@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
+  m_Name: ReadMe
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2800000, guid: d9139a2683873cb4cb5e86cb4fcf0670, type: 3}
+  title: 'Beamable Sample Project: Multiplayer - King of the Ring (KOR)'
+  sections:
+  - heading: What is "King of the Ring"?
+    text: Attack with power & dodge with speed! Last player alive, wins. This sample project demonstrates Beamable's Multiplayer feature.
+    linkText: Multiplayer KOR - Sample Project
+    url: https://docs.beamable.com/docs/multiplayer-kor-sample-project
+  - heading: What is Beamable?
+    text: Beamable is the low-code option for rapidly adding social, commerce, and
+      content management features to your live game. Learn how to do that with Beamable's
+      online product documentation.
+    linkText: docs.beamable.com
+    url: https://docs.beamable.com/
+  - heading: What is Beamable's Multiplayer feature?
+    text: The purpose of this feature is to allow game makers to create real-time and turn-based multi-user game experiences.
+    linkText: Multiplayer
+    url: https://docs.beamable.com/docs/multiplayer
+  - heading: Got feedback?
+    text: Let us know what you think or ask any questions you might have.
+    linkText: Contact Us
+    url: https://docs.beamable.com/discuss
+  loadedLayout: 0
