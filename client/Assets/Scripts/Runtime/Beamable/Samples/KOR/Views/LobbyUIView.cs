@@ -16,16 +16,20 @@ namespace Beamable.Samples.KOR.Views
       //  Properties -----------------------------------
       public TMP_BufferedText BufferedText { get { return _bufferedText; } }
       public Button BackButton { get { return _backButton; } }
+      public Button StartGameButton { get { return _startGameButton; } }
 
       //  Fields ---------------------------------------
       [SerializeField]
       private Configuration _configuration = null;
 
       [SerializeField]
-      private Button _backButton = null;
+      private TMP_BufferedText _bufferedText = null;
 
       [SerializeField]
-      private TMP_BufferedText _bufferedText = null;
+      private Button _startGameButton = null;
+      
+      [SerializeField]
+      private Button _backButton = null;
 
       [Header ("Cosmetic Animation")]
       [SerializeField]

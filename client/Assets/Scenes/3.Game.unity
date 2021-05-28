@@ -1118,34 +1118,6 @@ PrefabInstance:
       propertyPath: _ringView
       value: 
       objectReference: {fileID: 8221772080244604855}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.data[2]
-      value: 
-      objectReference: {fileID: 5779685053553598082}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.data[3]
-      value: 
-      objectReference: {fileID: 5779685053553598081}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.data[4]
-      value: 
-      objectReference: {fileID: 5779685053553598080}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.data[5]
-      value: 
-      objectReference: {fileID: 5779685053553598079}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.data[6]
-      value: 
-      objectReference: {fileID: 5779685053553598078}
-    - target: {fileID: -7102396843781980557, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-      propertyPath: _canvasGroups.Array.data[7]
-      value: 
-      objectReference: {fileID: 5779685053553598077}
     - target: {fileID: 495559907781336040, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1583,36 +1555,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d4e279521cf7042ad8225d157ca781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!225 &5779685053553598077 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 6186135834508461590, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-  m_PrefabInstance: {fileID: 5779685053553598075}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &5779685053553598078 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 9088646949318134312, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-  m_PrefabInstance: {fileID: 5779685053553598075}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &5779685053553598079 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 3057489800597117765, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-  m_PrefabInstance: {fileID: 5779685053553598075}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &5779685053553598080 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 1092385586482707108, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-  m_PrefabInstance: {fileID: 5779685053553598075}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &5779685053553598081 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 8460811445307573125, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-  m_PrefabInstance: {fileID: 5779685053553598075}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &5779685053553598082 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 1647980392838134476, guid: fd39caf993b537142b82f807f7a6302d, type: 3}
-  m_PrefabInstance: {fileID: 5779685053553598075}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8221772080244604854
 PrefabInstance:
   m_ObjectHideFlags: 0

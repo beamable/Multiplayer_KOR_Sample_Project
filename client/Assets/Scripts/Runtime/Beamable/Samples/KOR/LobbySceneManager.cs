@@ -6,6 +6,7 @@ using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
+using TMPro;
 using UnityEngine;
 using SimGameTypeRef = Beamable.Common.Content.SimGameTypeRef;
 
@@ -30,6 +31,8 @@ namespace Beamable.Samples.KOR
       protected void Start()
       {
          _lobbyUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
+         _lobbyUIView.StartGameButton.onClick.AddListener(StartGameButton_OnClicked);
+         MyMatchmaking_OnProgress(null);
 
          if (RuntimeDataStorage.Instance.CurrentPlayerCount == RuntimeDataStorage.UnsetPlayerCount)
          {
@@ -88,6 +91,15 @@ namespace Beamable.Samples.KOR
 
 
       //  Event Handlers -------------------------------
+      private void StartGameButton_OnClicked()
+      {
+         Debug.Log("TODO: Properly end the matchmaking so the game can be playable without max players");
+         matchmaking?.Stop();
+
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.GameSceneName,
+            _configuration.DelayBeforeLoadScene));
+      }
+      
       private void BackButton_OnClicked()
       {
          matchmaking?.Stop();
@@ -96,18 +108,26 @@ namespace Beamable.Samples.KOR
             _configuration.DelayBeforeLoadScene));
       }
 
-
       private void MyMatchmaking_OnProgress(MyMatchmakingResult result)
       {
-         DebugLog($"MyMatchmaking_OnProgress() " +
-            $"Players={result.CurrentPlayerDbidList.Count}/{result.TargetPlayerCount} " +
-            $"RoomId={result.RoomId}");
+         int currentPlayersCount = 0;
+         if (result != null)
+         {
+            currentPlayersCount = result.CurrentPlayerDbidList.Count;
+            DebugLog($"MyMatchmaking_OnProgress() " +
+                     $"Players={currentPlayersCount}/{result.TargetPlayerCount} " +
+                     $"RoomId={result.RoomId}");
 
-         string text = string.Format(KORConstants.StatusText_Joining,
-            result.CurrentPlayerDbidList.Count,
-            result.TargetPlayerCount);
+            string text = string.Format(KORConstants.StatusText_Joining,
+               result.CurrentPlayerDbidList.Count,
+               result.TargetPlayerCount);
 
-         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
+            _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
+         }
+
+         _lobbyUIView.StartGameButton.interactable = currentPlayersCount > 0;
+         _lobbyUIView.StartGameButton.GetComponentInChildren<TMP_Text>().text = $"Start Game\n({currentPlayersCount} Players)";
+
       }
 
 

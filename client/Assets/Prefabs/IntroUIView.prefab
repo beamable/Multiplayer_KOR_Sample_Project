@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 899589364}
   - component: {fileID: 5165251433994429126}
   - component: {fileID: 5006121330396702812}
+  - component: {fileID: 1887321441468121994}
   m_Layer: 5
   m_Name: RawImage
   m_TagString: Untagged
@@ -108,6 +109,18 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &1887321441468121994
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899589362}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &361388983769430887
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +349,11 @@ MonoBehaviour:
   _canvasGroups:
   - {fileID: 9077155039664476505}
   - {fileID: 3391841333033439565}
-  - {fileID: 3920588769318341740}
+  - {fileID: 8589999856418919874}
+  - {fileID: 1231894197329114791}
+  - {fileID: 4124438534647013278}
+  - {fileID: 7986492596832642112}
+  - {fileID: 1887321441468121994}
 --- !u!1 &845030773551779315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,6 +1282,7 @@ GameObject:
   - component: {fileID: 125315912903701396}
   - component: {fileID: 3359199423808837069}
   - component: {fileID: 7900274295167429203}
+  - component: {fileID: 8589999856418919874}
   m_Layer: 5
   m_Name: StartGameButton
   m_TagString: Untagged
@@ -1394,6 +1412,18 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &8589999856418919874
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3877717254778740557}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3971717143279793038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,6 +1571,7 @@ GameObject:
   - component: {fileID: 8358535711774117432}
   - component: {fileID: 8615297229981989025}
   - component: {fileID: 6616739809180709824}
+  - component: {fileID: 1231894197329114791}
   m_Layer: 5
   m_Name: LeaderboardsButton
   m_TagString: Untagged
@@ -1670,6 +1701,18 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &1231894197329114791
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4216885252651365602}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4236808003895154048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1987,6 +2030,7 @@ GameObject:
   - component: {fileID: 7921157637463439393}
   - component: {fileID: 855258757292406568}
   - component: {fileID: 8272884930796744459}
+  - component: {fileID: 4124438534647013278}
   m_Layer: 5
   m_Name: StoreButton
   m_TagString: Untagged
@@ -2116,6 +2160,18 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &4124438534647013278
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7186208892936170874}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7359536393337287980
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,6 +2389,7 @@ GameObject:
   - component: {fileID: 4212599867693218254}
   - component: {fileID: 3652083655748458244}
   - component: {fileID: 3842297962134614670}
+  - component: {fileID: 7986492596832642112}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -2462,3 +2519,15 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &7986492596832642112
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8010316207723999585}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
