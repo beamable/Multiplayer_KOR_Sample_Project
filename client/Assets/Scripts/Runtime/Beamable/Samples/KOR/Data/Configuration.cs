@@ -101,7 +101,7 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private float _delayFadeInUI = 0.25f;
 
-      [Header("Cosmetic Data")] 
+      [Header("Mock Data")] 
       [SerializeField]
       private int _leaderboardMinRowCount = 10;
          
