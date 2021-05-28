@@ -16,6 +16,9 @@ namespace Beamable.Samples.KOR.Views
       private Animator _animator = null;
 
       [SerializeField]
+      private Collider _collider = null;
+      
+      [SerializeField]
       private Configuration _configuration = null;
 
       /// <summary>

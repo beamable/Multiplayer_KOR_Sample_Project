@@ -20,6 +20,7 @@ namespace Beamable.Samples.KOR.Data
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }
       
+
       public string IntroSceneName { get { return _introSceneName; } }
       
       public string LobbySceneName { get { return _lobbySceneName; } }
@@ -34,11 +35,16 @@ namespace Beamable.Samples.KOR.Data
       public float DelayFadeInUI { get { return _delayFadeInUI; } }
       public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
       public List<AvatarData> AvatarDatas { get { return _avatarDatas; } }
+      public int LeaderboardMinRowCount { get { return _leaderboardMinRowCount; } }
+      public int LeaderboardMockScoreMin { get { return _leaderboardMockScoreMin; } }
+      public int LeaderboardMockScoreMax { get { return _leaderboardMockScoreMax; } }
 
+         
       /// <summary>
       /// Duration in seconds
       /// </summary>
       public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
+      
 
       //  Fields ---------------------------------------
       
@@ -71,7 +77,7 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private float _delayGameBeforeMove = 1;
 
-      [Header("Cosmetic Data")]
+      [Header("Game Visuals")]
       [SerializeField]
       private List<AvatarData> _avatarDatas = null;
 
@@ -81,17 +87,28 @@ namespace Beamable.Samples.KOR.Data
 
       [Range (0,3)]
       [SerializeField]
-      public float _statusMessageMinDuration = 3000;
+      private float _statusMessageMinDuration = 3000;
 
-      [Header("Cosmetic Animation")]
       [SerializeField]
       private float _delayFadeInUI = 0.25f;
+
+      [Header("Cosmetic Data")] 
+      [SerializeField]
+      private int _leaderboardMinRowCount = 10;
+         
+      [SerializeField]
+      private int _leaderboardMockScoreMin = 1;
+
+      [SerializeField]
+      private int _leaderboardMockScoreMax = 10;
 
       //  Unity Methods ---------------------------------------
       protected void OnValidate()
       {
          // Example validation, remove as needed
-         _delayFadeInUI = Mathf.Max(_delayFadeInUI, 0.25f);
+         _leaderboardMinRowCount = Mathf.Clamp(_leaderboardMinRowCount, 0, 20);
+         _leaderboardMockScoreMin = Mathf.Max(_leaderboardMockScoreMin, 0);
+         _leaderboardMockScoreMax = Mathf.Min(_leaderboardMockScoreMax, _leaderboardMockScoreMin);
       }
    }
 }
