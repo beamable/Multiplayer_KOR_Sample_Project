@@ -61,7 +61,7 @@ namespace Beamable.Samples.KOR
                {
                   DebugLog($"Scene '{gameObject.scene.name}' was loaded directly. That is ok. Setting defaults.");
                   RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
-                  RuntimeDataStorage.Instance.TargetPlayerCount = 1;
+                  RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
                   RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
                }
                else
@@ -69,12 +69,14 @@ namespace Beamable.Samples.KOR
                   DebugLog($"Scene '{gameObject.scene.name}' was loaded from lobby per production.");
                }
 
-               // Optional: Stuff to use later when player moves incoming
+               // Optional: Stuff to use later when player moves are incoming
                long tbdIncomingPlayerDbid = 0;
-               DebugLog($"LocalPlayerDbid = {RuntimeDataStorage.Instance.LocalPlayerDbid}'");
-               DebugLog($"TargetPlayerCount = {RuntimeDataStorage.Instance.TargetPlayerCount}'");
+               DebugLog($"MinPlayerCount = {RuntimeDataStorage.Instance.MinPlayerCount}");
+               DebugLog($"MaxPlayerCount = {RuntimeDataStorage.Instance.MaxPlayerCount}");
+               DebugLog($"CurrentPlayerCount = {RuntimeDataStorage.Instance.CurrentPlayerCount}");
+               DebugLog($"LocalPlayerDbid = {RuntimeDataStorage.Instance.LocalPlayerDbid}");
                DebugLog($"IsLocalPlayerDbid = {RuntimeDataStorage.Instance.IsLocalPlayerDbid(tbdIncomingPlayerDbid)}'");
-               DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}'");
+               DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}");
                
                // Optional: Show queueable status text onscreen
                SetStatusText(KORConstants.StatusText_GameState_Playing, TMP_BufferedText.BufferedTextMode.Immediate);

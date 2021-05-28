@@ -26,11 +26,11 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       public bool IsComplete { get { return !string.IsNullOrEmpty(RoomId); } }
       public long LocalPlayerDbid { get { return _localPlayerDbid; } }
       public int TargetPlayerCount { get { return _targetPlayerCount; } }
-
+      
       //  Fields  -----------------------------------------
       public string RoomId;
       public int SecondsRemaining;
-      public List<long> Players = new List<long>();
+      public List<long> CurrentPlayerDbidList = new List<long>();
       public string ErrorMessage = "";
       //
       private long _localPlayerDbid;
@@ -50,7 +50,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          return $"[MyMatchmakingResult (" +
             $"RoomId={RoomId}, " +
             $"TargetPlayerCount={TargetPlayerCount}, " +
-            $"players.Count={Players.Count})]";
+            $"players.Count={CurrentPlayerDbidList.Count})]";
       }
    }
 
@@ -107,7 +107,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             {
                if (token.IsCancellationRequested) return;
 
-               _myMatchmakingResult.Players = handle.Status.Players;
+               _myMatchmakingResult.CurrentPlayerDbidList = handle.Status.Players;
                _myMatchmakingResult.SecondsRemaining = handle.Status.SecondsRemaining;
                _myMatchmakingResult.RoomId = handle.Status.GameId;
                OnProgress?.Invoke(_myMatchmakingResult);

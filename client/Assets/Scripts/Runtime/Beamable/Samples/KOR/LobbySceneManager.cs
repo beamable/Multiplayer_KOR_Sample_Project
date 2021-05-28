@@ -23,18 +23,6 @@ namespace Beamable.Samples.KOR
       [SerializeField]
       private LobbyUIView _lobbyUIView = null;
 
-      /// <summary>
-      /// This defines the matchmaking criteria including "NumberOfPlayers"
-      /// </summary>
-      [SerializeField]
-      private SimGameTypeRef _onePlayerSimGameTypeRef;
-
-      /// <summary>
-      /// This defines the matchmaking criteria including "NumberOfPlayers"
-      /// </summary>
-      [SerializeField]
-      private SimGameTypeRef _twoPlayerSimGameTypeRef;
-
       private IBeamableAPI _beamableAPI;
       private KORMatchmaking matchmaking;
 
@@ -43,14 +31,14 @@ namespace Beamable.Samples.KOR
       {
          _lobbyUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
 
-         if (RuntimeDataStorage.Instance.TargetPlayerCount == RuntimeDataStorage.UnsetPlayerCount)
+         if (RuntimeDataStorage.Instance.CurrentPlayerCount == RuntimeDataStorage.UnsetPlayerCount)
          {
             DebugLog($"Scene '{gameObject.scene.name}' was loaded directly. That is ok. Setting defaults.");
-            RuntimeDataStorage.Instance.TargetPlayerCount = 1;
+            RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
          }
 
          var text = string.Format(KORConstants.StatusText_Joining, 0,
-            RuntimeDataStorage.Instance.TargetPlayerCount);
+            RuntimeDataStorage.Instance.CurrentPlayerCount);
 
          _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
 
@@ -67,26 +55,13 @@ namespace Beamable.Samples.KOR
       //  Other Methods   ------------------------------
       private async void SetupBeamable()
       {
-         SimGameType simGameType;
-
-         if (RuntimeDataStorage.Instance.TargetPlayerCount == 1)
-         {
-            simGameType = await _onePlayerSimGameTypeRef.Resolve();
-         }
-         else if (RuntimeDataStorage.Instance.TargetPlayerCount == 2)
-         {
-            simGameType = await _twoPlayerSimGameTypeRef.Resolve();
-         }
-         else
-         {
-            throw new Exception("Codepath is never intended.");
-         }
-
          var beamable = await Beamable.API.Instance;
          _beamableAPI = beamable;
          RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
-
-         matchmaking = new KORMatchmaking(beamable.Experimental.MatchmakingService, simGameType,
+         RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
+            
+         matchmaking = new KORMatchmaking(beamable.Experimental.MatchmakingService, 
+            RuntimeDataStorage.Instance.SimGameType,
             _beamableAPI.User.id);
          matchmaking.OnProgress += MyMatchmaking_OnProgress;
          matchmaking.OnComplete += MyMatchmaking_OnComplete;
@@ -125,11 +100,11 @@ namespace Beamable.Samples.KOR
       private void MyMatchmaking_OnProgress(MyMatchmakingResult result)
       {
          DebugLog($"MyMatchmaking_OnProgress() " +
-            $"Players={result.Players.Count}/{result.TargetPlayerCount} " +
+            $"Players={result.CurrentPlayerDbidList.Count}/{result.TargetPlayerCount} " +
             $"RoomId={result.RoomId}");
 
          string text = string.Format(KORConstants.StatusText_Joining,
-            result.Players.Count,
+            result.CurrentPlayerDbidList.Count,
             result.TargetPlayerCount);
 
          _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
@@ -141,18 +116,19 @@ namespace Beamable.Samples.KOR
          if (!RuntimeDataStorage.Instance.IsMatchmakingComplete)
          {
             string text = string.Format(KORConstants.StatusText_Joined,
-               result.Players.Count,
+               result.CurrentPlayerDbidList.Count,
                result.TargetPlayerCount);
 
             _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
 
             DebugLog($"MyMatchmaking_OnComplete() " +
-               $"Players={result.Players.Count}/{result.TargetPlayerCount} " +
+               $"Players={result.CurrentPlayerDbidList.Count}/{result.TargetPlayerCount} " +
                $"RoomId={result.RoomId}");
 
             //Store successful info here for use in another scene
             RuntimeDataStorage.Instance.IsMatchmakingComplete = true;
             RuntimeDataStorage.Instance.LocalPlayerDbid = result.LocalPlayerDbid;
+            RuntimeDataStorage.Instance.CurrentPlayerCount = result.CurrentPlayerDbidList.Count;
             RuntimeDataStorage.Instance.RoomId = result.RoomId;
 
             StartCoroutine(LoadScene_Coroutine());

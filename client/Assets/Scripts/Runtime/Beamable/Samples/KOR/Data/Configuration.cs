@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Beamable.Common.Content;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
@@ -20,7 +21,11 @@ namespace Beamable.Samples.KOR.Data
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }
       
-
+      /// <summary>
+      /// This defines the matchmaking criteria including "NumberOfPlayers"
+      /// </summary>
+      public SimGameTypeRef SimGameTypeRef { get { return _simGameTypeRef; } }
+      
       public string IntroSceneName { get { return _introSceneName; } }
       
       public string LobbySceneName { get { return _lobbySceneName; } }
@@ -76,6 +81,10 @@ namespace Beamable.Samples.KOR.Data
       [Header("Game Data")]
       [SerializeField]
       private float _delayGameBeforeMove = 1;
+
+      [Header("Game Content")]
+      [SerializeField]
+      private SimGameTypeRef _simGameTypeRef = null;
 
       [Header("Game Visuals")]
       [SerializeField]

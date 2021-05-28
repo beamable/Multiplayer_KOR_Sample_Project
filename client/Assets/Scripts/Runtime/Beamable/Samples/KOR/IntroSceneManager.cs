@@ -100,7 +100,7 @@ namespace Beamable.Samples.KOR
 
       private void StartGame(int targetPlayerCount)
       {
-         RuntimeDataStorage.Instance.TargetPlayerCount = targetPlayerCount;
+         RuntimeDataStorage.Instance.CurrentPlayerCount = targetPlayerCount;
 
          _introUIView.ButtonsCanvasGroup.interactable = false;
 

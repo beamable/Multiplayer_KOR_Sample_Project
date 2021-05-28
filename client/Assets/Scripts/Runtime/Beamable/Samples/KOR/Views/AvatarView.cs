@@ -41,6 +41,8 @@ namespace Beamable.Samples.KOR.Views
       //  Other Methods --------------------------------
       public void PlayAnimationIdle()
       {
+         var dummy = _collider;
+         var foo = _configuration;
          _animator.SetTrigger(KORConstants.Avatar_Idle);
          _idleAnimationFullPathHash = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
       }
