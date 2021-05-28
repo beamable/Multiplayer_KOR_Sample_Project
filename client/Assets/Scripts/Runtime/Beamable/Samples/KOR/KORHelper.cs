@@ -10,7 +10,7 @@ namespace Beamable.Samples.KOR
    /// <summary>
    /// Store commonly reused functionality for concerns: General
    /// </summary>
-   public static class TBFHelper
+   public static class KORHelper
    {
 
       //  Other Methods --------------------------------
@@ -18,7 +18,7 @@ namespace Beamable.Samples.KOR
       {
          SoundManager.Instance.PlayAudioClip(SoundConstants.Click01);
 
-         if (TBFConstants.IsDebugLogging)
+         if (KORConstants.IsDebugLogging)
          {
             Debug.Log($"LoadScene() to {sceneName}");
          }
@@ -43,8 +43,8 @@ namespace Beamable.Samples.KOR
             // Is Game Properly Connected To Internet?
             if (isConnected)
             {
-               text += TBFHelper.GameInstructionsText;
-               text += TBFHelper.GetBulletList("Status", new List<string>
+               text += KORHelper.GameInstructionsText;
+               text += KORHelper.GetBulletList("Status", new List<string>
                {
                   $"Connected: {true}",
                   $"DBID: {dbid}", 
@@ -53,7 +53,7 @@ namespace Beamable.Samples.KOR
             else
             {
                // Error
-               text += TBFHelper.InternetOfflineInstructionsText;
+               text += KORHelper.InternetOfflineInstructionsText;
             }
          }
          else
@@ -61,7 +61,7 @@ namespace Beamable.Samples.KOR
             // Error
             text += $"_isBeamableSDKInstalled = {isBeamableSDKInstalled}." + "\n\n";
             text += $"_isBeamableSDKInstalledErrorMessage = {isBeamableSDKInstalledErrorMessage}" + "\n\n";
-            text += TBFHelper.BeamableSDKInstallInstructionsText;
+            text += KORHelper.BeamableSDKInstallInstructionsText;
          }
 
          return text;
@@ -93,7 +93,7 @@ namespace Beamable.Samples.KOR
             string text = "";
             text += "<color=#ff0000>You are currently offline.</color>" + "\n\n";
             text += "<align=left>";
-            text += TBFHelper.GetBulletList("Suggestions\n", new List<string> {
+            text += KORHelper.GetBulletList("Suggestions\n", new List<string> {
                "Stop the Scene in the Unity Editor",
                "Connect to the internet",
                "Play the Scene in the Unity Editor",
@@ -143,7 +143,7 @@ namespace Beamable.Samples.KOR
 
             text += "This sample project demonstrates Beamable's Multiplayer feature.\n\n";
             
-            text += TBFHelper.GetBulletList("Resources", new List<string>
+            text += KORHelper.GetBulletList("Resources", new List<string>
             {
                "Overview: <u><link=https://docs.beamable.com/docs/multiplayer-kor-sample>Multiplayer (KOR) Sample</link></u>",
                "Feature: <u><link=https://docs.beamable.com/docs/multiplayer-feature>Multiplayer</link></u>",
@@ -161,7 +161,7 @@ namespace Beamable.Samples.KOR
          {
             string text = "";
             text += "<color=#ff0000>";
-            text += TBFHelper.GetBulletList("Todo", new List<string> {
+            text += KORHelper.GetBulletList("Todo", new List<string> {
                "Download & Install <u><link=http://docs.beamable.com>Beamable SDK</link></u>",
                "Open the Beamable Toolbox Window in Unity",
                "Register or Sign In"

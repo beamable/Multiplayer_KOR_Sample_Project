@@ -1,19 +1,14 @@
-﻿using Beamable.Samples.KOR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Beamable.Common.Content;
 using Beamable.Experimental.Api.Matchmaking;
+using Beamable.Samples.KOR;
 using UnityEngine;
 
 /// <summary>
-/// NOTE ON USAGE: Both the EXAMPLE and the SAMPLE use the classes below. If the EXAMPLE
-/// and SAMPLE are moved to separate  unity projects in the future, then ...
-///
-/// 1. leave the file below as is for sole use in the EXAMPLE, and
-/// 2. copy/move/rename/renamespace the file below for sole use in the SAMPLE.
-///
+/// Reusable matchmaking that is not game-specific.
 /// </summary>
 namespace Beamable.Examples.Features.Multiplayer.Core
 {
@@ -144,7 +139,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       private static void DebugLog(string message)
       {
-         if (TBFConstants.IsDebugLogging)
+         if (KORConstants.IsDebugLogging)
          {
             Debug.Log(message);
          }

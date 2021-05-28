@@ -18,6 +18,8 @@ namespace Beamable.Samples.KOR.Data
       private const string Title = "TFB Configuration";
 
       //  Properties -----------------------------------
+      public bool IsDemoMode { get { return _isDemoMode; } }
+      
       public string IntroSceneName { get { return _introSceneName; } }
       
       public string LobbySceneName { get { return _lobbySceneName; } }
@@ -31,25 +33,24 @@ namespace Beamable.Samples.KOR.Data
       public float DelayBeforeLoadScene { get { return _delayBeforeLoadScene; } }
       public float DelayFadeInUI { get { return _delayFadeInUI; } }
       public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
-      public float DelayGameMaxDuringMove { get { return _delayGameMaxDuringMove; } }
-      public float DelayGameAfterMove { get { return _delayGameAfterMove; } }
-      public float DelayBeforeSoundAttack_01a { get { return _delayBeforeSoundAttack_01a; } }
-      public float DelayBeforeSoundAttack_01b { get { return _delayBeforeSoundAttack_01b; } }
-      public float DelayBeforeSoundAttack_02a { get { return _delayBeforeSoundAttack_02a; } }
-      public float DelayBeforeSoundAttack_02b { get { return _delayBeforeSoundAttack_02b; } }
-      public float DelayBeforeSoundAttack_03 { get { return _delayBeforeSoundAttack_03; } }
-      public float DelayGameBeforeGameOver { get { return _delayGameBeforeGameOver; } }
       public List<AvatarData> AvatarDatas { get { return _avatarDatas; } }
-      public int GameRoundsTotal { get { return _gameRoundsTotal; } }
-      public int TargetPlayerCount { get { return _targetPlayerCount; } }
 
       /// <summary>
       /// Duration in seconds
       /// </summary>
       public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
 
-
       //  Fields ---------------------------------------
+      
+      /// <summary>
+      /// Determines if we are demo mode. Demo mode does several operations
+      /// which are not recommended in a production project including 
+      /// creating mock data for the game.
+      /// </summary>
+      [Header("Debug")]
+      [SerializeField]
+      private bool _isDemoMode = true;
+      
       [Header("Scene Names")]
       [SerializeField]
       private string _introSceneName = "";
@@ -67,24 +68,8 @@ namespace Beamable.Samples.KOR.Data
       private string _leaderboardSceneName = "";
       
       [Header("Game Data")]
-      [Range (1,2)]
-      [SerializeField]
-      private int _targetPlayerCount = 2;
-
-      [SerializeField]
-      private int _gameRoundsTotal = 3;
-
       [SerializeField]
       private float _delayGameBeforeMove = 1;
-
-      [SerializeField]
-      private float _delayGameMaxDuringMove = 10;
-
-      [SerializeField]
-      private float _delayGameAfterMove = 1;
-
-      [SerializeField]
-      private float _delayGameBeforeGameOver = 3;
 
       [Header("Cosmetic Data")]
       [SerializeField]
@@ -93,22 +78,6 @@ namespace Beamable.Samples.KOR.Data
       [Header("Cosmetic Delays")]
       [SerializeField]
       private float _delayBeforeLoadScene = 0;
-
-      [SerializeField]
-      private float _delayBeforeSoundAttack_01a = 1;
-
-
-      [SerializeField]
-      private float _delayBeforeSoundAttack_01b = 1;
-
-      [SerializeField]
-      private float _delayBeforeSoundAttack_02a = 1;
-
-      [SerializeField]
-      private float _delayBeforeSoundAttack_02b = 1;
-
-      [SerializeField]
-      private float _delayBeforeSoundAttack_03 = 1;
 
       [Range (0,3)]
       [SerializeField]
@@ -121,7 +90,8 @@ namespace Beamable.Samples.KOR.Data
       //  Unity Methods ---------------------------------------
       protected void OnValidate()
       {
-         _targetPlayerCount = Mathf.Clamp(_targetPlayerCount, 1, 2);
+         // Example validation, remove as needed
+         _delayFadeInUI = Mathf.Max(_delayFadeInUI, 0.25f);
       }
    }
 }

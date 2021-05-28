@@ -7,7 +7,6 @@ using Beamable.Samples.KOR.Multiplayer;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
-using static Beamable.Samples.KOR.UI.TMP_BufferedText;
 using SimGameTypeRef = Beamable.Common.Content.SimGameTypeRef;
 
 namespace Beamable.Samples.KOR
@@ -37,7 +36,7 @@ namespace Beamable.Samples.KOR
       private SimGameTypeRef _twoPlayerSimGameTypeRef;
 
       private IBeamableAPI _beamableAPI;
-      private TBFMatchmaking matchmaking;
+      private KORMatchmaking matchmaking;
 
       //  Unity Methods   ------------------------------
       protected void Start()
@@ -50,7 +49,7 @@ namespace Beamable.Samples.KOR
             RuntimeDataStorage.Instance.TargetPlayerCount = 1;
          }
 
-         var text = string.Format(TBFConstants.StatusText_Joining, 0,
+         var text = string.Format(KORConstants.StatusText_Joining, 0,
             RuntimeDataStorage.Instance.TargetPlayerCount);
 
          _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
@@ -87,7 +86,7 @@ namespace Beamable.Samples.KOR
          _beamableAPI = beamable;
          RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
 
-         matchmaking = new TBFMatchmaking(beamable.Experimental.MatchmakingService, simGameType,
+         matchmaking = new KORMatchmaking(beamable.Experimental.MatchmakingService, simGameType,
             _beamableAPI.User.id);
          matchmaking.OnProgress += MyMatchmaking_OnProgress;
          matchmaking.OnComplete += MyMatchmaking_OnComplete;
@@ -99,14 +98,14 @@ namespace Beamable.Samples.KOR
          }
          catch (Exception)
          {
-            _lobbyUIView.BufferedText.SetText(TBFHelper.InternetOfflineInstructionsText,
+            _lobbyUIView.BufferedText.SetText(KORHelper.InternetOfflineInstructionsText,
                TMP_BufferedText.BufferedTextMode.Queue);
          }
       }
 
       private void DebugLog(string message)
       {
-         if (TBFConstants.IsDebugLogging)
+         if (KORConstants.IsDebugLogging)
          {
             Debug.Log(message);
          }
@@ -118,43 +117,43 @@ namespace Beamable.Samples.KOR
       {
          matchmaking?.Stop();
 
-         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }
 
 
-      private void MyMatchmaking_OnProgress(MyMatchmakingResult myMatchmakingResult)
+      private void MyMatchmaking_OnProgress(MyMatchmakingResult result)
       {
          DebugLog($"MyMatchmaking_OnProgress() " +
-            $"Players={myMatchmakingResult.Players.Count}/{myMatchmakingResult.TargetPlayerCount} " +
-            $"RoomId={myMatchmakingResult.RoomId}");
+            $"Players={result.Players.Count}/{result.TargetPlayerCount} " +
+            $"RoomId={result.RoomId}");
 
-         string text = string.Format(TBFConstants.StatusText_Joining,
-            myMatchmakingResult.Players.Count,
-            myMatchmakingResult.TargetPlayerCount);
+         string text = string.Format(KORConstants.StatusText_Joining,
+            result.Players.Count,
+            result.TargetPlayerCount);
 
          _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
       }
 
 
-      private void MyMatchmaking_OnComplete(MyMatchmakingResult myMatchmakingResult)
+      private void MyMatchmaking_OnComplete(MyMatchmakingResult result)
       {
          if (!RuntimeDataStorage.Instance.IsMatchmakingComplete)
          {
-            string text = string.Format(TBFConstants.StatusText_Joined,
-               myMatchmakingResult.Players.Count,
-               myMatchmakingResult.TargetPlayerCount);
+            string text = string.Format(KORConstants.StatusText_Joined,
+               result.Players.Count,
+               result.TargetPlayerCount);
 
             _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
 
             DebugLog($"MyMatchmaking_OnComplete() " +
-               $"Players={myMatchmakingResult.Players.Count}/{myMatchmakingResult.TargetPlayerCount} " +
-               $"RoomId={myMatchmakingResult.RoomId}");
+               $"Players={result.Players.Count}/{result.TargetPlayerCount} " +
+               $"RoomId={result.RoomId}");
 
             //Store successful info here for use in another scene
             RuntimeDataStorage.Instance.IsMatchmakingComplete = true;
-            RuntimeDataStorage.Instance.LocalPlayerDbid = myMatchmakingResult.LocalPlayerDbid;
-            RuntimeDataStorage.Instance.RoomId = myMatchmakingResult.RoomId;
+            RuntimeDataStorage.Instance.LocalPlayerDbid = result.LocalPlayerDbid;
+            RuntimeDataStorage.Instance.RoomId = result.RoomId;
 
             StartCoroutine(LoadScene_Coroutine());
 
@@ -177,7 +176,7 @@ namespace Beamable.Samples.KOR
          yield return new WaitForSeconds(0.5f);
 
          //Load another scene
-         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.GameSceneName,
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.GameSceneName,
             _configuration.DelayBeforeLoadScene));
       }
    }

@@ -1,5 +1,4 @@
-﻿
-using Beamable.Samples.Core;
+﻿using Beamable.Samples.Core;
 
 namespace Beamable.Samples.KOR.Data
 {
@@ -8,12 +7,14 @@ namespace Beamable.Samples.KOR.Data
 	/// </summary>
 	public class RuntimeDataStorage : SingletonMonobehavior<RuntimeDataStorage>
 	{
-
 		//  Properties  ----------------------------------
-		public long LocalPlayerDbid { get { return _localPlayerDbid; } set { _localPlayerDbid = value; } }
-		public string RoomId { get { return _roomId; } set { _roomId = value; } }
+		public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
 		public int TargetPlayerCount { get { return _targetPlayerCount; } set { _targetPlayerCount = value; } }
-      public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
+		public string RoomId { get { return _roomId; } set { _roomId = value; } }
+		//
+		public long LocalPlayerDbid { get { return _localPlayerDbid; } set { _localPlayerDbid = value; } }
+		public bool IsLocalPlayerDbid (long dbid) { return LocalPlayerDbid == dbid; }
+		public bool IsSinglePlayerMode { get { return TargetPlayerCount == 1; } }
 
 		//  Fields  --------------------------------------
 		public const int UnsetPlayerCount = -1;
@@ -33,7 +34,7 @@ namespace Beamable.Samples.KOR.Data
 		//  Other Methods  --------------------------------
 
 		/// <summary>
-		/// Demonstrates that the lifecycle of data is runtime only
+		/// Demonstrates that the lifecycle of data is for runtime only
 		/// </summary>
 		private void ClearData()
       {

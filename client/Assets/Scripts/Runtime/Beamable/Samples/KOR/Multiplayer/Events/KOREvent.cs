@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Beamable.Samples.KOR.Multiplayer.Events
 {
    //Used to hide some API from common use cases
-   public interface IHiddenTBFEvent
+   public interface IHiddenKOREvent
    {
       /// <summary>
       /// This is set to pack-in WHO SENT the event object.
@@ -18,7 +18,7 @@ namespace Beamable.Samples.KOR.Multiplayer.Events
    /// this sample game project.
    /// </summary>
    [Serializable]
-   public class TBFEvent: IHiddenTBFEvent
+   public class KOREvent: IHiddenKOREvent
    {
       //  Properties -----------------------------------
 

@@ -12,13 +12,6 @@ namespace Beamable.Samples.KOR
    {
       //  Fields ---------------------------------------
 
-      /// <summary>
-      /// Determines if we are demo mode. Demo mode does several operations
-      /// which are not recommended in a production project including 
-      /// creating mock data for the game.
-      /// </summary>
-      private static bool IsDemoMode = true;
-
       [SerializeField]
       private IntroUIView _introUIView = null;
 
@@ -94,7 +87,7 @@ namespace Beamable.Samples.KOR
             dbid = _beamableAPI.User.id;
          }
 
-         string aboutBodyText = TBFHelper.GetIntroAboutBodyText(
+         string aboutBodyText = KORHelper.GetIntroAboutBodyText(
             _isConnected, 
             dbid, 
             _isBeamableSDKInstalled, 
@@ -111,7 +104,7 @@ namespace Beamable.Samples.KOR
 
          _introUIView.ButtonsCanvasGroup.interactable = false;
 
-         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.LobbySceneName,
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.LobbySceneName,
             _configuration.DelayBeforeLoadScene));
       }
 
@@ -131,13 +124,13 @@ namespace Beamable.Samples.KOR
 
       private void LeaderboardButton_OnClicked()
       {
-         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.LeaderboardSceneName,
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.LeaderboardSceneName,
             _configuration.DelayBeforeLoadScene));
       }
       
       private void StoreButton_OnClicked()
       {
-         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.StoreSceneName,
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.StoreSceneName,
             _configuration.DelayBeforeLoadScene));
       }
 
@@ -156,6 +149,5 @@ namespace Beamable.Samples.KOR
             Application.Quit();
          }
       }
-      
    }
 }
