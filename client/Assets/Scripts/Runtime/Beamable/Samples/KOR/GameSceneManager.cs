@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Beamable.Samples.KOR
 {
-
    /// <summary>
    /// Handles the main scene logic: Game
    /// </summary>
@@ -53,13 +52,13 @@ namespace Beamable.Samples.KOR
       {
          Beamable.API.Instance.Then(async beamableAPI =>
          {
-            try
             {
                _beamableAPI = beamableAPI;
 
                if (!RuntimeDataStorage.Instance.IsMatchmakingComplete)
                {
                   DebugLog($"Scene '{gameObject.scene.name}' was loaded directly. That is ok. Setting defaults.");
+                  RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
                   RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
                   RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
                   RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
@@ -75,7 +74,7 @@ namespace Beamable.Samples.KOR
                DebugLog($"MaxPlayerCount = {RuntimeDataStorage.Instance.MaxPlayerCount}");
                DebugLog($"CurrentPlayerCount = {RuntimeDataStorage.Instance.CurrentPlayerCount}");
                DebugLog($"LocalPlayerDbid = {RuntimeDataStorage.Instance.LocalPlayerDbid}");
-               DebugLog($"IsLocalPlayerDbid = {RuntimeDataStorage.Instance.IsLocalPlayerDbid(tbdIncomingPlayerDbid)}'");
+               DebugLog($"IsLocalPlayerDbid = {RuntimeDataStorage.Instance.IsLocalPlayerDbid(tbdIncomingPlayerDbid)}");
                DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}");
                
                // Optional: Show queueable status text onscreen
@@ -86,10 +85,33 @@ namespace Beamable.Samples.KOR
                
                // Optional: Play "damage" sound
                SoundManager.Instance.PlayAudioClip(SoundConstants.HealthBarDecrement);
-            }
-            catch (Exception)
-            {
-               SetStatusText(KORHelper.InternetOfflineInstructionsText, TMP_BufferedText.BufferedTextMode.Immediate);
+               
+               // Optional: Render color and text of avatar ui
+               _gameUIView.AvatarViews.Clear();
+               for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
+               {
+                  AvatarData avatarData = _configuration.AvatarDatas[i];
+                  _gameUIView.AvatarUIViews[i].AvatarData = avatarData;
+                  _gameUIView.AvatarUIViews[i].Health = 100;
+                  _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
+                  _gameUIView.AvatarUIViews[i].Name = $"Player {(i+1):00}"; // "Player 01"
+                  _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
+
+                  if (i < RuntimeDataStorage.Instance.MinPlayerCount)
+                  {
+                     AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
+                     _gameUIView.AvatarViews.Add(avatarView);
+                     
+                     //Optional: Play animations. All are working properly
+                     //avatarView.PlayAnimationAttack01();
+                     //avatarView.PlayAnimationAttack02();
+                     //avatarView.PlayAnimationDie();
+                     //avatarView.PlayAnimationRunForward();
+                     //avatarView.PlayAnimationTakeDamage();
+                     //avatarView.PlayAnimationWalkForward();
+                     avatarView.PlayAnimationIdle();
+                  }
+               }
             }
          });
       }

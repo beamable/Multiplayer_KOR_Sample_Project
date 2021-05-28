@@ -1,5 +1,7 @@
 ﻿using Beamable.Samples.KOR.Data;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Beamable.Samples.KOR.Views
 {
@@ -9,20 +11,46 @@ namespace Beamable.Samples.KOR.Views
    public class AvatarUIView : MonoBehaviour
    {
       //  Properties -----------------------------------
-      public HealthBarView HealthBarView { get { return _healthBarView; } }
       public AvatarData AvatarData { set { _avatarData = value; Render(); } get { return _avatarData; } }
-
+      public bool IsLocalPlayer { set { _isLocalPlayer = value; Render(); } get { return _isLocalPlayer; } }
+      public bool IsInGame { set { _isInGame = value; Render(); } get { return _isInGame; } }
+      public string Name {  set { _name = value; Render(); } get { return _name;  } }
+      public int Health { set { _health = value; Render(); } get { return _health; }   }
+      
       //  Fields ---------------------------------------
       [SerializeField]
-      private HealthBarView _healthBarView = null;
+      private Image _backgroundImage = null;
+
+      [SerializeField]
+      private TMP_Text _text = null;
 
       private AvatarData _avatarData = null;
+      private string _name = "";
+      private int _health = 0;
+      private bool _isLocalPlayer = false;
+      private bool _isInGame = false;
+
 
       //  Other Methods   ------------------------------
       private void Render()
       {
-         _healthBarView.BackgroundColor = _avatarData.Color;
-         _healthBarView.Title = _avatarData.Location;
+         _backgroundImage.color = _avatarData.Color;
+
+         string location = KORConstants.AvatarUIView_Remote;
+         if (_isLocalPlayer)
+         {
+            location = KORConstants.AvatarUIView_Local;
+         }
+
+         if (_isInGame)
+         {
+            _text.text = $"{Name} ({_health}%)\n{location}";
+         }
+         else
+         {
+            _text.text = $"{Name}\n{KORConstants.AvatarUIView_Offline}";
+         }
+         
       }
    }
 }

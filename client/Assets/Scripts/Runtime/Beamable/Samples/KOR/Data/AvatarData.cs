@@ -1,4 +1,5 @@
 ﻿using System;
+using Beamable.Samples.KOR.Views;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
@@ -10,14 +11,18 @@ namespace Beamable.Samples.KOR.Data
    public class AvatarData
    {
       //  Fields  -----------------------------------
-      public string Location {  get { return _location; } }
+      
       public Color Color { get { return _color; } }
+      
+      public AvatarView AvatarViewPrefab { get { return _avatarViewPrefab; } }
 
       //  Properties -----------------------------------
-      [SerializeField]
-      private string _location = "";
+    
 
       [SerializeField]
       private Color _color = Color.blue;
+      
+      [SerializeField]
+      private AvatarView _avatarViewPrefab = null;
    }
 }

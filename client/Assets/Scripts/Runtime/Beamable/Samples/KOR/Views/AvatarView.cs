@@ -43,20 +43,44 @@ namespace Beamable.Samples.KOR.Views
       {
          var dummy = _collider;
          var foo = _configuration;
-         _animator.SetTrigger(KORConstants.Avatar_Idle);
+         _animator.SetBool(KORConstants.Avatar_WalkForward, false);
+         _animator.SetBool(KORConstants.Avatar_RunForward, false);
          _idleAnimationFullPathHash = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
       }
 
-      public void PlayAnimationWin()
+      public void PlayAnimationWalkForward()
       {
-         _animator.SetTrigger(KORConstants.Avatar_Idle);
+         _animator.SetBool(KORConstants.Avatar_RunForward, false);
+         _animator.SetBool(KORConstants.Avatar_WalkForward, true);
       }
 
-      public void PlayAnimationLoss()
+      public void PlayAnimationRunForward()
       {
-         _animator.SetTrigger(KORConstants.Avatar_Death);
+         _animator.SetBool(KORConstants.Avatar_WalkForward, false);
+         _animator.SetBool(KORConstants.Avatar_RunForward, true);
+      }
+      
+      public void PlayAnimationAttack01()
+      {
+         _animator.SetTrigger(KORConstants.Avatar_Attack01);
+      }
+      
+      public void PlayAnimationAttack02()
+      {
+         _animator.SetTrigger(KORConstants.Avatar_Attack02);
+      }
+      
+      public void PlayAnimationTakeDamage()
+      {
+         _animator.SetTrigger(KORConstants.Avatar_TakeDamage);
+      }
+      public void PlayAnimationDie()
+      {
+         _animator.SetTrigger(KORConstants.Avatar_Die);
       }
 
+      // Play a sound related to this view, its ok if it happens
+      // before or after the object is destroyed. 
       private void PlayAudioClipDelayed(string audioClipName, float delay)
       {
          SoundManager.Instance.PlayAudioClipDelayed(audioClipName, delay);

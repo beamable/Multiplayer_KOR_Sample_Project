@@ -18,18 +18,23 @@
       /// </summary>
       public const int UnsetValue = -1;
 
-      // Round
+      // Display Text
       public static string RoundText = "<b>Round</b><br><size=20>{0} of {1}</size>";
+      public static string AvatarUIView_Remote = "Remote";
+      public static string AvatarUIView_Local = "Local";
+      public static string AvatarUIView_Offline = "Offline";
+         
 
       // Status
       public const string StatusText_GameState_Playing = "Playing ...";
       
       // Animations
-      public static string Avatar_Idle = "Idle"; //start here
-      public static string Avatar_Attack_01 = "Attack_01";
-      public static string Avatar_Attack_02 = "Attack_02";
-      public static string Avatar_Attack_03 = "Attack_03";
-      public static string Avatar_Death = "Death"; //end here
+      public static string Avatar_WalkForward = "Walk Forward"; //start here
+      public static string Avatar_RunForward = "Run Forward";
+      public static string Avatar_Attack01 = "Attack 01";
+      public static string Avatar_Attack02 = "Attack 02";
+      public static string Avatar_TakeDamage = "Take Damage";
+      public static string Avatar_Die = "Die";
 
       //Lobby
       public static string StatusText_Joining = "Player {0}/{1} joined. Waiting ...";
