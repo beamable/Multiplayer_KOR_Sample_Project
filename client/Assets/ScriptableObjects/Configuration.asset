@@ -15,9 +15,10 @@ MonoBehaviour:
   _introSceneName: 1.Intro
   _lobbySceneName: 2.Lobby
   _gameSceneName: 3.Game
+  _leaderboardSceneName: 5.Leaderboard
+  _storeSceneName: 4.Store
   _targetPlayerCount: 2
   _gameRoundsTotal: 3
-  _delayMatchmakingMax: 10
   _delayGameBeforeMove: 1
   _delayGameMaxDuringMove: 10
   _delayGameAfterMove: 1
@@ -33,6 +34,5 @@ MonoBehaviour:
   _delayBeforeSoundAttack_02a: 0.1
   _delayBeforeSoundAttack_02b: 0.6
   _delayBeforeSoundAttack_03: 1
-  _delayGameBetweenPlayerAnimations: 3
   _statusMessageMinDuration: 1
   _delayFadeInUI: 0.25

@@ -34,8 +34,9 @@ namespace Beamable.Samples.TBF
       protected void Start()
       {
          _introUIView.AboutBodyText = "";
-         _introUIView.StartGameOnePlayerButton.onClick.AddListener(StartGameOnePlayerButton_OnClicked);
-         _introUIView.StartGameTwoPlayerButton.onClick.AddListener(StartGameTwoPlayerButton_OnClicked);
+         _introUIView.StartGameButton.onClick.AddListener(StartGameButton_OnClicked);
+         _introUIView.LeaderboardButton.onClick.AddListener(LeaderboardButton_OnClicked);
+         _introUIView.StoreButton.onClick.AddListener(StoreButton_OnClicked);
          _introUIView.QuitButton.onClick.AddListener(QuitButton_OnClicked);
          SetupBeamable();
       }
@@ -70,11 +71,6 @@ namespace Beamable.Samples.TBF
                _beamableAPI.ConnectivityService.OnConnectivityChanged += ConnectivityService_OnConnectivityChanged;
                ConnectivityService_OnConnectivityChanged(_beamableAPI.ConnectivityService.HasConnectivity);
 
-               if (IsDemoMode)
-               {
-                  //Set my player's name
-                  //MockDataCreator.SetCurrentUserAlias(_beamableAPI.Stats, "This_is_you:)");
-               }
             }
             catch (Exception e)
             {
@@ -127,15 +123,22 @@ namespace Beamable.Samples.TBF
       }
 
 
-      private void StartGameOnePlayerButton_OnClicked()
+      private void StartGameButton_OnClicked()
       {
          StartGame(1);
       }
 
 
-      private void StartGameTwoPlayerButton_OnClicked()
+      private void LeaderboardButton_OnClicked()
       {
-         StartGame(2);
+         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.LeaderboardSceneName,
+            _configuration.DelayBeforeLoadScene));
+      }
+      
+      private void StoreButton_OnClicked()
+      {
+         StartCoroutine(TBFHelper.LoadScene_Coroutine(_configuration.StoreSceneName,
+            _configuration.DelayBeforeLoadScene));
       }
 
       private void QuitButton_OnClicked()

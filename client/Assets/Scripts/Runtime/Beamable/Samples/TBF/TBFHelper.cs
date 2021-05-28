@@ -139,14 +139,14 @@ namespace Beamable.Samples.TBF
          {
             string text = "";
 
-            text += "Choose strategic attacks to win! Only the bravest knight survives." + "\n\n";
+            text += "Attack with power & dodge with speed! Last player alive, wins." + "\n\n";
 
             text += "This sample project demonstrates Beamable's Multiplayer feature.\n\n";
-
+            
             text += TBFHelper.GetBulletList("Resources", new List<string>
             {
-               "Overview: <u><link=https://docs.beamable.com/docs/multiplayer-sample>Multiplayer Sample</u>",
-               "Feature: <u><link=https://docs.beamable.com/docs/multiplayer>Multiplayer</u>",
+               "Overview: <u><link=https://docs.beamable.com/docs/multiplayer-kor-sample>Multiplayer (KOR) Sample</link></u>",
+               "Feature: <u><link=https://docs.beamable.com/docs/multiplayer-feature>Multiplayer</link></u>",
             });
 
 

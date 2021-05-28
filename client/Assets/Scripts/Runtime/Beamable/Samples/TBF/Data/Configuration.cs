@@ -19,8 +19,15 @@ namespace Beamable.Samples.TBF.Data
 
       //  Properties -----------------------------------
       public string IntroSceneName { get { return _introSceneName; } }
-      public string GameSceneName { get { return _gameSceneName; } }
+      
       public string LobbySceneName { get { return _lobbySceneName; } }
+
+      public string GameSceneName { get { return _gameSceneName; } }
+
+      public string StoreSceneName { get { return _storeSceneName; } }
+
+      public string LeaderboardSceneName { get { return _leaderboardSceneName; } }
+      
       public float DelayBeforeLoadScene { get { return _delayBeforeLoadScene; } }
       public float DelayFadeInUI { get { return _delayFadeInUI; } }
       public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
@@ -53,6 +60,12 @@ namespace Beamable.Samples.TBF.Data
       [SerializeField]
       private string _gameSceneName = "";
 
+      [SerializeField]
+      private string _storeSceneName = "";
+      
+      [SerializeField]
+      private string _leaderboardSceneName = "";
+      
       [Header("Game Data")]
       [Range (1,2)]
       [SerializeField]
