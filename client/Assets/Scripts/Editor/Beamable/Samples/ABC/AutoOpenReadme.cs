@@ -1,7 +1,7 @@
 ﻿using Beamable.Samples.SampleProjectBase;
 using UnityEditor;
 
-namespace Beamable.Samples.TBF
+namespace Beamable.Samples.KOR
 {
 	/// <summary>
 	/// Automatically focus on the sample project readme file when Unity first opens.

@@ -155,9 +155,9 @@ MonoBehaviour:
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
   _lobbyUIView: {fileID: 1288480993498687064}
   _onePlayerSimGameTypeRef:
-    Id: game_types.OnePlayerGameType
+    Id: game_types.GameType01
   _twoPlayerSimGameTypeRef:
-    Id: game_types.TwoPlayerGameType
+    Id: game_types.GameType01
 --- !u!4 &654778935
 Transform:
   m_ObjectHideFlags: 0

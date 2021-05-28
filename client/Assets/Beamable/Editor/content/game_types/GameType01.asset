@@ -14,15 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tags:
   - base
-  maxPlayers: 1
+  maxPlayers: 6
   minPlayersToStart:
-    HasValue: 0
-    Value: 0
+    HasValue: 1
+    Value: 1
   waitAfterMinReachedSecs:
-    HasValue: 0
-    Value: 0
+    HasValue: 1
+    Value: 60
   maxWaitDurationSecs:
-    HasValue: 0
-    Value: 0
-  leaderboardUpdates: []
+    HasValue: 1
+    Value: 60
+  leaderboardUpdates:
+  - leaderboard: leaderboards.Leaderboard01
+    scoringAlgorithm:
+      algorithm: 0
+      options: []
   rewards: []
