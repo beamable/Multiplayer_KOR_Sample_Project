@@ -1,5 +1,6 @@
 ﻿using Beamable.Common.Content;
 using Beamable.Samples.Core;
+using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
 {
@@ -20,10 +21,12 @@ namespace Beamable.Samples.KOR.Data
 		public bool IsSinglePlayerMode { get { return CurrentPlayerCount == 1; } }
 		
 		public SimGameType SimGameType { get { return _simGameType; } set { _simGameType = value; } }
+		public bool HasPopulatedLeaderboard { get { return _hasPopulatedLeaderboard; } set { _hasPopulatedLeaderboard = value; } }
 
 		//  Fields  --------------------------------------
 		public const int UnsetPlayerCount = -1;
 		private bool _isMatchmakingComplete;
+		private bool _hasPopulatedLeaderboard = false;
 		private long _localPlayerDbid;
 		private string _roomId;
 		private int _currentPlayerCount;
@@ -31,7 +34,6 @@ namespace Beamable.Samples.KOR.Data
 
 
 		//  Unity Methods  --------------------------------
-
 		protected override void Awake()
 		{
 			base.Awake();

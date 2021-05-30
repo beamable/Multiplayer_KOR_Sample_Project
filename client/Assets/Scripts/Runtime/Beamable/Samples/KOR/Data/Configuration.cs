@@ -16,7 +16,7 @@ namespace Beamable.Samples.KOR.Data
    public class Configuration : ScriptableObject
    {
       //  Constants  -----------------------------------
-      private const string Title = "TFB Configuration";
+      private const string Title = "KOR Configuration";
 
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }

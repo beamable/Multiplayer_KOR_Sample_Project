@@ -1,4 +1,6 @@
 ﻿using System;
+using Beamable.Common.Api.Leaderboards;
+using Beamable.Common.Leaderboards;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
@@ -14,6 +16,9 @@ namespace Beamable.Samples.KOR
 
       [SerializeField]
       private IntroUIView _introUIView = null;
+
+      [SerializeField]
+      private LeaderboardRef _leaderboardContentRef = null;
 
       [SerializeField]
       private Configuration _configuration = null;
@@ -53,17 +58,31 @@ namespace Beamable.Samples.KOR
       private void SetupBeamable()
       {
          // Attempt Connection to Beamable
-         Beamable.API.Instance.Then(de =>
+         Beamable.API.Instance.Then(async beamableAPI =>
          {
             try
             {
-               _beamableAPI = de;
+               _beamableAPI = beamableAPI;
                _isBeamableSDKInstalled = true;
 
                // Handle any changes to the internet connectivity
                _beamableAPI.ConnectivityService.OnConnectivityChanged += ConnectivityService_OnConnectivityChanged;
                ConnectivityService_OnConnectivityChanged(_beamableAPI.ConnectivityService.HasConnectivity);
+               
+               // Populate the leaderboard with mock values for cosmetics
+               if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
+               {
+                  LeaderboardContent leaderboardContent = await _leaderboardContentRef.Resolve();
+                  LeaderBoardView leaderBoardView = await MockDataCreator.PopulateLeaderboardWithMockData(_beamableAPI, 
+                     leaderboardContent, 
+                     _configuration.LeaderboardMinRowCount, 
+                     _configuration.LeaderboardMockScoreMin, 
+                     _configuration.LeaderboardMockScoreMax);
 
+                  // No need to check again during this Unity playmode session
+                  RuntimeDataStorage.Instance.HasPopulatedLeaderboard = 
+                     leaderBoardView.rankings.Count >= _configuration.LeaderboardMinRowCount;
+               }
             }
             catch (Exception e)
             {

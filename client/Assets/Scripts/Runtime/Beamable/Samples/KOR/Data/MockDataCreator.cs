@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Beamable.Api.Auth;
 using Beamable.Api.Leaderboard;
 using Beamable.Api.Stats;
@@ -26,9 +27,13 @@ namespace Beamable.Samples.KOR.Data
       /// <param name="beamableAPI"></param>
       /// <param name="leaderboardContent"></param>
       /// <param name="configuration"></param>
-      public static async void PopulateLeaderboardWithMockData(IBeamableAPI beamableAPI,
-         LeaderboardContent leaderboardContent, Configuration configuration)
+      public static async Task<LeaderBoardView> PopulateLeaderboardWithMockData(IBeamableAPI beamableAPI,
+         LeaderboardContent leaderboardContent, 
+         int leaderboardMinRowCount, 
+         int leaderboardMockScoreMin, 
+         int leaderboardMockScoreMax )
       {
+         LeaderBoardView leaderboardViewToReturn = null;
          LeaderboardService leaderboardService = beamableAPI.LeaderboardService;
          StatsService statsService = beamableAPI.StatsService;
          IAuthService authService = beamableAPI.AuthService;
@@ -37,47 +42,58 @@ namespace Beamable.Samples.KOR.Data
          var localDbid = beamableAPI.User.id;
 
          // Check Leaderboard
-         LeaderBoardView leaderboardView = await leaderboardService.GetBoard(leaderboardContent.Id, 0, 100);
+         LeaderBoardView leaderboardViewBefore = leaderboardViewToReturn = 
+            await leaderboardService.GetBoard(leaderboardContent.Id, 0, 100);
 
          // Not enough data in the leaderboard? Create users with mock scores
-         int currentRowCount = leaderboardView.rankings.Count;
-         int targetRowCount = configuration.LeaderboardMinRowCount;
+         int currentRowCount = leaderboardViewBefore.rankings.Count;
 
-         Debug.Log($"PopulateLeaderboardWithMockData() BEFORE, rowCount={currentRowCount}");
-
-         if (currentRowCount < targetRowCount)
+         if (currentRowCount < leaderboardMinRowCount)
          {
-            int itemsToCreate = targetRowCount - currentRowCount;
-            for (int i = 0; i < itemsToCreate; i++)
+            Debug.Log($"PopulateLeaderboardWithMockData() BEFORE, rowCount = {currentRowCount}, targetRowCount = {leaderboardMinRowCount}");
+
+            if (currentRowCount < leaderboardMinRowCount)
             {
-               // Create NEW user
-               // Login as NEW user (Required before using "SetScore")
-               await authService.CreateUser().FlatMap(beamableAPI.ApplyToken);
+               int itemsToCreate = leaderboardMinRowCount - currentRowCount;
+               for (int i = 0; i < itemsToCreate; i++)
+               {
+                  // Create NEW user
+                  // Login as NEW user (Required before using "SetScore")
+                  await authService.CreateUser().FlatMap(beamableAPI.ApplyToken);
 
-               // Rename NEW user
-               string alias = MockDataCreator.CreateNewRandomAlias("Player");
-               MockDataCreator.SetCurrentUserAlias(statsService, alias);
-           
-               // Submit mock score for NEW user
-               double mockScore = UnityEngine.Random.Range(configuration.LeaderboardMockScoreMin, 
-                  configuration.LeaderboardMockScoreMax);
-               
-               mockScore = KORHelper.GetRoundedScore(mockScore);
-               await leaderboardService.SetScore(leaderboardContent.Id, mockScore);
+                  // Rename NEW user
+                  string alias = MockDataCreator.CreateNewRandomAlias("Player");
+                  MockDataCreator.SetCurrentUserAlias(statsService, alias);
 
-               Debug.Log($"PopulateLeaderboardWithMockData() Created Mock User. Alias={alias}, score:{mockScore}.");
+                  // Submit mock score for NEW user
+                  double mockScore = UnityEngine.Random.Range(leaderboardMockScoreMin,
+                     leaderboardMockScoreMax);
 
+                  mockScore = KORHelper.GetRoundedScore(mockScore);
+                  await leaderboardService.SetScore(leaderboardContent.Id, mockScore);
+
+                  Debug.Log($"PopulateLeaderboardWithMockData() Created Mock User. Alias={alias}, score:{mockScore}.");
+
+               }
             }
+
+            LeaderBoardView leaderboardViewAfter = leaderboardViewToReturn = 
+               await leaderboardService.GetBoard(leaderboardContent.Id, 0, 100);
+            
+            Debug.Log($"PopulateLeaderboardWithMockData() AFTER, rowCount = {leaderboardViewAfter.rankings.Count}, " +
+                      $"targetRowCount = {leaderboardMinRowCount}");
+
+            // Login again as local user
+            var deviceUsers = await beamableAPI.GetDeviceUsers();
+            var user = deviceUsers.First(bundle => bundle.User.id == localDbid);
+            await beamableAPI.ApplyToken(user.Token);
+            
+            return leaderboardViewAfter;
          }
-
-         LeaderBoardView leaderboardViewAfter = await leaderboardService.GetBoard(leaderboardContent.Id, 0, 100);
-         int currentRowCountAfter = leaderboardViewAfter.rankings.Count;
-         Debug.Log($"PopulateLeaderboardWithMockData() AFTER, rowCount={currentRowCountAfter}");
-
-         // Login again as local user
-         var deviceUsers = await beamableAPI.GetDeviceUsers();
-         var user = deviceUsers.First(bundle => bundle.User.id == localDbid);
-         await beamableAPI.ApplyToken(user.Token);
+         
+         Debug.Log($"PopulateLeaderboardWithMockData() Data is valid! rowCount = {leaderboardViewToReturn.rankings.Count}," +
+                   $"targetRowCount = {leaderboardMinRowCount}");
+         return leaderboardViewToReturn;
       }
 
       /// <summary>
