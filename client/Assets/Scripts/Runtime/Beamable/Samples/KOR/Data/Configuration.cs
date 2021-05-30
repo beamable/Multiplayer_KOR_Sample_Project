@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Beamable.Common.Content;
+using Beamable.Common.Leaderboards;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
@@ -20,11 +21,17 @@ namespace Beamable.Samples.KOR.Data
 
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }
+      public bool IsDebugLog { get { return _isDebugLog; } }
       
       /// <summary>
       /// This defines the matchmaking criteria including "NumberOfPlayers"
       /// </summary>
       public SimGameTypeRef SimGameTypeRef { get { return _simGameTypeRef; } }
+      
+      /// <summary>
+      /// This defines the leaderboard, shared across game players
+      /// </summary>
+      public LeaderboardRef LeaderboardRef { get { return _leaderboardRef; } }
       
       public string IntroSceneName { get { return _introSceneName; } }
       
@@ -44,12 +51,10 @@ namespace Beamable.Samples.KOR.Data
       public int LeaderboardMockScoreMin { get { return _leaderboardMockScoreMin; } }
       public int LeaderboardMockScoreMax { get { return _leaderboardMockScoreMax; } }
 
-         
       /// <summary>
       /// Duration in seconds
       /// </summary>
       public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
-      
 
       //  Fields ---------------------------------------
       
@@ -59,6 +64,9 @@ namespace Beamable.Samples.KOR.Data
       /// creating mock data for the game.
       /// </summary>
       [Header("Debug")]
+      [SerializeField]
+      private bool _isDebugLog = true;
+      
       [SerializeField]
       private bool _isDemoMode = true;
       
@@ -86,6 +94,9 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private SimGameTypeRef _simGameTypeRef = null;
 
+      [SerializeField]
+      private LeaderboardRef _leaderboardRef = null;
+      
       [Header("Game Visuals")]
       [SerializeField]
       private List<AvatarData> _avatarDatas = null;
@@ -117,7 +128,7 @@ namespace Beamable.Samples.KOR.Data
          // Example validation, remove as needed
          _leaderboardMinRowCount = Mathf.Clamp(_leaderboardMinRowCount, 0, 20);
          _leaderboardMockScoreMin = Mathf.Max(_leaderboardMockScoreMin, 0);
-         _leaderboardMockScoreMax = Mathf.Min(_leaderboardMockScoreMax, _leaderboardMockScoreMin);
+         _leaderboardMockScoreMax = Mathf.Max(_leaderboardMockScoreMin, _leaderboardMockScoreMax);
       }
    }
 }

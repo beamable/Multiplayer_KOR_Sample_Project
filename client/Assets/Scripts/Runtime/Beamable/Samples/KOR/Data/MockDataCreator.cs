@@ -72,7 +72,7 @@ namespace Beamable.Samples.KOR.Data
                   mockScore = KORHelper.GetRoundedScore(mockScore);
                   await leaderboardService.SetScore(leaderboardContent.Id, mockScore);
 
-                  Debug.Log($"PopulateLeaderboardWithMockData() Created Mock User. Alias={alias}, score:{mockScore}.");
+                  Debug.Log($"PopulateLeaderboardWithMockData() Created Mock User. Alias = {alias}, score = {mockScore}.");
 
                }
             }

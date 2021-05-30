@@ -18,11 +18,6 @@ namespace Beamable.Samples.KOR
       {
          SoundManager.Instance.PlayAudioClip(SoundConstants.Click01);
 
-         if (KORConstants.IsDebugLogging)
-         {
-            Debug.Log($"LoadScene() to {sceneName}");
-         }
-
          yield return new WaitForSeconds(delayBeforeLoading);
          SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
       }

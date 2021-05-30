@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Beamable.Common.Content;
 using Beamable.Experimental.Api.Matchmaking;
-using Beamable.Samples.KOR;
 using UnityEngine;
 
 /// <summary>
@@ -138,11 +137,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       }
 
       private static void DebugLog(string message)
-      {
-         if (KORConstants.IsDebugLogging)
-         {
-            Debug.Log(message);
-         }
+      { 
+         //Debug.Log(message);
       }
    }
 }

@@ -42,7 +42,7 @@ namespace Beamable.Samples.KOR
       //  Other Methods  -----------------------------
       private void DebugLog(string message)
       {
-         if (KORConstants.IsDebugLogging)
+         if (_configuration.IsDebugLog)
          {
             Debug.Log(message);
          }
@@ -58,10 +58,12 @@ namespace Beamable.Samples.KOR
                if (!RuntimeDataStorage.Instance.IsMatchmakingComplete)
                {
                   DebugLog($"Scene '{gameObject.scene.name}' was loaded directly. That is ok. Setting defaults.");
-                  RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
                   RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
                   RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
                   RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
+                  
+                  // Put in storage to offer several convenience getters
+                  RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
                }
                else
                {
@@ -78,7 +80,7 @@ namespace Beamable.Samples.KOR
                DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}");
                
                // Optional: Show queueable status text onscreen
-               SetStatusText(KORConstants.StatusText_GameState_Playing, TMP_BufferedText.BufferedTextMode.Immediate);
+               SetStatusText(KORConstants.GameUIView_Playing, TMP_BufferedText.BufferedTextMode.Immediate);
 
                // Optional: Add easily configurable delays
                await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));

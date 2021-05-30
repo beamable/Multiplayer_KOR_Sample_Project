@@ -18,9 +18,6 @@ namespace Beamable.Samples.KOR
       private IntroUIView _introUIView = null;
 
       [SerializeField]
-      private LeaderboardRef _leaderboardContentRef = null;
-
-      [SerializeField]
       private Configuration _configuration = null;
 
       private IBeamableAPI _beamableAPI = null;
@@ -72,7 +69,7 @@ namespace Beamable.Samples.KOR
                // Populate the leaderboard with mock values for cosmetics
                if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
                {
-                  LeaderboardContent leaderboardContent = await _leaderboardContentRef.Resolve();
+                  LeaderboardContent leaderboardContent = await _configuration.LeaderboardRef.Resolve();
                   LeaderBoardView leaderBoardView = await MockDataCreator.PopulateLeaderboardWithMockData(_beamableAPI, 
                      leaderboardContent, 
                      _configuration.LeaderboardMinRowCount, 

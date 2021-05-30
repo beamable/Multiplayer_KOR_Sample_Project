@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3911db0875ba10f4e865abf8c7093ed0, type: 3}
   m_Name: Configuration
   m_EditorClassIdentifier: 
+  _isDebugLog: 1
   _isDemoMode: 1
   _introSceneName: 1.Intro
   _lobbySceneName: 2.Lobby
@@ -21,6 +22,8 @@ MonoBehaviour:
   _delayGameBeforeMove: 1
   _simGameTypeRef:
     Id: game_types.GameType01
+  _leaderboardRef:
+    Id: leaderboards.Leaderboard01
   _avatarDatas:
   - _color: {r: 1, g: 0.40000004, b: 0.23137257, a: 1}
     _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
@@ -39,4 +42,4 @@ MonoBehaviour:
   _delayFadeInUI: 0.25
   _leaderboardMinRowCount: 10
   _leaderboardMockScoreMin: 1
-  _leaderboardMockScoreMax: 1
+  _leaderboardMockScoreMax: 10

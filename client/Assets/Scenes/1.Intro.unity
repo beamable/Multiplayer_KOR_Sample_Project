@@ -228,6 +228,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &224650326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 224650328}
+  - component: {fileID: 224650327}
+  m_Layer: 0
+  m_Name: Application Lifetime Detector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &224650327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224650326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1209106014}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &224650328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224650326}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &654778933
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,8 +301,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _introUIView: {fileID: 6580571727630222944}
-  _leaderboardContentRef:
-    Id: leaderboards.Leaderboard01
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
 --- !u!4 &654778935
 Transform:
@@ -368,6 +409,20 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!115 &1209106014
+MonoScript:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 5
+  m_Script: 
+  m_DefaultReferences: {}
+  m_Icon: {fileID: 0}
+  m_ExecutionOrder: 0
+  m_ClassName: ApplicationLifetimeDetector
+  m_Namespace: Beamable.Service
 --- !u!1 &1413401270
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,6 +870,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3904987983782186929, guid: d349b26339919d940b7c37f7992492db, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3920588769318341740, guid: d349b26339919d940b7c37f7992492db, type: 3}
+      propertyPath: m_Interactable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4284432387048611806, guid: d349b26339919d940b7c37f7992492db, type: 3}
