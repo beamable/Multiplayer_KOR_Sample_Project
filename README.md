@@ -7,6 +7,9 @@ This sample project demonstrates specific [Beamable](https://beamable.com/) feat
 * `Unity Version` - Use this [Version](./client/ProjectSettings/ProjectVersion.txt) or above
 * `Unity Rendering` - [Universal Render Pipeline (URP)](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@10.2/manual/index.html)
 
+**Project Physics**
+* **Included**: This project includes [Kimbatt's Deterministic Physics Code](https://github.com/Kimbatt/unity-deterministic-physics) 
+
 **Project Structure**
 * `README.md` - This README file
 * `client/` - Open this folder in the Unity Editor
