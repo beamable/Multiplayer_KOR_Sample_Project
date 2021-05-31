@@ -74,13 +74,6 @@ namespace Beamable.Samples.KOR
       }
 
 
-      public static float GetAudioPitchByGrowthPercentage(float growthPercentage)
-      {
-         //Range from 0.5 to 1.5
-         return 0.5f + Mathf.Clamp01(growthPercentage);
-      }
-
-
       public static string InternetOfflineInstructionsText
       {
          get
@@ -166,6 +159,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
+      
       private static string GetBulletList(string title, List<string> items)
       {
          string text = "";

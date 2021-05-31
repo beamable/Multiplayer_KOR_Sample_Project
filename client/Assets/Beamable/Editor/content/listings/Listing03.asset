@@ -10,24 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14ae295abc57d4046906c98c15f3ea23, type: 3}
-  m_Name: Listings01
+  m_Name: Listing03
   m_EditorClassIdentifier: 
   _tags: []
   price:
-    type: 
-    symbol: 
-    amount: 0
+    type: currency
+    symbol: currency.Coins
+    amount: 15
   offer:
     titles:
-      HasValue: 0
+      HasValue: 1
       Value:
-        listData: []
+        listData:
+        - The first item
     descriptions:
-      HasValue: 0
+      HasValue: 1
       Value:
-        listData: []
+        listData:
+        - Powerful description
     obtainCurrency: []
-    obtainItems: []
+    obtainItems:
+    - contentId: items.Item01
+      properties: []
   activePeriod:
     HasValue: 0
     Value:

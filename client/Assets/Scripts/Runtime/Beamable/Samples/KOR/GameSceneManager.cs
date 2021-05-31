@@ -18,6 +18,7 @@ namespace Beamable.Samples.KOR
       public GameUIView GameUIView { get { return _gameUIView; } }
       public Configuration Configuration { get { return _configuration; } }
 
+      
       //  Fields ---------------------------------------
       private IBeamableAPI _beamableAPI = null;
       
@@ -27,6 +28,7 @@ namespace Beamable.Samples.KOR
       [SerializeField]
       private GameUIView _gameUIView = null;
       
+      
       //  Unity Methods   ------------------------------
       protected void Start()
       {
@@ -34,11 +36,7 @@ namespace Beamable.Samples.KOR
          SetupBeamable();
       }
 
-      protected void Update()
-      {
-         //_multiplayerSession?.Update();
-      }
-
+      
       //  Other Methods  -----------------------------
       private void DebugLog(string message)
       {
@@ -48,6 +46,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
+      
       private void SetupBeamable()
       {
          Beamable.API.Instance.Then(async beamableAPI =>
@@ -118,6 +117,7 @@ namespace Beamable.Samples.KOR
          });
       }
 
+      
       /// <summary>
       /// Render UI text
       /// </summary>
@@ -128,6 +128,7 @@ namespace Beamable.Samples.KOR
          _gameUIView.BufferedText.SetText(message, statusTextMode);
       }
 
+      
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {

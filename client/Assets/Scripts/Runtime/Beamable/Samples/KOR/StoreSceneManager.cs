@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using Beamable.Api.Payments;
-using Beamable.Common.Api;
 using Beamable.Common.Api.Inventory;
+using Beamable.Common.Shop;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
@@ -17,7 +16,8 @@ namespace Beamable.Samples.KOR
    public class StoreSceneManager : MonoBehaviour
    {
       //  Consts ---------------------------------------
-      private const string ContentType = "items";
+      private const string ItemContentType = "items";
+      private const string CurrencyContentType = "currency";
       
       //  Fields ---------------------------------------
       [SerializeField]
@@ -31,6 +31,8 @@ namespace Beamable.Samples.KOR
       private PlayerStoreView _playerStoreView = null;
       private List<string> _inventoryItems = new List<string>();
       private List<string> _storeItems = new List<string>();
+      private StoreContent _storeContent = null;
+      private int _currencyAmount = 0;
       
       //  Unity Methods   ------------------------------
       protected void Start()
@@ -47,6 +49,8 @@ namespace Beamable.Samples.KOR
             TMP_BufferedText.BufferedTextMode.Queue);
 
          _beamableAPI= await Beamable.API.Instance;
+         Debug.Log($"Store with dbid = {_beamableAPI.User.id}");
+         _storeContent = await _configuration.StoreRef.Resolve();
          LoadServices();
          
       }
@@ -63,11 +67,14 @@ namespace Beamable.Samples.KOR
          _storeUIView.StorePanelUIView.BodyText.text = KORConstants.StoreUIView_Loading_Store;
 
          // Reload the services
-         _beamableAPI.InventoryService.Subscribe(ContentType, InventoryService_OnChanged);
-         _beamableAPI.CommerceService.Subscribe(CommerceService_OnChanged);
+         _beamableAPI.InventoryService.Subscribe(ItemContentType, Inventory_OnChanged);
+         _beamableAPI.InventoryService.Subscribe(CurrencyContentType, Currency_OnChanged);
+         _beamableAPI.CommerceService.Subscribe(_storeContent.Id, CommerceService_OnChanged);
 
       }
-      
+
+
+
       private void CheckLoadServicesStatus()
       {
          if (_inventoryView == null || _playerStoreView == null)
@@ -75,23 +82,27 @@ namespace Beamable.Samples.KOR
             //TODO: Wait for both to load
             //return;
          }
-         
-         _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Instructions, 
-            TMP_BufferedText.BufferedTextMode.Queue);
+
+         string instructions = string.Format(KORConstants.StoreUIView_Instructions, _currencyAmount, 
+            KORConstants.StoreUIView_CurrencyName);
+         _storeUIView.BufferedText.SetText(instructions, 
+            TMP_BufferedText.BufferedTextMode.Immediate);
 
          // Render inventory
          StringBuilder inventoryStringBuilder = new StringBuilder();
+         inventoryStringBuilder.AppendLine();
          foreach (var item in _inventoryItems)
          {
-            inventoryStringBuilder.AppendLine($"•{item}").AppendLine();
+            inventoryStringBuilder.AppendLine($"•{item}");
          }
          _storeUIView.InventoryPanelUIView.BodyText.text = inventoryStringBuilder.ToString();
 
          // Render store
          StringBuilder storeStringBuilder = new StringBuilder();
-         foreach (var item in _inventoryItems)
+         storeStringBuilder.AppendLine();
+         foreach (var item in _storeItems)
          {
-            storeStringBuilder.AppendLine($"•{item}").AppendLine();
+            storeStringBuilder.AppendLine($"•{item}");
          }  
          _storeUIView.StorePanelUIView.BodyText.text = storeStringBuilder.ToString();
       }
@@ -104,10 +115,11 @@ namespace Beamable.Samples.KOR
          }
       }
       //  Event Handlers -------------------------------
-      private void InventoryService_OnChanged(InventoryView inventoryView)
+      private void Inventory_OnChanged(InventoryView inventoryView)
       {
          _inventoryView = inventoryView;
          
+         _inventoryItems.Clear();
          foreach (KeyValuePair<string, List<ItemView>> kvp in _inventoryView.items)
          {
             // User can have multiple of EACH item. Show simpler info here
@@ -115,7 +127,7 @@ namespace Beamable.Samples.KOR
             {
                int itemCount = kvp.Value.Count;
                string itemName = kvp.Key.Replace("items.", "");
-               string itemDisplayName = $"\t{itemName} ({itemCount})";
+               string itemDisplayName = $"\t{itemName} x {itemCount}";
                
                //TODO: Replace List<string> with List<blah> to hold more data?
                _inventoryItems.Add(itemDisplayName);
@@ -126,17 +138,46 @@ namespace Beamable.Samples.KOR
          CheckLoadServicesStatus();
       }
 
+      private void Currency_OnChanged(InventoryView inventoryViewForCurrencies)
+      {
+        
+         _currencyAmount = 0;
+         foreach (KeyValuePair<string, long> kvp  in inventoryViewForCurrencies.currencies)
+         {
+            _currencyAmount = (int)kvp.Value;
+            break;
+         }
+         
+         CheckLoadServicesStatus();
+      }
+      
       private void CommerceService_OnChanged(PlayerStoreView playerStoreView)
       {
          _playerStoreView = playerStoreView;
+         _storeItems.Clear();
+         
+         foreach (PlayerListingView playerListingView in playerStoreView.listings)
+         {
+            var title = playerListingView.offer.obtainItems[0].contentId;
+            
+            int price = playerListingView.offer.price.amount;
+            string itemName = title.Replace("items.", "");
+            string itemDisplayName = $"\t{itemName} ({price} {KORConstants.StoreUIView_CurrencyName})";
+               
+            //TODO: Replace List<string> with List<blah> to hold more data?
+            _storeItems.Add(itemDisplayName);
+         }
+         
          Debug.Log($"CommerceService_OnChanged() _playerStoreView = {_playerStoreView}");
          CheckLoadServicesStatus();
       }
+      
       
       private void BuyButton_OnClicked()
       {
          Debug.Log("TODO: Enable this on item selection. Disable after purchase.");
       }
+      
       
       private void BackButton_OnClicked()
       {

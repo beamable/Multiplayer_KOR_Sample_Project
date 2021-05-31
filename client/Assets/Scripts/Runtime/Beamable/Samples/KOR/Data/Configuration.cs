@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Beamable.Common.Content;
 using Beamable.Common.Leaderboards;
+using Beamable.Common.Shop;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
@@ -32,6 +33,11 @@ namespace Beamable.Samples.KOR.Data
       /// This defines the leaderboard, shared across game players
       /// </summary>
       public LeaderboardRef LeaderboardRef { get { return _leaderboardRef; } }
+      
+      /// <summary>
+      /// This defines the store, for IPA by game players
+      /// </summary>
+      public StoreRef StoreRef { get { return _storeRef; } }
       
       public string IntroSceneName { get { return _introSceneName; } }
       
@@ -97,6 +103,9 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private LeaderboardRef _leaderboardRef = null;
       
+      [SerializeField]
+      private StoreRef _storeRef = null;
+
       [Header("Game Visuals")]
       [SerializeField]
       private List<AvatarData> _avatarDatas = null;

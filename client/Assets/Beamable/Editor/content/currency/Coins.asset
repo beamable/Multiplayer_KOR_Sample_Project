@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e65df06d8f8e499788b3ed5b359d54a, type: 3}
-  m_Name: Item03
+  m_Script: {fileID: 11500000, guid: 7071e886d4789435d9ad361e916b2207, type: 3}
+  m_Name: Coins
   m_EditorClassIdentifier: 
   _tags: []
   icon:
-    m_AssetGUID: fd6e4fc32c78509458fc45ea4a478ba8
-    m_SubObjectName: helmets
+    m_AssetGUID: 0e8271e3bc569064687b488a21e01cd0
+    m_SubObjectName: coin
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   clientPermission:
     writeSelf: 0
+  startingAmount: 10

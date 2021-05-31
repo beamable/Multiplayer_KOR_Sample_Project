@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7071e886d4789435d9ad361e916b2207, type: 3}
-  m_Name: Gems
+  m_Script: {fileID: 11500000, guid: a658558ea86c749979b310e828e3892e, type: 3}
+  m_Name: Store01
   m_EditorClassIdentifier: 
   _tags: []
-  icon:
-    m_AssetGUID: 
-    m_SubObjectName: 
-    m_SubObjectType: 
-  clientPermission:
-    writeSelf: 0
-  startingAmount: 0
+  title: Store01
+  listings:
+  - Id: listings.Listing01
+  - Id: listings.Listing02
+  - Id: listings.Listing03
+  showInactiveListings: 1

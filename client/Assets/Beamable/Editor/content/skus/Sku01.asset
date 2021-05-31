@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Sku01
   m_EditorClassIdentifier: 
   _tags: []
-  description: 
-  realPrice: 0
+  description: The item
+  realPrice: 1
   productIds:
     itunes:
       HasValue: 0

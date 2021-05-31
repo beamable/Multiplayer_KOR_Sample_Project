@@ -15,6 +15,9 @@ namespace Beamable.Samples.KOR
    /// </summary>
    public class LobbySceneManager : MonoBehaviour
    {
+      //  Events ---------------------------------------
+      private Action _onDestroy;
+      
       //  Fields ---------------------------------------
       [SerializeField]
       private Configuration _configuration = null;
@@ -46,12 +49,12 @@ namespace Beamable.Samples.KOR
          SetupBeamable();
       }
 
-      private Action _onDestroy;
 
       public void OnDestroy()
       {
          _onDestroy?.Invoke();
       }
+      
 
       //  Other Methods   ------------------------------
       private async void SetupBeamable()
@@ -82,6 +85,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
+      
       private void DebugLog(string message)
       {
          if (_configuration.IsDebugLog)
@@ -101,6 +105,7 @@ namespace Beamable.Samples.KOR
             _configuration.DelayBeforeLoadScene));
       }
       
+      
       private void BackButton_OnClicked()
       {
          _korMatchmaking?.Stop();
@@ -109,6 +114,7 @@ namespace Beamable.Samples.KOR
             _configuration.DelayBeforeLoadScene));
       }
 
+      
       private void MyKorMatchmakingOnProgress(MyMatchmakingResult result)
       {
          int currentPlayersCount = 0;
@@ -161,6 +167,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
+      
       private IEnumerator LoadScene_Coroutine()
       {
          //Wait for old messages to pass before changing scenes

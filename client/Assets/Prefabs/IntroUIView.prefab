@@ -846,8 +846,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2530758618558435487}
-  - {fileID: 3904987983782186929}
   - {fileID: 2691104605602164819}
+  - {fileID: 3904987983782186929}
   - {fileID: 8524379108623254409}
   m_Father: {fileID: 3407520637515950519}
   m_RootOrder: 1
@@ -892,7 +892,7 @@ CanvasGroup:
   m_GameObject: {fileID: 1922229364658046761}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &1982775936381613708
@@ -1592,7 +1592,7 @@ RectTransform:
   m_Children:
   - {fileID: 7869763336111456923}
   m_Father: {fileID: 513002051495932450}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2051,7 +2051,7 @@ RectTransform:
   m_Children:
   - {fileID: 7694683174424510961}
   m_Father: {fileID: 513002051495932450}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

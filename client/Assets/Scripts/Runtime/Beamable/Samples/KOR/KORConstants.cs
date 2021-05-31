@@ -5,6 +5,7 @@
    /// </summary>
    public static class KORConstants
    {
+      
       //  Fields ---------------------------------------
 
       /// <summary>
@@ -29,6 +30,7 @@
       public const string LobbyUIView_Joined = "Player {0}/{1} joined. Ready!";
       public const string StoreUIView_Loading_Store = "Loading Store...";
       public const string StoreUIView_Loading_Inventory = "Loading Inventory ...";
-      public const string StoreUIView_Instructions = "Select item above. Click 'Buy'!";
+      public const string StoreUIView_Instructions = "You have {0} {1}s. Select item above. Click 'Buy'!";
+      public const string StoreUIView_CurrencyName = "Coin";
    }
 }
