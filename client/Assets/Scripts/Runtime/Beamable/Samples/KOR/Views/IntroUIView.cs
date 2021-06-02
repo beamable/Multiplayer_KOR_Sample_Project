@@ -9,7 +9,7 @@ namespace Beamable.Samples.KOR.Views
    /// <summary>
    /// Handles the audio/graphics rendering logic: Intro UI
    /// </summary>
-   public class IntroUIView : BaseUIView
+   public class IntroUIView : BaseUIView 
    {
       //  Properties -----------------------------------
       public string AboutBodyText { set { _aboutBodyText.text = value; } }
@@ -50,6 +50,11 @@ namespace Beamable.Samples.KOR.Views
 
       //  Unity Methods   ------------------------------
       protected void Start()
+      {
+         
+      }
+      
+      public void CanvasGroupsDoFade()
       {
          TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, Configuration.DelayBeforeFadeInUI, Configuration.DelayBetweenFadeInUI);
       }

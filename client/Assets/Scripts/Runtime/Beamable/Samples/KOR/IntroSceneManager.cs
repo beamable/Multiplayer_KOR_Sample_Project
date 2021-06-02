@@ -60,6 +60,8 @@ namespace Beamable.Samples.KOR
          // Attempt Connection to Beamable
          _beamableAPI = await Beamable.API.Instance;
          
+         _introUIView.CanvasGroupsDoFade();
+         
          try
          {
             _isBeamableSDKInstalled = true;
