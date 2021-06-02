@@ -58,7 +58,7 @@ namespace Beamable.Samples.KOR
 
          _beamableAPI= await Beamable.API.Instance;
          
-         Debug.Log($"Store with dbid = {_beamableAPI.User.id}");
+         DebugLog($"Store with dbid = {_beamableAPI.User.id}");
          
          _storeContent = await _configuration.StoreRef.Resolve();
          
@@ -139,7 +139,7 @@ namespace Beamable.Samples.KOR
             }
          }
          
-         Debug.Log($"InventoryService_OnChanged() _inventoryView = {_inventoryView}");
+         DebugLog($"InventoryService_OnChanged() _inventoryView = {_inventoryView}");
          CheckLoadServicesStatus();
       }
 
@@ -175,14 +175,14 @@ namespace Beamable.Samples.KOR
             _storeItems.Add(itemDisplayName);
          }
          
-         Debug.Log($"CommerceService_OnChanged() _playerStoreView = {_playerStoreView}");
+         DebugLog($"CommerceService_OnChanged() _playerStoreView = {_playerStoreView}");
          CheckLoadServicesStatus();
       }
       
       
       private void BuyButton_OnClicked()
       {
-         Debug.Log("TODO: Enable this on item selection. Disable after purchase.");
+         DebugLog("TODO: Enable this on item selection. Disable after purchase.");
       }
       
       
