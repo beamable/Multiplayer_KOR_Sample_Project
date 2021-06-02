@@ -74,12 +74,14 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       private MatchmakingService _matchmakingService;
       private SimGameType _simGameType;
       private CancellationTokenSource _matchmakingOngoing;
+      private bool _isDebugLog = false;
 
       public MyMatchmaking(MatchmakingService matchmakingService,
-         SimGameType simGameType, long LocalPlayerDbid)
+         SimGameType simGameType, long LocalPlayerDbid, bool isDebugLog = false)
       {
          _matchmakingService = matchmakingService;
          _simGameType = simGameType;
+         _isDebugLog = isDebugLog;
 
          _myMatchmakingResult = new MyMatchmakingResult(LocalPlayerDbid, _simGameType.maxPlayers);
       }
@@ -95,7 +97,9 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          _myMatchmakingResult.RoomId = "";
          _myMatchmakingResult.SecondsRemaining = 0;
 
-         DebugLog($"MyMatchmaking.Start() TargetPlayerCount={_simGameType.maxPlayers}");
+         DebugLog($"MyMatchmaking.Start() MinPlayersToStart = {_simGameType.minPlayersToStart.Value}, " +
+                  $"TargetPlayerCount = {_simGameType.maxPlayers}");
+         
          var handle = await _matchmakingService.StartMatchmaking(_simGameType.Id);
 
          try
@@ -136,9 +140,12 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          _matchmakingOngoing?.Cancel();
       }
 
-      private static void DebugLog(string message)
-      { 
-         //Debug.Log(message);
+      private void DebugLog(string message)
+      {
+         if (_isDebugLog)
+         {
+            Debug.Log(message);
+         }
       }
    }
 }

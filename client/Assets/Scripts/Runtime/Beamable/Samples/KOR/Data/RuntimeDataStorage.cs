@@ -1,6 +1,6 @@
-﻿using Beamable.Common.Content;
+﻿using System;
+using Beamable.Common.Content;
 using Beamable.Samples.Core;
-using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
 {
@@ -11,26 +11,38 @@ namespace Beamable.Samples.KOR.Data
 	{
 		//  Properties  ----------------------------------
 		public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
+		public int TargetPlayerCount { get { return _targetPlayerCount; } set { _targetPlayerCount = value; } }
 		public int CurrentPlayerCount { get { return _currentPlayerCount; } set { _currentPlayerCount = value; } }
-		public int MinPlayerCount { get { return _simGameType.minPlayersToStart.Value; } }
-		public int MaxPlayerCount { get { return _simGameType.maxPlayers; } }
+		public int MinPlayerCount { get { return _ActiveSimGameType.minPlayersToStart.Value; } }
+		public int MaxPlayerCount { get { return _ActiveSimGameType.maxPlayers; } }
 		public string RoomId { get { return _roomId; } set { _roomId = value; } }
-		//
 		public long LocalPlayerDbid { get { return _localPlayerDbid; } set { _localPlayerDbid = value; } }
 		public bool IsLocalPlayerDbid (long dbid) { return LocalPlayerDbid == dbid; }
-		public bool IsSinglePlayerMode { get { return CurrentPlayerCount == 1; } }
-		
-		public SimGameType SimGameType { get { return _simGameType; } set { _simGameType = value; } }
+
+		public bool IsSinglePlayerMode
+		{
+			get
+			{
+				if (_targetPlayerCount == KORConstants.UnsetValue)
+				{
+					throw new Exception("Must set TargetPlayerCount before getting IsSinglePlayerMode");
+				}
+				return _targetPlayerCount == 1;
+			}
+		}
+
+		public SimGameType ActiveSimGameType { get { return _ActiveSimGameType; } set { _ActiveSimGameType = value; } }
 		public bool HasPopulatedLeaderboard { get { return _hasPopulatedLeaderboard; } set { _hasPopulatedLeaderboard = value; } }
 
+		
 		//  Fields  --------------------------------------
-		public const int UnsetPlayerCount = -1;
 		private bool _isMatchmakingComplete;
-		private bool _hasPopulatedLeaderboard = false;
+		private bool _hasPopulatedLeaderboard;
 		private long _localPlayerDbid;
 		private string _roomId;
 		private int _currentPlayerCount;
-		private SimGameType _simGameType = null;
+		private int _targetPlayerCount;
+		private SimGameType _ActiveSimGameType;
 
 
 		//  Unity Methods  --------------------------------
@@ -47,9 +59,12 @@ namespace Beamable.Samples.KOR.Data
 		private void ClearData()
 		{
 			_isMatchmakingComplete = false;
-			_localPlayerDbid = 0;
+			 _hasPopulatedLeaderboard = false;
+			_localPlayerDbid= KORConstants.UnsetValue;
 			_roomId = "";
-			_currentPlayerCount = UnsetPlayerCount;
+			_currentPlayerCount = KORConstants.UnsetValue;
+			_targetPlayerCount = KORConstants.UnsetValue;
+			_ActiveSimGameType = null;
 		}
    }
 }

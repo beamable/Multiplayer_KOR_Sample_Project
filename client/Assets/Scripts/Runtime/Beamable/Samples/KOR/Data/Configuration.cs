@@ -27,7 +27,12 @@ namespace Beamable.Samples.KOR.Data
       /// <summary>
       /// This defines the matchmaking criteria including "NumberOfPlayers"
       /// </summary>
-      public SimGameTypeRef SimGameTypeRef { get { return _simGameTypeRef; } }
+      public SimGameTypeRef SimGameType01Ref { get { return _simGameType01Ref; } }
+      
+      /// <summary>
+      /// This defines the matchmaking criteria including "NumberOfPlayers"
+      /// </summary>
+      public SimGameTypeRef SimGameType02Ref { get { return _simGameType02Ref; } }
       
       /// <summary>
       /// This defines the leaderboard, shared across game players
@@ -98,8 +103,11 @@ namespace Beamable.Samples.KOR.Data
 
       [Header("Game Content")]
       [SerializeField]
-      private SimGameTypeRef _simGameTypeRef = null;
+      private SimGameTypeRef _simGameType01Ref = null;
 
+      [SerializeField]
+      private SimGameTypeRef _simGameType02Ref = null;
+      
       [SerializeField]
       private LeaderboardRef _leaderboardRef = null;
       

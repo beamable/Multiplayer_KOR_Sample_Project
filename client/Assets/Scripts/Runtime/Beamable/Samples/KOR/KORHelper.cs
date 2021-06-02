@@ -173,5 +173,16 @@ namespace Beamable.Samples.KOR
          return text;
       }
 
+      public static string GetSceneLoadingMessage(string sceneName, bool wasLoadedDirectly)
+      {
+         if (wasLoadedDirectly)
+         {
+           return $"Scene '{sceneName}' loaded directly per debugging. That is ok. Setting defaults.";
+         }
+         else
+         {
+            return $"Scene '{sceneName}' loaded indirectly per production.";
+         }
+      }
    }
 }

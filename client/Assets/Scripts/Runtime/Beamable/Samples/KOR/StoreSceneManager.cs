@@ -43,17 +43,29 @@ namespace Beamable.Samples.KOR
       }
 
       //  Other Methods   ------------------------------
+      private void DebugLog(string message)
+      {
+         if (_configuration.IsDebugLog)
+         {
+            Debug.Log(message);
+         }
+      }
+      
       private async void SetupBeamable()
       {
          _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Loading_Store, 
             TMP_BufferedText.BufferedTextMode.Queue);
 
          _beamableAPI= await Beamable.API.Instance;
-         Debug.Log($"Store with dbid = {_beamableAPI.User.id}");
+         
+         DebugLog($"Store with dbid = {_beamableAPI.User.id}");
+         
          _storeContent = await _configuration.StoreRef.Resolve();
+         
          LoadServices();
          
       }
+      
       
       private void LoadServices()
       {
@@ -73,8 +85,7 @@ namespace Beamable.Samples.KOR
 
       }
 
-
-
+      
       private void CheckLoadServicesStatus()
       {
          if (_inventoryView == null || _playerStoreView == null)
@@ -107,13 +118,7 @@ namespace Beamable.Samples.KOR
          _storeUIView.StorePanelUIView.BodyText.text = storeStringBuilder.ToString();
       }
 
-      private void DebugLog(string message)
-      {
-         if (_configuration.IsDebugLog)
-         {
-            Debug.Log(message);
-         }
-      }
+
       //  Event Handlers -------------------------------
       private void Inventory_OnChanged(InventoryView inventoryView)
       {
@@ -134,10 +139,11 @@ namespace Beamable.Samples.KOR
             }
          }
          
-         Debug.Log($"InventoryService_OnChanged() _inventoryView = {_inventoryView}");
+         DebugLog($"InventoryService_OnChanged() _inventoryView = {_inventoryView}");
          CheckLoadServicesStatus();
       }
 
+      
       private void Currency_OnChanged(InventoryView inventoryViewForCurrencies)
       {
         
@@ -150,6 +156,7 @@ namespace Beamable.Samples.KOR
          
          CheckLoadServicesStatus();
       }
+      
       
       private void CommerceService_OnChanged(PlayerStoreView playerStoreView)
       {
@@ -168,14 +175,14 @@ namespace Beamable.Samples.KOR
             _storeItems.Add(itemDisplayName);
          }
          
-         Debug.Log($"CommerceService_OnChanged() _playerStoreView = {_playerStoreView}");
+         DebugLog($"CommerceService_OnChanged() _playerStoreView = {_playerStoreView}");
          CheckLoadServicesStatus();
       }
       
       
       private void BuyButton_OnClicked()
       {
-         Debug.Log("TODO: Enable this on item selection. Disable after purchase.");
+         DebugLog("TODO: Enable this on item selection. Disable after purchase.");
       }
       
       

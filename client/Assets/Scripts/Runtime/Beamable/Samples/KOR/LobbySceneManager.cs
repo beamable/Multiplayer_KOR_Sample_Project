@@ -32,19 +32,7 @@ namespace Beamable.Samples.KOR
       protected void Start()
       {
          _lobbyUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
-         _lobbyUIView.StartGameButton.onClick.AddListener(StartGameButton_OnClicked);
          MyKorMatchmakingOnProgress(null);
-
-         if (RuntimeDataStorage.Instance.CurrentPlayerCount == RuntimeDataStorage.UnsetPlayerCount)
-         {
-            DebugLog($"Scene '{gameObject.scene.name}' was loaded directly. That is ok. Setting defaults.");
-            RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
-         }
-
-         var text = string.Format(KORConstants.LobbyUIView_Joining, 0,
-            RuntimeDataStorage.Instance.CurrentPlayerCount);
-
-         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
 
          SetupBeamable();
       }
@@ -57,19 +45,52 @@ namespace Beamable.Samples.KOR
       
 
       //  Other Methods   ------------------------------
+      private void DebugLog(string message)
+      {
+         if (_configuration.IsDebugLog)
+         {
+            Debug.Log(message);
+         }
+      }
+      
       private async void SetupBeamable()
       {
-         var beamable = await Beamable.API.Instance;
-         _beamableAPI = beamable;
+         _beamableAPI = await Beamable.API.Instance;
+         
+         // Set defaults if scene was loaded directly
+         if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
+         {
+            DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, true));
+            RuntimeDataStorage.Instance.TargetPlayerCount = 1;
+         }
+         else
+         {
+            DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
+         }
+
+         var text = string.Format(KORConstants.LobbyUIView_Joining, 0,
+            RuntimeDataStorage.Instance.TargetPlayerCount);
+
+         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
+         
          RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
          
-         // Put in storage to offer several convenience getters
-         RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
-            
+         if (RuntimeDataStorage.Instance.IsSinglePlayerMode)
+         {
+            RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType01Ref.Resolve();
+         }
+         else
+         {
+            RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType02Ref.Resolve();
+         }
+         
          // Do matchmaking
-         _korMatchmaking = new KORMatchmaking(beamable.Experimental.MatchmakingService, 
-            RuntimeDataStorage.Instance.SimGameType,
-            _beamableAPI.User.id);
+         bool isDebugLog = _configuration.IsDebugLog;
+         _korMatchmaking = new KORMatchmaking(_beamableAPI.Experimental.MatchmakingService, 
+            RuntimeDataStorage.Instance.ActiveSimGameType,
+            _beamableAPI.User.id,
+            isDebugLog);
+         
          _korMatchmaking.OnProgress += MyKorMatchmakingOnProgress;
          _korMatchmaking.OnComplete += MyKorMatchmakingOnComplete;
          _onDestroy = _korMatchmaking.Stop;
@@ -85,26 +106,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
-      
-      private void DebugLog(string message)
-      {
-         if (_configuration.IsDebugLog)
-         {
-            Debug.Log(message);
-         }
-      }
-
-
       //  Event Handlers -------------------------------
-      private void StartGameButton_OnClicked()
-      {
-         Debug.Log("TODO: Properly end the matchmaking so the game can be playable without max players");
-         _korMatchmaking?.Stop();
-
-         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.GameSceneName,
-            _configuration.DelayBeforeLoadScene));
-      }
-      
       
       private void BackButton_OnClicked()
       {
@@ -118,23 +120,25 @@ namespace Beamable.Samples.KOR
       private void MyKorMatchmakingOnProgress(MyMatchmakingResult result)
       {
          int currentPlayersCount = 0;
+         int targetPlayerCount = 0;
+         string roomId = "0";
+         
          if (result != null)
          {
             currentPlayersCount = result.CurrentPlayerDbidList.Count;
-            DebugLog($"MyMatchmaking_OnProgress() " +
-                     $"Players={currentPlayersCount}/{result.TargetPlayerCount} " +
-                     $"RoomId={result.RoomId}");
-
-            string text = string.Format(KORConstants.LobbyUIView_Joining,
-               result.CurrentPlayerDbidList.Count,
-               result.TargetPlayerCount);
-
-            _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
+            targetPlayerCount = result.TargetPlayerCount;
+            roomId = result.RoomId;
          }
+         
+         DebugLog($"MyMatchmaking_OnProgress() " +
+                  $"Players={currentPlayersCount}/{targetPlayerCount} " +
+                  $"RoomId={roomId}");
 
-         _lobbyUIView.StartGameButton.interactable = currentPlayersCount > 0;
-         _lobbyUIView.StartGameButton.GetComponentInChildren<TMP_Text>().text = $"Start Game\n({currentPlayersCount} Players)";
+         string text = string.Format(KORConstants.LobbyUIView_Joining,
+            currentPlayersCount,
+            targetPlayerCount);
 
+         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
       }
 
 
@@ -163,7 +167,7 @@ namespace Beamable.Samples.KOR
          }
          else
          {
-            throw new Exception("Codepath is never intended.");
+            throw new Exception("Must not reach MyKorMatchmakingOnComplete() if already IsMatchmakingComplete == true");
          }
       }
 
