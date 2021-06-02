@@ -13,8 +13,30 @@ namespace Beamable.Samples.KOR.Data
 		public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
 		public int TargetPlayerCount { get { return _targetPlayerCount; } set { _targetPlayerCount = value; } }
 		public int CurrentPlayerCount { get { return _currentPlayerCount; } set { _currentPlayerCount = value; } }
-		public int MinPlayerCount { get { return _ActiveSimGameType.minPlayersToStart.Value; } }
-		public int MaxPlayerCount { get { return _ActiveSimGameType.maxPlayers; } }
+
+		public int MinPlayerCount
+		{
+			get
+			{
+				if (_activeSimGameType == null)
+				{
+					throw new Exception("Must set ActiveSimGameType before getting MinPlayerCount");
+				}
+				return _activeSimGameType.minPlayersToStart.Value;
+			}
+		}
+
+		public int MaxPlayerCount
+		{
+			get
+			{
+				if (_activeSimGameType == null)
+				{
+					throw new Exception("Must set ActiveSimGameType before getting MaxPlayerCount");
+				}
+				return _activeSimGameType.maxPlayers;
+			}
+		}
 		public string RoomId { get { return _roomId; } set { _roomId = value; } }
 		public long LocalPlayerDbid { get { return _localPlayerDbid; } set { _localPlayerDbid = value; } }
 		public bool IsLocalPlayerDbid (long dbid) { return LocalPlayerDbid == dbid; }
@@ -31,7 +53,7 @@ namespace Beamable.Samples.KOR.Data
 			}
 		}
 
-		public SimGameType ActiveSimGameType { get { return _ActiveSimGameType; } set { _ActiveSimGameType = value; } }
+		public SimGameType ActiveSimGameType { get { return _activeSimGameType; } set { _activeSimGameType = value; } }
 		public bool HasPopulatedLeaderboard { get { return _hasPopulatedLeaderboard; } set { _hasPopulatedLeaderboard = value; } }
 
 		
@@ -42,7 +64,7 @@ namespace Beamable.Samples.KOR.Data
 		private string _roomId;
 		private int _currentPlayerCount;
 		private int _targetPlayerCount;
-		private SimGameType _ActiveSimGameType;
+		private SimGameType _activeSimGameType;
 
 
 		//  Unity Methods  --------------------------------
@@ -64,7 +86,7 @@ namespace Beamable.Samples.KOR.Data
 			_roomId = "";
 			_currentPlayerCount = KORConstants.UnsetValue;
 			_targetPlayerCount = KORConstants.UnsetValue;
-			_ActiveSimGameType = null;
+			_activeSimGameType = null;
 		}
    }
 }

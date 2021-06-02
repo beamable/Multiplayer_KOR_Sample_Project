@@ -68,13 +68,7 @@ namespace Beamable.Samples.KOR
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
          }
 
-         var text = string.Format(KORConstants.LobbyUIView_Joining, 0,
-            RuntimeDataStorage.Instance.TargetPlayerCount);
-
-         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
-         
-         RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
-         
+         // Set the ActiveSimGameType. This happens in 2+ spots to handle direct scene loading
          if (RuntimeDataStorage.Instance.IsSinglePlayerMode)
          {
             RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType01Ref.Resolve();
@@ -83,6 +77,13 @@ namespace Beamable.Samples.KOR
          {
             RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType02Ref.Resolve();
          }
+         
+         var text = string.Format(KORConstants.LobbyUIView_Joining, 0,
+            RuntimeDataStorage.Instance.TargetPlayerCount);
+
+         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
+         
+         RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
          
          // Do matchmaking
          bool isDebugLog = _configuration.IsDebugLog;

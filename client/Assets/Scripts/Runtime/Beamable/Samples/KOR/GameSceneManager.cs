@@ -56,13 +56,23 @@ namespace Beamable.Samples.KOR
          if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, true));
+            RuntimeDataStorage.Instance.TargetPlayerCount = 1;
             RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
-            RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
             RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
          }
          else
          {
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
+         }
+         
+         // Set the ActiveSimGameType. This happens in 2+ spots to handle direct scene loading
+         if (RuntimeDataStorage.Instance.IsSinglePlayerMode)
+         {
+            RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType01Ref.Resolve();
+         }
+         else
+         {
+            RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType02Ref.Resolve();
          }
 
          // Initialize ECS
