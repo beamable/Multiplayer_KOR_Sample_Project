@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Beamable.Common;
 using Beamable.Samples.KOR.Data;
 using Unity.Entities;
 using UnityEngine;
@@ -15,6 +16,9 @@ namespace Beamable.Samples.KOR.Multiplayer
     [UpdateAfter(typeof(ExportPhysicsWorld))]
     public class GameController : SystemBase
     {
+
+        public static Promise<GameController> OnInstance = new Promise<GameController>();
+
         public static GameController Instance;
 
         // store entity-gameobject pairs for rendering (not really efficient to use gameobjects here)
@@ -46,6 +50,7 @@ namespace Beamable.Samples.KOR.Multiplayer
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            OnInstance = new Promise<GameController>();
             Instance = null;
         }
 
@@ -54,6 +59,7 @@ namespace Beamable.Samples.KOR.Multiplayer
             base.OnCreate();
             Debug.Log("Creating Game Controller");
             Instance = this;
+            OnInstance.CompleteSuccess(Instance);
             UnityEngine.Physics.autoSimulation = false;
 
             matPropBlock = new MaterialPropertyBlock();
@@ -89,9 +95,9 @@ namespace Beamable.Samples.KOR.Multiplayer
             PhysicsParams physicsParamsDynamic = PhysicsParams.Default;
             physicsParamsDynamic.isDynamic = true;
 
-            CreateBoxColliderObject(GameResourceManager.Instance.CubePrefab, new float3(sfloat.Zero, sfloat.Zero, sfloat.Zero),
-                new float3((sfloat) 500.0f, (sfloat) 2.0f, (sfloat) 500.0f), quaternion.identity, material,
-                physicsParamsStatic);
+            // CreateBoxColliderObject(GameResourceManager.Instance.CubePrefab, new float3(sfloat.Zero, sfloat.Zero, sfloat.Zero),
+            //     new float3((sfloat) 500.0f, (sfloat) 2.0f, (sfloat) 500.0f), quaternion.identity, material,
+            //     physicsParamsStatic);
 
             var c = 50;
             for (var i = 0f; i < c; i++)
@@ -132,15 +138,35 @@ namespace Beamable.Samples.KOR.Multiplayer
 
         protected override void OnUpdate()
         {
-            Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r, ref PhysicsMass mass, ref PhysicsVelocity _vel) =>
+
+            // Set all positions
+            Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r) =>
             {
                 if (objects.TryGetValue(e, out GameObject obj))
                 {
                     obj.transform.localPosition = (Vector3)t.Value;
                     obj.transform.localRotation = (Quaternion)r.Value;
-
                 }
             }).WithoutBurst().Run();
+
+            // Cap velocities...
+            Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r, ref PhysicsMass mass, ref PhysicsVelocity vel) =>
+            {
+                // cap out the velocity at a given speed.
+                var linearVelocityMag = math.length(vel.Linear);
+                if (linearVelocityMag > (sfloat).01f)
+                {
+                    var normalizedLinearVelocity = vel.Linear / linearVelocityMag;
+                    vel.Linear = normalizedLinearVelocity * math.min(linearVelocityMag, (sfloat)15);
+                }
+
+
+            }).WithoutBurst().Run();
+        }
+
+        public void Register(GameObject obj, Entity entity)
+        {
+            objects.Add(entity, obj);
         }
 
 
