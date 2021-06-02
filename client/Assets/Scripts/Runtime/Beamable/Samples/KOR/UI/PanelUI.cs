@@ -1,12 +1,12 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Beamable.Samples.KOR.Views
+namespace Beamable.Samples.KOR.UI
 {
    /// <summary>
    /// Handles the view concerns for panels with texts
    /// </summary>
-   public class PanelUIView : MonoBehaviour
+   public class PanelUI : MonoBehaviour
    {
       //  Properties -----------------------------------
       public TMP_Text TitleText { get { return _titleText; } }

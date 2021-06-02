@@ -26,8 +26,8 @@ namespace Beamable.Samples.KOR.Multiplayer
       }
 
       public KORMatchmaking(
-         MatchmakingService matchmakingService, SimGameType simGameType, long LocalPlayerDbid, bool isDebugLogging) :
-         base(matchmakingService, simGameType, LocalPlayerDbid, isDebugLogging)
+         MatchmakingService matchmakingService, SimGameType simGameType, long LocalPlayerDbid, bool isDebugLog = false) :
+         base(matchmakingService, simGameType, LocalPlayerDbid, isDebugLog)
       {
       }
    }

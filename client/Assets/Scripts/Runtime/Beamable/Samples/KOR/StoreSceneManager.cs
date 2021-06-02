@@ -75,8 +75,8 @@ namespace Beamable.Samples.KOR
          // Set loading text
          _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Loading_Store, 
             TMP_BufferedText.BufferedTextMode.Immediate);
-         _storeUIView.InventoryPanelUIView.BodyText.text = KORConstants.StoreUIView_Loading_Inventory;
-         _storeUIView.StorePanelUIView.BodyText.text = KORConstants.StoreUIView_Loading_Store;
+         _storeUIView.InventoryPanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Inventory;
+         _storeUIView.StorePanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Store;
 
          // Reload the services
          _beamableAPI.InventoryService.Subscribe(ItemContentType, Inventory_OnChanged);
@@ -106,7 +106,7 @@ namespace Beamable.Samples.KOR
          {
             inventoryStringBuilder.AppendLine($"•{item}");
          }
-         _storeUIView.InventoryPanelUIView.BodyText.text = inventoryStringBuilder.ToString();
+         _storeUIView.InventoryPanelUI.BodyText.text = inventoryStringBuilder.ToString();
 
          // Render store
          StringBuilder storeStringBuilder = new StringBuilder();
@@ -115,7 +115,7 @@ namespace Beamable.Samples.KOR
          {
             storeStringBuilder.AppendLine($"•{item}");
          }  
-         _storeUIView.StorePanelUIView.BodyText.text = storeStringBuilder.ToString();
+         _storeUIView.StorePanelUI.BodyText.text = storeStringBuilder.ToString();
       }
 
 

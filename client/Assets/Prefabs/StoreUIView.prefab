@@ -985,6 +985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b20be4b562bcab4d8a22093cb33b599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
   _bufferedText: {fileID: 7430113981452663110}
   _inventoryPanelUIView: {fileID: 4854276195642544568}

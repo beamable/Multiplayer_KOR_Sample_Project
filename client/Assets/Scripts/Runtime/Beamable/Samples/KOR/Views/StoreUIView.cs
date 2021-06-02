@@ -10,28 +10,26 @@ namespace Beamable.Samples.KOR.Views
    /// <summary>
    /// Handles the audio/graphics rendering logic: Store UI
    /// </summary>
-   public class StoreUIView : MonoBehaviour
+   public class StoreUIView : BaseUIView
    {
       //  Properties -----------------------------------
       public TMP_BufferedText BufferedText { get { return _bufferedText; } }
-      public PanelUIView InventoryPanelUIView { get { return _inventoryPanelUIView; } }
-      public PanelUIView StorePanelUIView { get { return _storePanelUIView; } }
+      public PanelUI InventoryPanelUI { get { return inventoryPanelUI; } }
+      public PanelUI StorePanelUI { get { return storePanelUI; } }
       
       public Button BuyButton { get { return _buyButton; } }
       public Button BackButton { get { return _backButton; } }
       
       //  Fields ---------------------------------------
-      [SerializeField]
-      private Configuration _configuration = null;
-
+      [Header("UI")]
       [SerializeField]
       private TMP_BufferedText _bufferedText = null;
 
       [SerializeField]
-      private PanelUIView _inventoryPanelUIView = null;
+      private PanelUI inventoryPanelUI = null;
       
       [SerializeField]
-      private PanelUIView _storePanelUIView = null;
+      private PanelUI storePanelUI = null;
       
       [SerializeField]
       private Button _buyButton = null;
@@ -46,7 +44,7 @@ namespace Beamable.Samples.KOR.Views
       //  Unity Methods   ------------------------------
       protected void Start()
       {
-         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, 0, _configuration.DelayFadeInUI);
+         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, Configuration.DelayBeforeFadeInUI, Configuration.DelayBetweenFadeInUI);
       }
    }
 }

@@ -48,7 +48,7 @@ namespace Beamable.Samples.KOR.Views
       //  Unity Methods   ------------------------------
       protected void Start()
       {
-         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, 1f, _configuration.DelayFadeInUI);
+         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, _configuration.DelayBeforeFadeInUI, _configuration.DelayBetweenFadeInUI);
       }
    }
 }

@@ -28,6 +28,7 @@ MonoBehaviour:
     Id: leaderboards.Leaderboard01
   _storeRef:
     Id: stores.Store01
+  _cameraBackgroundColor: {r: 0.7372549, g: 0.9019608, b: 1, a: 1}
   _avatarDatas:
   - _color: {r: 1, g: 0.40000004, b: 0.23137257, a: 1}
     _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}

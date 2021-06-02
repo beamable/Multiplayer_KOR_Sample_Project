@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Beamable.Samples.KOR.Animation;
-using Beamable.Samples.KOR.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +9,7 @@ namespace Beamable.Samples.KOR.Views
    /// <summary>
    /// Handles the audio/graphics rendering logic: Intro UI
    /// </summary>
-   public class IntroUIView : MonoBehaviour
+   public class IntroUIView : BaseUIView
    {
       //  Properties -----------------------------------
       public string AboutBodyText { set { _aboutBodyText.text = value; } }
@@ -23,9 +22,7 @@ namespace Beamable.Samples.KOR.Views
       public CanvasGroup ButtonsCanvasGroup { get { return _buttonsCanvasGroup; } }
 
       //  Fields ---------------------------------------
-      [SerializeField]
-      private Configuration _configuration = null;
-
+      [Header("UI")]
       [SerializeField]
       private Button startGame01Button = null;
 
@@ -54,7 +51,7 @@ namespace Beamable.Samples.KOR.Views
       //  Unity Methods   ------------------------------
       protected void Start()
       {
-         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, 0, _configuration.DelayFadeInUI);
+         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, Configuration.DelayBeforeFadeInUI, Configuration.DelayBetweenFadeInUI);
       }
    }
 }

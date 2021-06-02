@@ -55,7 +55,8 @@ namespace Beamable.Samples.KOR.Data
       public string LeaderboardSceneName { get { return _leaderboardSceneName; } }
       
       public float DelayBeforeLoadScene { get { return _delayBeforeLoadScene; } }
-      public float DelayFadeInUI { get { return _delayFadeInUI; } }
+      public float DelayBetweenFadeInUI { get { return delayBetweenBetweenFadeInUI; } }
+      public float DelayBeforeFadeInUI { get { return _delayBeforeFadeInUI; } }
       public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
       public List<AvatarData> AvatarDatas { get { return _avatarDatas; } }
       public int LeaderboardMinRowCount { get { return _leaderboardMinRowCount; } }
@@ -66,6 +67,8 @@ namespace Beamable.Samples.KOR.Data
       /// Duration in seconds
       /// </summary>
       public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
+
+      public Color CameraBackgroundColor { get { return _cameraBackgroundColor; } }
 
       //  Fields ---------------------------------------
       
@@ -116,8 +119,11 @@ namespace Beamable.Samples.KOR.Data
 
       [Header("Game Visuals")]
       [SerializeField]
-      private List<AvatarData> _avatarDatas = null;
+      private Color _cameraBackgroundColor = Color.white;
 
+      [SerializeField]
+      private List<AvatarData> _avatarDatas = null;
+         
       [Header("Cosmetic Delays")]
       [SerializeField]
       private float _delayBeforeLoadScene = 0;
@@ -127,7 +133,10 @@ namespace Beamable.Samples.KOR.Data
       private float _statusMessageMinDuration = 3000;
 
       [SerializeField]
-      private float _delayFadeInUI = 0.25f;
+      private float delayBetweenBetweenFadeInUI = 0.25f;
+
+      [SerializeField]
+      private float _delayBeforeFadeInUI = 0.25f;
 
       [Header("Mock Data")] 
       [SerializeField]
