@@ -3,6 +3,7 @@ using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
+using TMPro;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR
@@ -29,7 +30,9 @@ namespace Beamable.Samples.KOR
       protected void Start()
       {
          _introUIView.AboutBodyText = "";
-         _introUIView.StartGameButton.onClick.AddListener(StartGameButton_OnClicked);
+         
+         _introUIView.StartGame01Button.onClick.AddListener(StartGame01Button_OnClicked);
+         _introUIView.StartGame02Button.onClick.AddListener(StartGame02Button_OnClicked);
          _introUIView.LeaderboardButton.onClick.AddListener(LeaderboardButton_OnClicked);
          _introUIView.StoreButton.onClick.AddListener(StoreButton_OnClicked);
          _introUIView.QuitButton.onClick.AddListener(QuitButton_OnClicked);
@@ -52,43 +55,41 @@ namespace Beamable.Samples.KOR
       /// <summary>
       /// Login with Beamable and fetch user/session information
       /// </summary>
-      private void SetupBeamable()
+      private async void SetupBeamable()
       {
          // Attempt Connection to Beamable
-         Beamable.API.Instance.Then(async beamableAPI =>
+         _beamableAPI = await Beamable.API.Instance;
+         
+         try
          {
-            try
-            {
-               _beamableAPI = beamableAPI;
-               _isBeamableSDKInstalled = true;
+            _isBeamableSDKInstalled = true;
 
-               // Handle any changes to the internet connectivity
-               _beamableAPI.ConnectivityService.OnConnectivityChanged += ConnectivityService_OnConnectivityChanged;
-               ConnectivityService_OnConnectivityChanged(_beamableAPI.ConnectivityService.HasConnectivity);
+            // Handle any changes to the internet connectivity
+            _beamableAPI.ConnectivityService.OnConnectivityChanged += ConnectivityService_OnConnectivityChanged;
+            ConnectivityService_OnConnectivityChanged(_beamableAPI.ConnectivityService.HasConnectivity);
                
-               // Populate the leaderboard with mock values for cosmetics
-               if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
-               {
-                  LeaderboardContent leaderboardContent = await _configuration.LeaderboardRef.Resolve();
-                  LeaderBoardView leaderBoardView = await MockDataCreator.PopulateLeaderboardWithMockData(_beamableAPI, 
-                     leaderboardContent, 
-                     _configuration.LeaderboardMinRowCount, 
-                     _configuration.LeaderboardMockScoreMin, 
-                     _configuration.LeaderboardMockScoreMax);
-
-                  // No need to check again during this Unity playmode session
-                  RuntimeDataStorage.Instance.HasPopulatedLeaderboard = 
-                     leaderBoardView.rankings.Count >= _configuration.LeaderboardMinRowCount;
-               }
-            }
-            catch (Exception e)
+            // Populate the leaderboard with mock values for cosmetics
+            if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
             {
-               // Failed to connect (e.g. not logged in)
-               _isBeamableSDKInstalled = false;
-               _isBeamableSDKInstalledErrorMessage = e.Message;
-               ConnectivityService_OnConnectivityChanged(false);
+               LeaderboardContent leaderboardContent = await _configuration.LeaderboardRef.Resolve();
+               LeaderBoardView leaderBoardView = await MockDataCreator.PopulateLeaderboardWithMockData(_beamableAPI, 
+                  leaderboardContent, 
+                  _configuration.LeaderboardMinRowCount, 
+                  _configuration.LeaderboardMockScoreMin, 
+                  _configuration.LeaderboardMockScoreMax);
+
+               // No need to check again during this Unity playmode session
+               RuntimeDataStorage.Instance.HasPopulatedLeaderboard = 
+                  leaderBoardView.rankings.Count >= _configuration.LeaderboardMinRowCount;
             }
-         });
+         }
+         catch (Exception e)
+         {
+            // Failed to connect (e.g. not logged in)
+            _isBeamableSDKInstalled = false;
+            _isBeamableSDKInstalledErrorMessage = e.Message;
+            ConnectivityService_OnConnectivityChanged(false);
+         }
       }
 
 
@@ -116,10 +117,11 @@ namespace Beamable.Samples.KOR
 
       private void StartGame(int targetPlayerCount)
       {
-         RuntimeDataStorage.Instance.CurrentPlayerCount = targetPlayerCount;
-
          _introUIView.ButtonsCanvasGroup.interactable = false;
-
+         
+         // Stores the "UI wants this player count"
+         RuntimeDataStorage.Instance.TargetPlayerCount = targetPlayerCount;
+         
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.LobbySceneName,
             _configuration.DelayBeforeLoadScene));
       }
@@ -132,12 +134,17 @@ namespace Beamable.Samples.KOR
       }
 
 
-      private void StartGameButton_OnClicked()
+      private void StartGame01Button_OnClicked()
       {
          StartGame(1);
       }
 
-
+      
+      private void StartGame02Button_OnClicked()
+      {
+         StartGame(6);
+      }
+      
       private void LeaderboardButton_OnClicked()
       {
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.LeaderboardSceneName,

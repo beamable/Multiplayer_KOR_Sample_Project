@@ -21,9 +21,7 @@ namespace Beamable.Samples.KOR
         protected void Start()
         {
             _closeButton.onClick.AddListener(CloseButton_OnClicked);
-
         }
-
 
         //  Event Handlers -------------------------------
         private void CloseButton_OnClicked()

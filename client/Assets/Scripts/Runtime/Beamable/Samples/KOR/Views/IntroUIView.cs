@@ -15,7 +15,8 @@ namespace Beamable.Samples.KOR.Views
       //  Properties -----------------------------------
       public string AboutBodyText { set { _aboutBodyText.text = value; } }
 
-      public Button StartGameButton { get { return _startGameButton; } }
+      public Button StartGame01Button { get { return startGame01Button; } }
+      public Button StartGame02Button { get { return startGame02Button; } }
       public Button LeaderboardButton { get { return _leaderboardButton; } }
       public Button StoreButton { get { return _storeButton; } }
       public Button QuitButton { get { return _quitButton; } }
@@ -26,7 +27,10 @@ namespace Beamable.Samples.KOR.Views
       private Configuration _configuration = null;
 
       [SerializeField]
-      private Button _startGameButton = null;
+      private Button startGame01Button = null;
+
+      [SerializeField]
+      private Button startGame02Button = null;
 
       [SerializeField]
       private Button _leaderboardButton = null;

@@ -46,78 +46,71 @@ namespace Beamable.Samples.KOR
          }
       }
 
-      
-      private void SetupBeamable()
+
+      private async void SetupBeamable()
       {
-         Beamable.API.Instance.Then(async beamableAPI =>
+         _beamableAPI = await Beamable.API.Instance;
+
+         // Set defaults if scene was loaded directly
+         if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {
+            DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, true));
+            RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
+            RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
+            RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
+         }
+         else
+         {
+            DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
+         }
+
+         // Optional: Stuff to use later when player moves are incoming
+         long tbdIncomingPlayerDbid = _beamableAPI.User.id; // test value;
+         DebugLog($"MinPlayerCount = {RuntimeDataStorage.Instance.MinPlayerCount}");
+         DebugLog($"MaxPlayerCount = {RuntimeDataStorage.Instance.MaxPlayerCount}");
+         DebugLog($"CurrentPlayerCount = {RuntimeDataStorage.Instance.CurrentPlayerCount}");
+         DebugLog($"LocalPlayerDbid = {RuntimeDataStorage.Instance.LocalPlayerDbid}");
+         DebugLog($"IsLocalPlayerDbid = {RuntimeDataStorage.Instance.IsLocalPlayerDbid(tbdIncomingPlayerDbid)}");
+         DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}");
+
+         // Optional: Show queueable status text onscreen
+         SetStatusText(KORConstants.GameUIView_Playing, TMP_BufferedText.BufferedTextMode.Immediate);
+
+         // Optional: Add easily configurable delays
+         await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));
+
+         // Optional: Play "damage" sound
+         SoundManager.Instance.PlayAudioClip(SoundConstants.HealthBarDecrement);
+
+         // Optional: Render color and text of avatar ui
+         _gameUIView.AvatarViews.Clear();
+         for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
+         {
+            AvatarData avatarData = _configuration.AvatarDatas[i];
+            _gameUIView.AvatarUIViews[i].AvatarData = avatarData;
+            _gameUIView.AvatarUIViews[i].Health = 100;
+            _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
+            _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
+            _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
+
+            if (i < RuntimeDataStorage.Instance.MinPlayerCount)
             {
-               _beamableAPI = beamableAPI;
+               AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
+               _gameUIView.AvatarViews.Add(avatarView);
 
-               if (!RuntimeDataStorage.Instance.IsMatchmakingComplete)
-               {
-                  DebugLog($"Scene '{gameObject.scene.name}' was loaded directly. That is ok. Setting defaults.");
-                  RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
-                  RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
-                  RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
-                  
-                  // Put in storage to offer several convenience getters
-                  RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
-               }
-               else
-               {
-                  DebugLog($"Scene '{gameObject.scene.name}' was loaded from lobby per production.");
-               }
-
-               // Optional: Stuff to use later when player moves are incoming
-               long tbdIncomingPlayerDbid = 0;
-               DebugLog($"MinPlayerCount = {RuntimeDataStorage.Instance.MinPlayerCount}");
-               DebugLog($"MaxPlayerCount = {RuntimeDataStorage.Instance.MaxPlayerCount}");
-               DebugLog($"CurrentPlayerCount = {RuntimeDataStorage.Instance.CurrentPlayerCount}");
-               DebugLog($"LocalPlayerDbid = {RuntimeDataStorage.Instance.LocalPlayerDbid}");
-               DebugLog($"IsLocalPlayerDbid = {RuntimeDataStorage.Instance.IsLocalPlayerDbid(tbdIncomingPlayerDbid)}");
-               DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}");
-               
-               // Optional: Show queueable status text onscreen
-               SetStatusText(KORConstants.GameUIView_Playing, TMP_BufferedText.BufferedTextMode.Immediate);
-
-               // Optional: Add easily configurable delays
-               await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));
-               
-               // Optional: Play "damage" sound
-               SoundManager.Instance.PlayAudioClip(SoundConstants.HealthBarDecrement);
-               
-               // Optional: Render color and text of avatar ui
-               _gameUIView.AvatarViews.Clear();
-               for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
-               {
-                  AvatarData avatarData = _configuration.AvatarDatas[i];
-                  _gameUIView.AvatarUIViews[i].AvatarData = avatarData;
-                  _gameUIView.AvatarUIViews[i].Health = 100;
-                  _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
-                  _gameUIView.AvatarUIViews[i].Name = $"Player {(i+1):00}"; // "Player 01"
-                  _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
-
-                  if (i < RuntimeDataStorage.Instance.MinPlayerCount)
-                  {
-                     AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
-                     _gameUIView.AvatarViews.Add(avatarView);
-                     
-                     //Optional: Play animations. All are working properly
-                     //avatarView.PlayAnimationAttack01();
-                     //avatarView.PlayAnimationAttack02();
-                     //avatarView.PlayAnimationDie();
-                     //avatarView.PlayAnimationRunForward();
-                     //avatarView.PlayAnimationTakeDamage();
-                     //avatarView.PlayAnimationWalkForward();
-                     avatarView.PlayAnimationIdle();
-                  }
-               }
+               //Optional: Play animations. All are working properly
+               //avatarView.PlayAnimationAttack01();
+               //avatarView.PlayAnimationAttack02();
+               //avatarView.PlayAnimationDie();
+               //avatarView.PlayAnimationRunForward();
+               //avatarView.PlayAnimationTakeDamage();
+               //avatarView.PlayAnimationWalkForward();
+               avatarView.PlayAnimationIdle();
             }
-         });
+         }
       }
 
-      
+
       /// <summary>
       /// Render UI text
       /// </summary>

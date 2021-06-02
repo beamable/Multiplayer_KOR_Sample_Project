@@ -20,8 +20,10 @@ MonoBehaviour:
   _storeSceneName: 4.Store
   _leaderboardSceneName: 5.Leaderboard
   _delayGameBeforeMove: 1
-  _simGameTypeRef:
+  _simGameType01Ref:
     Id: game_types.GameType01
+  _simGameType02Ref:
+    Id: game_types.GameType02
   _leaderboardRef:
     Id: leaderboards.Leaderboard01
   _storeRef:

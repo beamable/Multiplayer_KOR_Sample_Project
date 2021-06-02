@@ -43,17 +43,29 @@ namespace Beamable.Samples.KOR
       }
 
       //  Other Methods   ------------------------------
+      private void DebugLog(string message)
+      {
+         if (_configuration.IsDebugLog)
+         {
+            Debug.Log(message);
+         }
+      }
+      
       private async void SetupBeamable()
       {
          _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Loading_Store, 
             TMP_BufferedText.BufferedTextMode.Queue);
 
          _beamableAPI= await Beamable.API.Instance;
+         
          Debug.Log($"Store with dbid = {_beamableAPI.User.id}");
+         
          _storeContent = await _configuration.StoreRef.Resolve();
+         
          LoadServices();
          
       }
+      
       
       private void LoadServices()
       {
@@ -73,8 +85,7 @@ namespace Beamable.Samples.KOR
 
       }
 
-
-
+      
       private void CheckLoadServicesStatus()
       {
          if (_inventoryView == null || _playerStoreView == null)
@@ -107,13 +118,7 @@ namespace Beamable.Samples.KOR
          _storeUIView.StorePanelUIView.BodyText.text = storeStringBuilder.ToString();
       }
 
-      private void DebugLog(string message)
-      {
-         if (_configuration.IsDebugLog)
-         {
-            Debug.Log(message);
-         }
-      }
+
       //  Event Handlers -------------------------------
       private void Inventory_OnChanged(InventoryView inventoryView)
       {
@@ -138,6 +143,7 @@ namespace Beamable.Samples.KOR
          CheckLoadServicesStatus();
       }
 
+      
       private void Currency_OnChanged(InventoryView inventoryViewForCurrencies)
       {
         
@@ -150,6 +156,7 @@ namespace Beamable.Samples.KOR
          
          CheckLoadServicesStatus();
       }
+      
       
       private void CommerceService_OnChanged(PlayerStoreView playerStoreView)
       {
