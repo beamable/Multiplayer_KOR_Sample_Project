@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
@@ -18,17 +19,17 @@ namespace Beamable.Samples.KOR
       public GameUIView GameUIView { get { return _gameUIView; } }
       public Configuration Configuration { get { return _configuration; } }
 
-      
+
       //  Fields ---------------------------------------
       private IBeamableAPI _beamableAPI = null;
-      
+
       [SerializeField]
       private Configuration _configuration = null;
-      
+
       [SerializeField]
       private GameUIView _gameUIView = null;
-      
-      
+
+
       //  Unity Methods   ------------------------------
       protected void Start()
       {
@@ -36,7 +37,7 @@ namespace Beamable.Samples.KOR
          SetupBeamable();
       }
 
-      
+
       //  Other Methods  -----------------------------
       private void DebugLog(string message)
       {
@@ -55,14 +56,30 @@ namespace Beamable.Samples.KOR
          if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, true));
+            RuntimeDataStorage.Instance.TargetPlayerCount = 1;
             RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
-            RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
             RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
          }
          else
          {
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
          }
+         
+         // Set the ActiveSimGameType. This happens in 2+ spots to handle direct scene loading
+         if (RuntimeDataStorage.Instance.IsSinglePlayerMode)
+         {
+            RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType01Ref.Resolve();
+         }
+         else
+         {
+            RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType02Ref.Resolve();
+         }
+
+         // Initialize ECS
+         SystemManager.StartGameSystems();
+
+         // Initialize Networking
+         await NetworkController.Instance.Init();
 
          // Optional: Stuff to use later when player moves are incoming
          long tbdIncomingPlayerDbid = _beamableAPI.User.id; // test value;
@@ -121,11 +138,14 @@ namespace Beamable.Samples.KOR
          _gameUIView.BufferedText.SetText(message, statusTextMode);
       }
 
-      
+
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {
-         //Change scenes
+         // Destroy ECS
+         SystemManager.DestroyGameSystems();
+
+         // Change scenes
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }
