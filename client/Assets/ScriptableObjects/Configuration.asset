@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDebugLog: 1
   _isDemoMode: 1
+  _isAudioMuted: 0
   _introSceneName: 1.Intro
   _lobbySceneName: 2.Lobby
   _gameSceneName: 3.Game

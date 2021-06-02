@@ -1,6 +1,7 @@
 ﻿using Beamable.Samples.Core;
 using System.Collections.Generic;
 using System.Text;
+using Beamable.Samples.KOR.Data;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Audio
@@ -38,9 +39,9 @@ namespace Beamable.Samples.KOR.Audio
 			stringBuilder.AppendLine("DebugLogCodeSnippet...");
 
 			foreach (AudioClip audioClip in _audioClips)
-         {
+			{
 				stringBuilder.AppendLine($"public const string {audioClip.name} = \"{audioClip.name}\";");
-         }
+			}
 
 			Debug.Log(stringBuilder.ToString());
 		}
@@ -127,15 +128,22 @@ namespace Beamable.Samples.KOR.Audio
 					audioSource.clip = audioClip;
 					audioSource.pitch = pitch;
 					if (delay == UnsetFloat)
-               {
-						audioSource.Play();
+					{
+						if (!Configuration.Instance.IsAudioMuted)
+						{
+							audioSource.Play();
+						}
+						
 					}
 					else
-               {
-						//delay in seconds
-						audioSource.PlayDelayed(delay);
+					{
+						if (!Configuration.Instance.IsAudioMuted)
+						{
+							//delay in seconds
+							audioSource.PlayDelayed(delay);
+						}
 					}
-					
+
 					return;
 				}
 			}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Beamable.Common.Content;
 using Beamable.Common.Leaderboards;
 using Beamable.Common.Shop;
@@ -17,12 +18,28 @@ namespace Beamable.Samples.KOR.Data
       order = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_ORDER_1)]
    public class Configuration : ScriptableObject
    {
+      private static Configuration _instance = null;
+      public static Configuration Instance
+      {
+         get
+         {
+            // NOTE: This is a light implementation that does not
+            // autocreate. Relies on awake being called before Instance
+            if (_instance == null)
+            {
+               Debug.LogWarning("Configuration.Instance getter called but not ready. Try later.");
+            }
+            return _instance;
+         }
+      }
+      
       //  Constants  -----------------------------------
       private const string Title = "KOR Configuration";
 
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }
       public bool IsDebugLog { get { return _isDebugLog; } }
+      public bool IsAudioMuted { get { return _isAudioMuted; } }
       
       /// <summary>
       /// This defines the matchmaking criteria including "NumberOfPlayers"
@@ -84,6 +101,9 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private bool _isDemoMode = true;
       
+      [SerializeField]
+      private bool _isAudioMuted = false;
+
       [Header("Scene Names")]
       [SerializeField]
       private string _introSceneName = "";
@@ -149,6 +169,16 @@ namespace Beamable.Samples.KOR.Data
       private int _leaderboardMockScoreMax = 10;
 
       //  Unity Methods ---------------------------------------
+      protected void OnEnable()
+      {
+         _instance = this;
+      }
+
+      protected void OnDisable()
+      {
+         _instance = null;
+      }
+
       protected void OnValidate()
       {
          // Example validation, remove as needed
