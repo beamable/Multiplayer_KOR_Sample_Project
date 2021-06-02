@@ -1,4 +1,5 @@
 ﻿using Beamable.Samples.KOR.Data;
+using Beamable.Samples.KOR.Views;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,9 @@ namespace Beamable.Samples.KOR
         private Configuration _configuration = null;
 
         [SerializeField]
+        private LeaderboardUIView _leaderboardUIView = null;
+
+        [SerializeField]
         private Button _closeButton = null;
 
 
@@ -21,6 +25,8 @@ namespace Beamable.Samples.KOR
         protected void Start()
         {
             _closeButton.onClick.AddListener(CloseButton_OnClicked);
+            
+            _leaderboardUIView.CanvasGroupsDoFadeIn();
         }
 
         //  Event Handlers -------------------------------

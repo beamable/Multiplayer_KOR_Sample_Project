@@ -57,6 +57,9 @@ namespace Beamable.Samples.KOR
       {
          _beamableAPI = await Beamable.API.Instance;
          
+         // Do this after calling "Beamable.API.Instance" for smoother UI
+         _lobbyUIView.CanvasGroupsDoFadeIn();
+         
          // Set defaults if scene was loaded directly
          if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {

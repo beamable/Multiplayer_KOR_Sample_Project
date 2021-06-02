@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: d9139a2683873cb4cb5e86cb4fcf0670, type: 3}
+  m_Texture: {fileID: 2800000, guid: 87b9a19d7b14dcf4d8f12216ef1f102b, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -355,17 +355,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 0}
+  _willRecolorCamera: 1
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
-  startGame01Button: {fileID: 3359199423808837069}
-  startGame02Button: {fileID: 2469519582240596170}
-  _leaderboardButton: {fileID: 8615297229981989025}
-  _storeButton: {fileID: 855258757292406568}
-  _quitButton: {fileID: 3652083655748458244}
-  _aboutBodyText: {fileID: 6970237749130384473}
-  _buttonsCanvasGroup: {fileID: 3920588769318341740}
   _canvasGroups:
   - {fileID: 3391841333033439565}
   - {fileID: 9077155039664476505}
+  - {fileID: 1887321441468121994}
   - {fileID: 5157500174131424334}
   - {fileID: 6607617726997837172}
   - {fileID: 7707843535244024995}
@@ -374,6 +369,13 @@ MonoBehaviour:
   - {fileID: 4124438534647013278}
   - {fileID: 1231894197329114791}
   - {fileID: 7986492596832642112}
+  startGame01Button: {fileID: 3359199423808837069}
+  startGame02Button: {fileID: 2469519582240596170}
+  _leaderboardButton: {fileID: 8615297229981989025}
+  _storeButton: {fileID: 855258757292406568}
+  _quitButton: {fileID: 3652083655748458244}
+  _aboutBodyText: {fileID: 6970237749130384473}
+  _buttonsCanvasGroup: {fileID: 1047781873497933301}
 --- !u!1 &845030773551779315
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,9 +977,9 @@ GameObject:
   m_Component:
   - component: {fileID: 513002051495932450}
   - component: {fileID: 4042427024568156644}
-  - component: {fileID: 3920588769318341740}
+  - component: {fileID: 1047781873497933301}
   m_Layer: 5
-  m_Name: ButtonsCanvasGroup
+  m_Name: ButtonsGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1033,7 +1035,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!225 &3920588769318341740
+--- !u!225 &1047781873497933301
 CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1042,7 +1044,7 @@ CanvasGroup:
   m_GameObject: {fileID: 1922229364658046761}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 0
+  m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &1982775936381613708
@@ -1500,7 +1502,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf6dc63f7eab0904d98a0bbe82a0f550, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4db674f18ef6c948b22ea85ba5f49a2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1789,7 +1791,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf6dc63f7eab0904d98a0bbe82a0f550, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4db674f18ef6c948b22ea85ba5f49a2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2250,7 +2252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf6dc63f7eab0904d98a0bbe82a0f550, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4db674f18ef6c948b22ea85ba5f49a2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2539,7 +2541,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf6dc63f7eab0904d98a0bbe82a0f550, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4db674f18ef6c948b22ea85ba5f49a2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2764,7 +2766,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf6dc63f7eab0904d98a0bbe82a0f550, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4db674f18ef6c948b22ea85ba5f49a2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1

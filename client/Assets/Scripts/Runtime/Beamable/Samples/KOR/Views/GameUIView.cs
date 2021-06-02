@@ -10,7 +10,7 @@ namespace Beamable.Samples.KOR.Views
    /// <summary>
    /// Handles the audio/graphics rendering logic: Game
    /// </summary>
-   public class GameUIView : MonoBehaviour
+   public class GameUIView : BaseUIView
    {
       //  Properties -----------------------------------
       public RingView RingView { get { return _ringView; } }
@@ -21,9 +21,6 @@ namespace Beamable.Samples.KOR.Views
       public List<AvatarUIView> AvatarUIViews { get { return _avatarUIViews; } }
 
       //  Fields ---------------------------------------
-      [SerializeField]
-      private Configuration _configuration = null;
-
       [SerializeField]
       private TMP_BufferedText _bufferedText = null;
 
@@ -36,19 +33,10 @@ namespace Beamable.Samples.KOR.Views
       [SerializeField]
       private List<AvatarUIView> _avatarUIViews = null;
 
-      [Header("Cosmetic Animation")]
-      [SerializeField]
-      private List<CanvasGroup> _canvasGroups = null;
 
       [Header("Populates at Runtime")]
       [SerializeField]
       private List<AvatarView> _avatarViews = new List<AvatarView>();
 
-      
-      //  Unity Methods   ------------------------------
-      protected void Start()
-      {
-         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, _configuration.DelayBeforeFadeInUI, _configuration.DelayBetweenFadeInUI);
-      }
    }
 }

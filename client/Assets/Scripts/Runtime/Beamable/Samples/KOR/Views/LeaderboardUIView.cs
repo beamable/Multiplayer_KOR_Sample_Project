@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Beamable.Samples.KOR.Animation;
-using UnityEngine;
-
+﻿
 namespace Beamable.Samples.KOR.Views
 {
    /// <summary>
@@ -12,14 +9,12 @@ namespace Beamable.Samples.KOR.Views
       //  Properties -----------------------------------
 
       //  Fields ---------------------------------------
-      [Header ("Cosmetic Animation")]
-      [SerializeField]
-      private List<CanvasGroup> _canvasGroups = null;
 
       //  Unity Methods   ------------------------------
-      protected void Start()
+      public void Start()
       {
-         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, Configuration.DelayBeforeFadeInUI, Configuration.DelayBetweenFadeInUI);
+         CanvasGroupsDoFadeIn();
       }
+
    }
 }

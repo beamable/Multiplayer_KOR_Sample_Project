@@ -58,6 +58,9 @@ namespace Beamable.Samples.KOR
 
          _beamableAPI= await Beamable.API.Instance;
          
+         // Do this after calling "Beamable.API.Instance" for smoother UI
+         _storeUIView.CanvasGroupsDoFadeIn();
+         
          DebugLog($"Store with dbid = {_beamableAPI.User.id}");
          
          _storeContent = await _configuration.StoreRef.Resolve();

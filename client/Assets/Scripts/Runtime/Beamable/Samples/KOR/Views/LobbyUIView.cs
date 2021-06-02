@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Beamable.Samples.KOR.Animation;
-using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,14 +21,10 @@ namespace Beamable.Samples.KOR.Views
       [SerializeField]
       private Button _backButton = null;
 
-      [Header ("Cosmetic Animation")]
-      [SerializeField]
-      private List<CanvasGroup> _canvasGroups = null;
-
       //  Unity Methods   ------------------------------
-      protected void Start()
+      public void Start()
       {
-         TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, Configuration.DelayBeforeFadeInUI, Configuration.DelayBetweenFadeInUI);
+         CanvasGroupsDoFadeOut();
       }
    }
 }

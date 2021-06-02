@@ -32,7 +32,7 @@ namespace Beamable.Samples.KOR.Views
 
 
       //  Other Methods   ------------------------------
-      private void Render()
+      public void Render()
       {
          _backgroundImage.color = _avatarData.Color;
 
@@ -50,7 +50,6 @@ namespace Beamable.Samples.KOR.Views
          {
             _text.text = $"{Name}\n{KORConstants.AvatarUIView_Offline}";
          }
-         
       }
    }
 }

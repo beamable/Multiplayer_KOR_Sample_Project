@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
+  _leaderboardUIView: {fileID: 7672810106755645144}
   _closeButton: {fileID: 341474070}
 --- !u!4 &654778935
 Transform:
@@ -480,7 +481,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BackGroundColor: {r: 0.7372549, g: 0.9019608, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1098,3 +1099,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4dd576057a8d89144908a0b68fbb7116, type: 3}
+--- !u!114 &7672810106755645144 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3541802833061783201, guid: 4dd576057a8d89144908a0b68fbb7116, type: 3}
+  m_PrefabInstance: {fileID: 7672810106755645143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1882d9e1234bd94ead24398e8e35d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

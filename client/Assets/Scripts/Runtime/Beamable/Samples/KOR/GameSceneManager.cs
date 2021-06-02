@@ -52,6 +52,9 @@ namespace Beamable.Samples.KOR
       {
          _beamableAPI = await Beamable.API.Instance;
 
+         // Do this after calling "Beamable.API.Instance" for smoother UI
+         _gameUIView.CanvasGroupsDoFadeIn();
+
          // Set defaults if scene was loaded directly
          if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {
@@ -101,7 +104,7 @@ namespace Beamable.Samples.KOR
 
          // Optional: Render color and text of avatar ui
          _gameUIView.AvatarViews.Clear();
-         for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
+         for (int i = 0; i < _configuration.AvatarDatas.Count; i++)
          {
             AvatarData avatarData = _configuration.AvatarDatas[i];
             _gameUIView.AvatarUIViews[i].AvatarData = avatarData;
@@ -109,6 +112,7 @@ namespace Beamable.Samples.KOR
             _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
             _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
             _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
+            _gameUIView.AvatarUIViews[i].Render();
 
             if (i < RuntimeDataStorage.Instance.MinPlayerCount)
             {

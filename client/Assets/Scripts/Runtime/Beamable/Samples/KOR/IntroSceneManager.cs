@@ -60,6 +60,7 @@ namespace Beamable.Samples.KOR
          // Attempt Connection to Beamable
          _beamableAPI = await Beamable.API.Instance;
          
+         // Do this after calling "Beamable.API.Instance" for smoother UI
          _introUIView.CanvasGroupsDoFade();
          
          try
