@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
@@ -18,17 +19,17 @@ namespace Beamable.Samples.KOR
       public GameUIView GameUIView { get { return _gameUIView; } }
       public Configuration Configuration { get { return _configuration; } }
 
-      
+
       //  Fields ---------------------------------------
       private IBeamableAPI _beamableAPI = null;
-      
+
       [SerializeField]
       private Configuration _configuration = null;
-      
+
       [SerializeField]
       private GameUIView _gameUIView = null;
-      
-      
+
+
       //  Unity Methods   ------------------------------
       protected void Start()
       {
@@ -36,7 +37,7 @@ namespace Beamable.Samples.KOR
          SetupBeamable();
       }
 
-      
+
       //  Other Methods  -----------------------------
       private void DebugLog(string message)
       {
@@ -46,7 +47,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
-      
+
       private void SetupBeamable()
       {
          Beamable.API.Instance.Then(async beamableAPI =>
@@ -60,7 +61,7 @@ namespace Beamable.Samples.KOR
                   RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
                   RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
                   RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
-                  
+
                   // Put in storage to offer several convenience getters
                   RuntimeDataStorage.Instance.SimGameType = await _configuration.SimGameTypeRef.Resolve();
                }
@@ -68,6 +69,12 @@ namespace Beamable.Samples.KOR
                {
                   DebugLog($"Scene '{gameObject.scene.name}' was loaded from lobby per production.");
                }
+
+               // Initialize ECS
+               SystemManager.StartGameSystems();
+
+               // Initialize Networking
+               await NetworkController.Instance.Init();
 
                // Optional: Stuff to use later when player moves are incoming
                long tbdIncomingPlayerDbid = 0;
@@ -77,16 +84,16 @@ namespace Beamable.Samples.KOR
                DebugLog($"LocalPlayerDbid = {RuntimeDataStorage.Instance.LocalPlayerDbid}");
                DebugLog($"IsLocalPlayerDbid = {RuntimeDataStorage.Instance.IsLocalPlayerDbid(tbdIncomingPlayerDbid)}");
                DebugLog($"IsSinglePlayerMode = {RuntimeDataStorage.Instance.IsSinglePlayerMode}");
-               
+
                // Optional: Show queueable status text onscreen
                SetStatusText(KORConstants.GameUIView_Playing, TMP_BufferedText.BufferedTextMode.Immediate);
 
                // Optional: Add easily configurable delays
                await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));
-               
+
                // Optional: Play "damage" sound
                SoundManager.Instance.PlayAudioClip(SoundConstants.HealthBarDecrement);
-               
+
                // Optional: Render color and text of avatar ui
                _gameUIView.AvatarViews.Clear();
                for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
@@ -102,7 +109,7 @@ namespace Beamable.Samples.KOR
                   {
                      AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
                      _gameUIView.AvatarViews.Add(avatarView);
-                     
+
                      //Optional: Play animations. All are working properly
                      //avatarView.PlayAnimationAttack01();
                      //avatarView.PlayAnimationAttack02();
@@ -117,7 +124,7 @@ namespace Beamable.Samples.KOR
          });
       }
 
-      
+
       /// <summary>
       /// Render UI text
       /// </summary>
@@ -128,11 +135,14 @@ namespace Beamable.Samples.KOR
          _gameUIView.BufferedText.SetText(message, statusTextMode);
       }
 
-      
+
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {
-         //Change scenes
+         // Destroy ECS
+         SystemManager.DestroyGameSystems();
+
+         // Change scenes
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }
