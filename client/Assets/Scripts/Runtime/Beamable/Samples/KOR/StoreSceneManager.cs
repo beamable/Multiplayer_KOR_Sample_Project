@@ -185,12 +185,16 @@ namespace Beamable.Samples.KOR
       
       private void BuyButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          DebugLog("TODO: Enable this on item selection. Disable after purchase.");
       }
       
       
       private void BackButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }

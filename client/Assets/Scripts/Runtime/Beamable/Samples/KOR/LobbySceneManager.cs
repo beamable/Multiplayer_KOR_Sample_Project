@@ -114,6 +114,8 @@ namespace Beamable.Samples.KOR
       
       private void BackButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          _korMatchmaking?.Stop();
 
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,

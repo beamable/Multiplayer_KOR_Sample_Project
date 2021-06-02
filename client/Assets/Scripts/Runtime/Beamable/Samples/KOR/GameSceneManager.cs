@@ -99,8 +99,8 @@ namespace Beamable.Samples.KOR
          // Optional: Add easily configurable delays
          await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));
 
-         // Optional: Play "damage" sound
-         SoundManager.Instance.PlayAudioClip(SoundConstants.HealthBarDecrement);
+         // Optional: Play sound
+         //SoundManager.Instance.PlayAudioClip(SoundConstants.Click01);
 
          // Optional: Render color and text of avatar ui
          _gameUIView.AvatarViews.Clear();
@@ -146,6 +146,8 @@ namespace Beamable.Samples.KOR
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          // Destroy ECS
          SystemManager.DestroyGameSystems();
 

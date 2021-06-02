@@ -23,7 +23,9 @@ namespace Beamable.Samples.KOR.Audio
 		protected override void Awake()
 		{
 			base.Awake();
-			/// If/after updating AudioClips in the UnityEditor, run this once to rebuild const *.cs
+			
+			// Run Unity once with this uncommented to
+			// rebuild the list of constants for the const *.cs
 			//DebugLogCodeSnippet();
 		}
 

@@ -32,6 +32,8 @@ namespace Beamable.Samples.KOR
         //  Event Handlers -------------------------------
         private void CloseButton_OnClicked()
         {
+            KORHelper.PlayAudioForUIClick();
+            
             StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
                 _configuration.DelayBeforeLoadScene));
         }

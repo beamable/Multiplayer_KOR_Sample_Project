@@ -45,7 +45,7 @@ MonoBehaviour:
   _delayBeforeLoadScene: 0.1
   _statusMessageMinDuration: 1
   delayBetweenBetweenFadeInUI: 0.25
-  _delayBeforeFadeInUI: 0.25
+  _delayBeforeFadeInUI: 0
   _leaderboardMinRowCount: 10
   _leaderboardMockScoreMin: 1
   _leaderboardMockScoreMax: 10
