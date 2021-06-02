@@ -65,6 +65,12 @@ namespace Beamable.Samples.KOR
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
          }
 
+         // Initialize ECS
+         SystemManager.StartGameSystems();
+
+         // Initialize Networking
+         await NetworkController.Instance.Init();
+
          // Optional: Stuff to use later when player moves are incoming
          long tbdIncomingPlayerDbid = _beamableAPI.User.id; // test value;
          DebugLog($"MinPlayerCount = {RuntimeDataStorage.Instance.MinPlayerCount}");
