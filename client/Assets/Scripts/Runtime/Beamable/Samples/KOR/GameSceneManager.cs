@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
@@ -18,17 +19,17 @@ namespace Beamable.Samples.KOR
       public GameUIView GameUIView { get { return _gameUIView; } }
       public Configuration Configuration { get { return _configuration; } }
 
-      
+
       //  Fields ---------------------------------------
       private IBeamableAPI _beamableAPI = null;
-      
+
       [SerializeField]
       private Configuration _configuration = null;
-      
+
       [SerializeField]
       private GameUIView _gameUIView = null;
-      
-      
+
+
       //  Unity Methods   ------------------------------
       protected void Start()
       {
@@ -36,7 +37,7 @@ namespace Beamable.Samples.KOR
          SetupBeamable();
       }
 
-      
+
       //  Other Methods  -----------------------------
       private void DebugLog(string message)
       {
@@ -63,6 +64,12 @@ namespace Beamable.Samples.KOR
          {
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
          }
+
+         // Initialize ECS
+         SystemManager.StartGameSystems();
+
+         // Initialize Networking
+         await NetworkController.Instance.Init();
 
          // Optional: Stuff to use later when player moves are incoming
          long tbdIncomingPlayerDbid = _beamableAPI.User.id; // test value;
@@ -121,11 +128,14 @@ namespace Beamable.Samples.KOR
          _gameUIView.BufferedText.SetText(message, statusTextMode);
       }
 
-      
+
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {
-         //Change scenes
+         // Destroy ECS
+         SystemManager.DestroyGameSystems();
+
+         // Change scenes
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }
