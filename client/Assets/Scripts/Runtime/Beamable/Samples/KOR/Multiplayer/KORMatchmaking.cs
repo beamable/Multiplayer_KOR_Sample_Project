@@ -25,8 +25,8 @@ namespace Beamable.Samples.KOR.Multiplayer
          return "KORRoomId" + string.Format("{00:00}", UnityEngine.Random.Range(0, 1000));
       }
 
-      public KORMatchmaking(
-         MatchmakingService matchmakingService, SimGameType simGameType, long LocalPlayerDbid, bool isDebugLog = false) :
+      public KORMatchmaking( MatchmakingService matchmakingService, 
+         SimGameType simGameType, long LocalPlayerDbid, bool isDebugLog = false) :
          base(matchmakingService, simGameType, LocalPlayerDbid, isDebugLog)
       {
       }

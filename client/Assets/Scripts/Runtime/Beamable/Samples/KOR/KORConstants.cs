@@ -26,7 +26,7 @@
       public const string AvatarUIView_Local = "Local";
       public const string AvatarUIView_Offline = "Offline";
       public const string GameUIView_Playing = "Playing ...";
-      public const string LobbyUIView_Joining = "Player {0}/{1} joined. Waiting ...";
+      public const string LobbyUIView_Joining = "Player {0}/{1} joined. Waiting {2}...";
       public const string LobbyUIView_Joined = "Player {0}/{1} joined. Ready!";
       public const string StoreUIView_Loading_Store = "Loading Store...";
       public const string StoreUIView_Loading_Inventory = "Loading Inventory ...";

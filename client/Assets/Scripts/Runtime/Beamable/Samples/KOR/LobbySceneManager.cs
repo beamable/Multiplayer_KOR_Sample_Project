@@ -81,11 +81,6 @@ namespace Beamable.Samples.KOR
             RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType02Ref.Resolve();
          }
          
-         var text = string.Format(KORConstants.LobbyUIView_Joining, 0,
-            RuntimeDataStorage.Instance.TargetPlayerCount);
-
-         _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
-         
          RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
          
          // Do matchmaking
@@ -127,6 +122,7 @@ namespace Beamable.Samples.KOR
       {
          int currentPlayersCount = 0;
          int targetPlayerCount = 0;
+         int secondsRemaining = 0;
          string roomId = "0";
          
          if (result != null)
@@ -134,15 +130,18 @@ namespace Beamable.Samples.KOR
             currentPlayersCount = result.CurrentPlayerDbidList.Count;
             targetPlayerCount = result.TargetPlayerCount;
             roomId = result.RoomId;
+            secondsRemaining = result.SecondsRemaining;
          }
          
-         DebugLog($"MyMatchmaking_OnProgress() " +
-                  $"Players={currentPlayersCount}/{targetPlayerCount} " +
+         DebugLog($"MyMatchmaking_OnProgress() ...\n " +
+                  $"Players={currentPlayersCount}/{targetPlayerCount}, " +
+                  $"SecondsRemaining = {secondsRemaining}, " + 
                   $"RoomId={roomId}");
 
          string text = string.Format(KORConstants.LobbyUIView_Joining,
             currentPlayersCount,
-            targetPlayerCount);
+            targetPlayerCount,
+            secondsRemaining);
 
          _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
       }
