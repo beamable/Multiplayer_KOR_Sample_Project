@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Beamable.Common;
 using Beamable.Samples.KOR.Data;
 using Unity.Entities;
@@ -99,12 +100,13 @@ namespace Beamable.Samples.KOR.Multiplayer
             //     new float3((sfloat) 500.0f, (sfloat) 2.0f, (sfloat) 500.0f), quaternion.identity, material,
             //     physicsParamsStatic);
 
-            var c = 50;
+            var c = 10;
             for (var i = 0f; i < c; i++)
             {
-                var x = ((sfloat)8) * math.cos((sfloat) (14 * (i/100f) * 3.14f));
+                var x = ((sfloat)8) * math.cos((sfloat) (14 * (i/100f) * 3.14f + (i % 2 == 0 ? 3.14f : 0)));
+                var z = ((sfloat)8) * math.sin((sfloat) (14 * (i/100f) * 3.14f + (i % 2 == 0 ? 3.14f : 0)));
                 var (renderer, entity) = CreateBoxColliderObject(GameResourceManager.Instance.CubePrefab,
-                    new float3(x, (sfloat) (4 + (i*8)), (sfloat)2),
+                    new float3(x, (sfloat) (6 + (i*6) - (i % 2 == 0 ? 6 : 0)), z),
                     new float3(sfloat.One, sfloat.One, sfloat.One), quaternion.identity, material,
                     physicsParamsDynamic);
                 renderer.material = GameResourceManager.Instance.colorMaterials[((int)i)%GameResourceManager.Instance.colorMaterials.Length];
@@ -113,27 +115,27 @@ namespace Beamable.Samples.KOR.Multiplayer
         }
 
 
-        public (MeshRenderer, Entity) SpawnCube(long colorIndex, float3 position)
-        {
-            Debug.Log("Spawning cube!");
-            UnityS.Physics.Material material = UnityS.Physics.Material.Default;
-            material.Friction = (sfloat)0.05f;
-
-            PhysicsParams physicsParams = PhysicsParams.Default;
-            physicsParams.isDynamic = true;
-
-            var direction = position / math.length(position);
-            physicsParams.startingLinearVelocity = -direction * Random.SFloatExclusive((sfloat)5, (sfloat)6); // launch towards center for now...
-            physicsParams.mass = (sfloat).25f;
-
-            var cube = GameController.Instance.CreateBoxColliderObject(GameResourceManager.Instance.CubePrefab,
-                //new float3((sfloat)0, (sfloat)5, -(sfloat)2),
-                position,
-                new float3((sfloat)1f, (sfloat)1f, (sfloat)1f), quaternion.identity, material, physicsParams);
-
-            cube.Item1.material = GameResourceManager.Instance.colorMaterials[(colorIndex)%GameResourceManager.Instance.colorMaterials.Length];
-            return cube;
-        }
+        // public (MeshRenderer, Entity) SpawnCube(long colorIndex, float3 position)
+        // {
+        //     Debug.Log("Spawning cube!");
+        //     UnityS.Physics.Material material = UnityS.Physics.Material.Default;
+        //     material.Friction = (sfloat)0.05f;
+        //
+        //     PhysicsParams physicsParams = PhysicsParams.Default;
+        //     physicsParams.isDynamic = true;
+        //
+        //     var direction = position / math.length(position);
+        //     physicsParams.startingLinearVelocity = -direction * Random.SFloatExclusive((sfloat)5, (sfloat)6); // launch towards center for now...
+        //     physicsParams.mass = (sfloat).25f;
+        //
+        //     var cube = GameController.Instance.CreateBoxColliderObject(GameResourceManager.Instance.CubePrefab,
+        //         //new float3((sfloat)0, (sfloat)5, -(sfloat)2),
+        //         position,
+        //         new float3((sfloat)1f, (sfloat)1f, (sfloat)1f), quaternion.identity, material, physicsParams);
+        //
+        //     cube.Item1.material = GameResourceManager.Instance.colorMaterials[(colorIndex)%GameResourceManager.Instance.colorMaterials.Length];
+        //     return cube;
+        // }
 
 
         protected override void OnUpdate()
@@ -142,6 +144,7 @@ namespace Beamable.Samples.KOR.Multiplayer
             // Set all positions
             Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r) =>
             {
+
                 if (objects.TryGetValue(e, out GameObject obj))
                 {
                     obj.transform.localPosition = (Vector3)t.Value;
@@ -149,15 +152,25 @@ namespace Beamable.Samples.KOR.Multiplayer
                 }
             }).WithoutBurst().Run();
 
-            // Cap velocities...
-            Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r, ref PhysicsMass mass, ref PhysicsVelocity vel) =>
+            // Update dynamic bodies
+            Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r, ref PhysicsMass mass, ref PhysicsVelocity vel, ref PhysicsImpulse impulse) =>
             {
+
+                if (t.Value.y < -(sfloat) 2)
+                {
+                    vel.Linear = sfloat.Zero;
+                    t.Value = new float3(sfloat.Zero, (sfloat) 8, sfloat.Zero);
+                }
+
+                vel.ApplyLinearImpulse(mass, impulse.Impulse);
+                impulse.Impulse = float3.zero;
+
                 // cap out the velocity at a given speed.
                 var linearVelocityMag = math.length(vel.Linear);
                 if (linearVelocityMag > (sfloat).01f)
                 {
                     var normalizedLinearVelocity = vel.Linear / linearVelocityMag;
-                    vel.Linear = normalizedLinearVelocity * math.min(linearVelocityMag, (sfloat)15);
+                    // vel.Linear = normalizedLinearVelocity * math.min(linearVelocityMag, (sfloat)15);
                 }
 
 
@@ -167,6 +180,12 @@ namespace Beamable.Samples.KOR.Multiplayer
         public void Register(GameObject obj, Entity entity)
         {
             objects.Add(entity, obj);
+        }
+
+        public Entity GetEntity(GameObject obj)
+        {
+            // TODO: Replace this with a better data structure...
+            return objects.First(kvp => kvp.Value == obj).Key;
         }
 
 
@@ -236,6 +255,7 @@ namespace Beamable.Samples.KOR.Multiplayer
                 componentTypes.Add(typeof(PhysicsVelocity));
                 componentTypes.Add(typeof(PhysicsMass));
                 componentTypes.Add(typeof(PhysicsDamping));
+                componentTypes.Add(typeof(PhysicsImpulse));
 
                 // componentTypes.Add(typeof(MoveForceData));
             }
@@ -250,8 +270,13 @@ namespace Beamable.Samples.KOR.Multiplayer
             if (physicsParams.isDynamic)
             {
                 UnityS.Physics.Collider* colliderPtr = (UnityS.Physics.Collider*) collider.GetUnsafePtr();
-                EntityManager.SetComponentData(entity,
-                    PhysicsMass.CreateDynamic(colliderPtr->MassProperties, physicsParams.mass));
+
+                var dynamicMass = PhysicsMass.CreateDynamic(colliderPtr->MassProperties, physicsParams.mass);
+                dynamicMass.InverseInertia.x = physicsParams.lockAxis.x ? sfloat.Zero : dynamicMass.InverseInertia.x;
+                dynamicMass.InverseInertia.y = physicsParams.lockAxis.y ? sfloat.Zero : dynamicMass.InverseInertia.y;
+                dynamicMass.InverseInertia.z = physicsParams.lockAxis.z ? sfloat.Zero : dynamicMass.InverseInertia.z;
+                EntityManager.SetComponentData(entity,dynamicMass);
+
                 // Calculate the angular velocity in local space from rotation and world angular velocity
                 float3 angularVelocityLocal =
                     math.mul(math.inverse(colliderPtr->MassProperties.MassDistribution.Transform.rot),

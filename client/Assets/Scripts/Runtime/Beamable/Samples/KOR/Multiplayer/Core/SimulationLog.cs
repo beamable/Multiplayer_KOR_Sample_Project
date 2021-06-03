@@ -190,6 +190,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public void RecordEvent(long tick, KOREvent message)
       {
+         message.Available = true;
          _highestTick = tick > _highestTick
             ? tick
             : _highestTick;

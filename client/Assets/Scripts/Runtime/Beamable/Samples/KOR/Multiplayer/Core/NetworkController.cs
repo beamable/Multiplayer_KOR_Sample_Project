@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using Beamable.Samples.Core;
+using Beamable.Samples.KOR;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer.Events;
 using UnityEngine;
@@ -15,10 +17,12 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
         private SimClient _sim;
 
-        public static string roomIdOverride;
-
         public SimulationLog Log;
         public long LocalDbid;
+
+        public System.Random rand;
+
+        public string RandomSeed { get; private set; }
 
         public async Task Init()
         {
@@ -40,7 +44,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
         private void HandleOnInit(string seed)
         {
-            Debug.Log("Sim client has initialized " + seed);
+            RandomSeed = seed;
+            rand = new System.Random(seed.GetHashCode());
             NetworkInitialized = true;
         }
 
@@ -59,7 +64,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
             // ListenForEventFrom<PlayerSpawnCubeMessage>(dbid);
             // ListenForEventFrom<PlayerDestroyAllMessage>(dbid);
-            // ListenForEventFrom<PlayerInputMessage>(dbid);
+            ListenForEventFrom<PlayerMoveStartedEvent>(dbid);
+            ListenForEventFrom<PlayerMoveEndEvent>(dbid);
             _sim.On<ChecksumEvent>(nameof(ChecksumEvent), dbid, hashCheck =>
             {
                 hashCheck.SetPlayerDbid(dbidNumber);

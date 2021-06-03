@@ -5,10 +5,13 @@ using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer.Events;
 using Unity.Entities;
 using UnityEngine;
+using UnityS.Physics.Systems;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+
+   [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+   [UpdateAfter(typeof(ExportPhysicsWorld))]
    [DisableAutoCreation]
    public class GameSystem : SystemBase
    {
@@ -35,32 +38,9 @@ namespace Beamable.Samples.KOR.Multiplayer
 
          foreach (var message in messages)
          {
-            switch (message)
-            {
-               // case PlayerInputMessage inputMessage:
-               //    var effectIn = (sfloat)time + sfloat.FromRaw(inputMessage.ForcedLagTime);
-               //    var startTime = sfloat.FromRaw(inputMessage.StartWorldTime);
-               //    var inputLag = (sfloat)time - startTime;
-               //    Debug.Log("Got input message with lag of " + inputLag );
-               //    inputMessage.Consume();
-               //    break;
-               case PlayerJoinedEvent join:
-                  HandlePlayerJoin(join);
-                  join.Consume();
-                  break;
-               // case PlayerSpawnCubeMessage cube:
-               //    var shootPlr = _dbidToPlayer[message.PlayerDbid];
-               //    shootPlr.ShootCube();
-               //    cube.Consume();
-               //    break;
-               // case PlayerDestroyAllMessage destroy:
-               //    var destroyPlr = _dbidToPlayer[message.PlayerDbid];
-               //    destroyPlr.DestroyAllCubes();
-               //    destroy.Consume();
-               //    break;
-               default:
-                  break;
-            }
+            GameSceneManager.Instance.HandleNetworkEvent(message);
+
+
          }
 
 
@@ -74,6 +54,8 @@ namespace Beamable.Samples.KOR.Multiplayer
          // }
 
          Debug.Log("A player has joined!");
+
+
 
          // UnityS.Physics.Material material = UnityS.Physics.Material.Default;
          // material.Friction = (sfloat)0.05f;

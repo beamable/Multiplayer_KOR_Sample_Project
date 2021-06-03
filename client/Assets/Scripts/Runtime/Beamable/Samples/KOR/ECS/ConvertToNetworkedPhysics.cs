@@ -11,6 +11,15 @@ namespace Beamable.Samples.KOR.Multiplayer
    {
       public UnityEngine.BoxCollider BoxCollider;
 
+      public bool IsDynamic;
+
+      public float Mass = .5f;
+
+      public bool XRotationLocked;
+      public bool YRotationLocked;
+      public bool ZRotationLocked;
+
+      public Entity Entity { get; private set; }
       // public bool AsCircle;
 
       // private void OnDrawGizmos()
@@ -89,7 +98,11 @@ namespace Beamable.Samples.KOR.Multiplayer
          var controller = await GameController.OnInstance;
 
          var physicsParams = PhysicsParams.Default;
-         physicsParams.isDynamic = false;
+         physicsParams.isDynamic = IsDynamic;
+         physicsParams.lockAxis.x = XRotationLocked;
+         physicsParams.lockAxis.y = YRotationLocked;
+         physicsParams.lockAxis.z = ZRotationLocked;
+         physicsParams.mass = (sfloat) Mass;
 
          var size = new float3(
             (sfloat) BoxCollider.size.x,
@@ -138,8 +151,8 @@ namespace Beamable.Samples.KOR.Multiplayer
             );
          }
 
-         var entity = controller.CreatePhysicsBody(position, quaternion.identity, collider, physicsParams);
-         GameController.Instance.Register(BoxCollider.gameObject, entity);
+         Entity = controller.CreatePhysicsBody(position, quaternion.identity, collider, physicsParams);
+         GameController.Instance.Register(BoxCollider.gameObject, Entity);
          // Destroy(Collider);
       }
    }

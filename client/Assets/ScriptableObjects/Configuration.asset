@@ -28,18 +28,11 @@ MonoBehaviour:
     Id: leaderboards.Leaderboard01
   _storeRef:
     Id: stores.Store01
-  _avatarDatas:
-  - _color: {r: 1, g: 0.40000004, b: 0.23137257, a: 1}
+  _localAvatar:
+    _color: {r: 0, g: 0, b: 1, a: 1}
     _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
-  - _color: {r: 1, g: 0.5529412, b: 0.31764707, a: 1}
-    _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
-  - _color: {r: 0.909804, g: 0.13333334, b: 0.14509805, a: 1}
-    _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
-  - _color: {r: 1, g: 1, b: 0.2784314, a: 1}
-    _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
-  - _color: {r: 0.011764707, g: 0.7411765, b: 0.7294118, a: 1}
-    _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
-  - _color: {r: 0.015686275, g: 1, b: 1, a: 1}
+  _remoteAvatar:
+    _color: {r: 1, g: 0.33480325, b: 0, a: 1}
     _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
   _delayBeforeLoadScene: 0.1
   _statusMessageMinDuration: 1

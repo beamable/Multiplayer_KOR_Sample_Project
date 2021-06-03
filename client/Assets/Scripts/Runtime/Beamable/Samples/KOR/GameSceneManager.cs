@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Beamable.Examples.Features.Multiplayer.Core;
+using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Audio;
+using Beamable.Samples.KOR.Behaviours;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
+using Beamable.Samples.KOR.Multiplayer.Events;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
@@ -13,12 +17,13 @@ namespace Beamable.Samples.KOR
    /// <summary>
    /// Handles the main scene logic: Game
    /// </summary>
-   public class GameSceneManager : MonoBehaviour
+   public class GameSceneManager : SingletonMonobehavior<GameSceneManager>
    {
       //  Properties -----------------------------------
       public GameUIView GameUIView { get { return _gameUIView; } }
       public Configuration Configuration { get { return _configuration; } }
 
+      public List<SpawnPointBehaviour> AvailableSpawnPoints;
 
       //  Fields ---------------------------------------
       private IBeamableAPI _beamableAPI = null;
@@ -64,7 +69,7 @@ namespace Beamable.Samples.KOR
          {
             DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, false));
          }
-         
+
          // Set the ActiveSimGameType. This happens in 2+ spots to handle direct scene loading
          if (RuntimeDataStorage.Instance.IsSinglePlayerMode)
          {
@@ -101,10 +106,12 @@ namespace Beamable.Samples.KOR
 
          // Optional: Render color and text of avatar ui
          _gameUIView.AvatarViews.Clear();
+
+         // TODO: Spawn the HUD from player join messages...
          for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
          {
-            AvatarData avatarData = _configuration.AvatarDatas[i];
-            _gameUIView.AvatarUIViews[i].AvatarData = avatarData;
+            // AvatarData avatarData = _configuration.AvatarDatas[i];
+            _gameUIView.AvatarUIViews[i].AvatarData = _configuration.LocalAvatar; // TODO: This is incorrect, now. We need to spawn huds based on who is in the game
             _gameUIView.AvatarUIViews[i].Health = 100;
             _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
             _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
@@ -112,8 +119,8 @@ namespace Beamable.Samples.KOR
 
             if (i < RuntimeDataStorage.Instance.MinPlayerCount)
             {
-               AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
-               _gameUIView.AvatarViews.Add(avatarView);
+               // AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
+               // _gameUIView.AvatarViews.Add(avatarView);
 
                //Optional: Play animations. All are working properly
                //avatarView.PlayAnimationAttack01();
@@ -122,8 +129,44 @@ namespace Beamable.Samples.KOR
                //avatarView.PlayAnimationRunForward();
                //avatarView.PlayAnimationTakeDamage();
                //avatarView.PlayAnimationWalkForward();
-               avatarView.PlayAnimationIdle();
+               // avatarView.PlayAnimationIdle();
             }
+         }
+      }
+
+      public void AddPlayer(PlayerJoinedEvent joinEvent)
+      {
+         // get random spawn point...
+         var spawnIndex = NetworkController.Instance.rand.Next(0, AvailableSpawnPoints.Count);
+         var spawnPoint = AvailableSpawnPoints[spawnIndex];
+
+         var isLocal = joinEvent.PlayerDbid == NetworkController.Instance.LocalDbid;
+         var avatarData = isLocal
+            ? _configuration.LocalAvatar
+            : _configuration.RemoteAvatar;
+
+         var avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
+         avatarView.transform.SetPhysicsPosition(spawnPoint.transform.position);
+
+         avatarView.SetForPlayer(joinEvent.PlayerDbid);
+         _gameUIView.AvatarViews.Add(avatarView);
+
+         // clean up spawn point so no one else can use it...
+         AvailableSpawnPoints.Remove(spawnPoint);
+      }
+
+      public void HandleNetworkEvent(KOREvent korEvent)
+      {
+         switch (korEvent)
+         {
+            case PlayerMoveStartedEvent moveEvt:
+               // moveEvt.Consume();
+               // _gameUIView.GetAvatarViewForDbid(moveEvt.PlayerDbid);
+               break;
+            case PlayerJoinedEvent joinEvt:
+               joinEvt.Consume();
+               AddPlayer(joinEvt);
+               break;
          }
       }
 

@@ -23,29 +23,29 @@ namespace Beamable.Samples.KOR.Data
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }
       public bool IsDebugLog { get { return _isDebugLog; } }
-      
+
       /// <summary>
       /// This defines the matchmaking criteria including "NumberOfPlayers"
       /// </summary>
       public SimGameTypeRef SimGameType01Ref { get { return _simGameType01Ref; } }
-      
+
       /// <summary>
       /// This defines the matchmaking criteria including "NumberOfPlayers"
       /// </summary>
       public SimGameTypeRef SimGameType02Ref { get { return _simGameType02Ref; } }
-      
+
       /// <summary>
       /// This defines the leaderboard, shared across game players
       /// </summary>
       public LeaderboardRef LeaderboardRef { get { return _leaderboardRef; } }
-      
+
       /// <summary>
       /// This defines the store, for IPA by game players
       /// </summary>
       public StoreRef StoreRef { get { return _storeRef; } }
-      
+
       public string IntroSceneName { get { return _introSceneName; } }
-      
+
       public string LobbySceneName { get { return _lobbySceneName; } }
 
       public string GameSceneName { get { return _gameSceneName; } }
@@ -53,11 +53,12 @@ namespace Beamable.Samples.KOR.Data
       public string StoreSceneName { get { return _storeSceneName; } }
 
       public string LeaderboardSceneName { get { return _leaderboardSceneName; } }
-      
+
       public float DelayBeforeLoadScene { get { return _delayBeforeLoadScene; } }
       public float DelayFadeInUI { get { return _delayFadeInUI; } }
       public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
-      public List<AvatarData> AvatarDatas { get { return _avatarDatas; } }
+      public AvatarData LocalAvatar { get { return _localAvatar; } }
+      public AvatarData RemoteAvatar { get { return _remoteAvatar; } }
       public int LeaderboardMinRowCount { get { return _leaderboardMinRowCount; } }
       public int LeaderboardMockScoreMin { get { return _leaderboardMockScoreMin; } }
       public int LeaderboardMockScoreMax { get { return _leaderboardMockScoreMax; } }
@@ -68,19 +69,19 @@ namespace Beamable.Samples.KOR.Data
       public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
 
       //  Fields ---------------------------------------
-      
+
       /// <summary>
       /// Determines if we are demo mode. Demo mode does several operations
-      /// which are not recommended in a production project including 
+      /// which are not recommended in a production project including
       /// creating mock data for the game.
       /// </summary>
       [Header("Debug")]
       [SerializeField]
       private bool _isDebugLog = true;
-      
+
       [SerializeField]
       private bool _isDemoMode = true;
-      
+
       [Header("Scene Names")]
       [SerializeField]
       private string _introSceneName = "";
@@ -93,10 +94,10 @@ namespace Beamable.Samples.KOR.Data
 
       [SerializeField]
       private string _storeSceneName = "";
-      
+
       [SerializeField]
       private string _leaderboardSceneName = "";
-      
+
       [Header("Game Data")]
       [SerializeField]
       private float _delayGameBeforeMove = 1;
@@ -107,16 +108,19 @@ namespace Beamable.Samples.KOR.Data
 
       [SerializeField]
       private SimGameTypeRef _simGameType02Ref = null;
-      
+
       [SerializeField]
       private LeaderboardRef _leaderboardRef = null;
-      
+
       [SerializeField]
       private StoreRef _storeRef = null;
 
       [Header("Game Visuals")]
       [SerializeField]
-      private List<AvatarData> _avatarDatas = null;
+      private AvatarData _localAvatar;
+
+      [SerializeField]
+      private AvatarData _remoteAvatar;
 
       [Header("Cosmetic Delays")]
       [SerializeField]
@@ -129,10 +133,10 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private float _delayFadeInUI = 0.25f;
 
-      [Header("Mock Data")] 
+      [Header("Mock Data")]
       [SerializeField]
       private int _leaderboardMinRowCount = 10;
-         
+
       [SerializeField]
       private int _leaderboardMockScoreMin = 1;
 

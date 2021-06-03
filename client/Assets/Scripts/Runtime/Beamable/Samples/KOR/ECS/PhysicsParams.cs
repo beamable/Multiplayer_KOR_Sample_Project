@@ -10,6 +10,7 @@ namespace Beamable.Samples.KOR.Multiplayer
       public bool isDynamic;
       public sfloat linearDamping;
       public sfloat angularDamping;
+      public bool3 lockAxis;
 
       public static PhysicsParams Default => new PhysicsParams
       {
