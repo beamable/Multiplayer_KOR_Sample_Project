@@ -469,7 +469,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.7372549, g: 0.9019608, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -598,27 +598,27 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340683849857635319, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+    - target: {fileID: 1809460132059317023, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340683849857635319, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+    - target: {fileID: 1809460132059317023, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340683849857635319, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+    - target: {fileID: 1809460132059317023, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340683849857635319, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+    - target: {fileID: 1809460132059317023, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340683849857635319, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+    - target: {fileID: 1809460132059317023, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340683849857635319, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+    - target: {fileID: 1809460132059317023, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -646,6 +646,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3851404881058840360, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 1617702626}
     - target: {fileID: 4799428382686286211, guid: 64a381f9657d88c4ca94f24373e3ac62, type: 3}
       propertyPath: m_Name
       value: StoreUIView

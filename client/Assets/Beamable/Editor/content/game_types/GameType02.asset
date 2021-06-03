@@ -20,7 +20,7 @@ MonoBehaviour:
     Value: 1
   waitAfterMinReachedSecs:
     HasValue: 1
-    Value: 60
+    Value: 15
   maxWaitDurationSecs:
     HasValue: 1
     Value: 60

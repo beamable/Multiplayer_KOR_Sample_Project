@@ -57,6 +57,9 @@ namespace Beamable.Samples.KOR
       {
          _beamableAPI = await Beamable.API.Instance;
 
+         // Do this after calling "Beamable.API.Instance" for smoother UI
+         _gameUIView.CanvasGroupsDoFadeIn();
+
          // Set defaults if scene was loaded directly
          if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {
@@ -101,14 +104,14 @@ namespace Beamable.Samples.KOR
          // Optional: Add easily configurable delays
          await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));
 
-         // Optional: Play "damage" sound
-         SoundManager.Instance.PlayAudioClip(SoundConstants.HealthBarDecrement);
+         // Optional: Play sound
+         //SoundManager.Instance.PlayAudioClip(SoundConstants.Click01);
 
          // Optional: Render color and text of avatar ui
          _gameUIView.AvatarViews.Clear();
 
          // TODO: Spawn the HUD from player join messages...
-         for (int i = 0; i < RuntimeDataStorage.Instance.MaxPlayerCount; i++)
+         for (int i = 0; i < 5; i++)
          {
             // AvatarData avatarData = _configuration.AvatarDatas[i];
             _gameUIView.AvatarUIViews[i].AvatarData = _configuration.LocalAvatar; // TODO: This is incorrect, now. We need to spawn huds based on who is in the game
@@ -116,6 +119,7 @@ namespace Beamable.Samples.KOR
             _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
             _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
             _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
+            _gameUIView.AvatarUIViews[i].Render();
 
             if (i < RuntimeDataStorage.Instance.MinPlayerCount)
             {
@@ -185,6 +189,8 @@ namespace Beamable.Samples.KOR
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          // Destroy ECS
          SystemManager.DestroyGameSystems();
 

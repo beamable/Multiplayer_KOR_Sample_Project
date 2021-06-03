@@ -16,12 +16,14 @@ namespace Beamable.Samples.KOR
       //  Other Methods --------------------------------
       public static IEnumerator LoadScene_Coroutine(string sceneName, float delayBeforeLoading)
       {
-         SoundManager.Instance.PlayAudioClip(SoundConstants.Click01);
-
          yield return new WaitForSeconds(delayBeforeLoading);
          SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
       }
-
+      
+      public static void PlayAudioForUIClick()
+      {
+         SoundManager.Instance.PlayAudioClip(SoundConstants.Chime01);
+      }
 
       /// <summary>
       /// Return the intro menu text. This serves as a welcome to the game plot and game instructions.

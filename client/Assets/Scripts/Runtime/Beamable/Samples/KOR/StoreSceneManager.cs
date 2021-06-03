@@ -58,6 +58,9 @@ namespace Beamable.Samples.KOR
 
          _beamableAPI= await Beamable.API.Instance;
          
+         // Do this after calling "Beamable.API.Instance" for smoother UI
+         _storeUIView.CanvasGroupsDoFadeIn();
+         
          DebugLog($"Store with dbid = {_beamableAPI.User.id}");
          
          _storeContent = await _configuration.StoreRef.Resolve();
@@ -75,8 +78,8 @@ namespace Beamable.Samples.KOR
          // Set loading text
          _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Loading_Store, 
             TMP_BufferedText.BufferedTextMode.Immediate);
-         _storeUIView.InventoryPanelUIView.BodyText.text = KORConstants.StoreUIView_Loading_Inventory;
-         _storeUIView.StorePanelUIView.BodyText.text = KORConstants.StoreUIView_Loading_Store;
+         _storeUIView.InventoryPanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Inventory;
+         _storeUIView.StorePanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Store;
 
          // Reload the services
          _beamableAPI.InventoryService.Subscribe(ItemContentType, Inventory_OnChanged);
@@ -106,7 +109,7 @@ namespace Beamable.Samples.KOR
          {
             inventoryStringBuilder.AppendLine($"•{item}");
          }
-         _storeUIView.InventoryPanelUIView.BodyText.text = inventoryStringBuilder.ToString();
+         _storeUIView.InventoryPanelUI.BodyText.text = inventoryStringBuilder.ToString();
 
          // Render store
          StringBuilder storeStringBuilder = new StringBuilder();
@@ -115,7 +118,7 @@ namespace Beamable.Samples.KOR
          {
             storeStringBuilder.AppendLine($"•{item}");
          }  
-         _storeUIView.StorePanelUIView.BodyText.text = storeStringBuilder.ToString();
+         _storeUIView.StorePanelUI.BodyText.text = storeStringBuilder.ToString();
       }
 
 
@@ -182,12 +185,16 @@ namespace Beamable.Samples.KOR
       
       private void BuyButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          DebugLog("TODO: Enable this on item selection. Disable after purchase.");
       }
       
       
       private void BackButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }

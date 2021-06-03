@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Beamable.Common.Content;
 using Beamable.Experimental.Api.Matchmaking;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Timer = System.Timers.Timer;
 
 /// <summary>
 /// Reusable matchmaking that is not game-specific.
@@ -28,7 +31,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       
       //  Fields  -----------------------------------------
       public string RoomId;
-      public int SecondsRemaining;
+      public int SecondsRemaining = 0;
       public List<long> CurrentPlayerDbidList = new List<long>();
       public string ErrorMessage = "";
       //
@@ -102,6 +105,13 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          
          var handle = await _matchmakingService.StartMatchmaking(_simGameType.Id);
 
+         Stopwatch stopwatch = new Stopwatch();
+         stopwatch.Start();
+
+         float customSecondsRemaining = 0; 
+         Timer customTimer = new Timer();
+         customTimer.Start();
+         
          try
          {
             _matchmakingOngoing = new CancellationTokenSource();
@@ -109,18 +119,26 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             do
             {
                if (token.IsCancellationRequested) return;
-
+               
+               if (_simGameType.waitAfterMinReachedSecs.HasValue)
+               {
+                  customSecondsRemaining = _simGameType.waitAfterMinReachedSecs.Value - (stopwatch.ElapsedMilliseconds/1000);
+                  _myMatchmakingResult.SecondsRemaining = (int)customSecondsRemaining;
+               }
+               
+               //_myMatchmakingResult.SecondsRemaining = handle.Status.SecondsRemaining; //value is forever "3"?
                _myMatchmakingResult.CurrentPlayerDbidList = handle.Status.Players;
-               _myMatchmakingResult.SecondsRemaining = handle.Status.SecondsRemaining;
                _myMatchmakingResult.RoomId = handle.Status.GameId;
                OnProgress?.Invoke(_myMatchmakingResult);
                await Task.Delay(1000, token);
-            } while (!handle.Status.MinPlayersReached);
+
+            } while (!handle.Status.MinPlayersReached || _myMatchmakingResult.SecondsRemaining > 0);
          }
          finally
          {
             _matchmakingOngoing.Dispose();
             _matchmakingOngoing = null;
+            customTimer.Stop();
          }
 
          // Invoke Progress #2

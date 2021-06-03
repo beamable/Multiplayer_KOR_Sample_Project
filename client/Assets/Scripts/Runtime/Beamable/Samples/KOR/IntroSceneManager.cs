@@ -60,6 +60,9 @@ namespace Beamable.Samples.KOR
          // Attempt Connection to Beamable
          _beamableAPI = await Beamable.API.Instance;
          
+         // Do this after calling "Beamable.API.Instance" for smoother UI
+         _introUIView.CanvasGroupsDoFade();
+         
          try
          {
             _isBeamableSDKInstalled = true;
@@ -136,29 +139,35 @@ namespace Beamable.Samples.KOR
 
       private void StartGame01Button_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
          StartGame(1);
       }
 
       
       private void StartGame02Button_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
          StartGame(6);
       }
       
       private void LeaderboardButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.LeaderboardSceneName,
             _configuration.DelayBeforeLoadScene));
       }
       
       private void StoreButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.StoreSceneName,
             _configuration.DelayBeforeLoadScene));
       }
 
       private void QuitButton_OnClicked()
       {
+         KORHelper.PlayAudioForUIClick();
+         
          if (Application.isEditor)
          {
             //In the Unity Editor, mimic the user clicking 'Stop' to stop.

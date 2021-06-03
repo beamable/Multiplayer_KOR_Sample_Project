@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDebugLog: 1
   _isDemoMode: 1
+  _isAudioMuted: 0
   _introSceneName: 1.Intro
   _lobbySceneName: 2.Lobby
   _gameSceneName: 3.Game
@@ -28,6 +29,7 @@ MonoBehaviour:
     Id: leaderboards.Leaderboard01
   _storeRef:
     Id: stores.Store01
+  _cameraBackgroundColor: {r: 0.7372549, g: 0.9019608, b: 1, a: 1}
   _localAvatar:
     _color: {r: 0, g: 0, b: 1, a: 1}
     _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
@@ -36,7 +38,8 @@ MonoBehaviour:
     _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
   _delayBeforeLoadScene: 0.1
   _statusMessageMinDuration: 1
-  _delayFadeInUI: 0.25
+  delayBetweenBetweenFadeInUI: 0.25
+  _delayBeforeFadeInUI: 0
   _leaderboardMinRowCount: 10
   _leaderboardMockScoreMin: 1
   _leaderboardMockScoreMax: 10
