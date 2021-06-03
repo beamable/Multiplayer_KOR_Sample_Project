@@ -89,6 +89,7 @@ namespace Beamable.Samples.KOR
          // Initialize Networking
          await NetworkController.Instance.Init();
 
+         NetworkController.Instance.Log.CreateNewConsumer(HandleNetworkUpdate);
          // Optional: Stuff to use later when player moves are incoming
          long tbdIncomingPlayerDbid = _beamableAPI.User.id; // test value;
          DebugLog($"MinPlayerCount = {RuntimeDataStorage.Instance.MinPlayerCount}");
@@ -159,16 +160,19 @@ namespace Beamable.Samples.KOR
          AvailableSpawnPoints.Remove(spawnPoint);
       }
 
+      public void HandleNetworkUpdate(TimeUpdate update)
+      {
+         foreach (var evt in update.Events)
+         {
+            HandleNetworkEvent(evt);
+         }
+      }
+
       public void HandleNetworkEvent(KOREvent korEvent)
       {
          switch (korEvent)
          {
-            case PlayerMoveStartedEvent moveEvt:
-               // moveEvt.Consume();
-               // _gameUIView.GetAvatarViewForDbid(moveEvt.PlayerDbid);
-               break;
             case PlayerJoinedEvent joinEvt:
-               joinEvt.Consume();
                AddPlayer(joinEvt);
                break;
          }
@@ -190,7 +194,7 @@ namespace Beamable.Samples.KOR
       private void BackButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClick();
-         
+
          // Destroy ECS
          SystemManager.DestroyGameSystems();
 

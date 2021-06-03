@@ -30,7 +30,7 @@ namespace Beamable.Samples.KOR.Multiplayer.Events
       /// <summary>
       /// Has the event been consumed by the local client, yet? Call <see cref="Consume"/>.
       /// </summary>
-      public bool Available { get; set; } = true; // TODO: refactor "availability" into the sim log as a global consumer
+      // public bool Available { get; set; } = true; // TODO: refactor "availability" into the sim log as a global consumer
 
       //  Fields ---------------------------------------
       [SerializeField]
@@ -42,12 +42,12 @@ namespace Beamable.Samples.KOR.Multiplayer.Events
          _playerDbid = playerDbid;
       }
 
-      /// <summary>
-      /// Marks the event as consumed and unavailable. Use this method to only process an event one time.
-      /// </summary>
-      public void Consume()
-      {
-         Available = false;
-      }
+      // /// <summary>
+      // /// Marks the event as consumed and unavailable. Use this method to only process an event one time.
+      // /// </summary>
+      // public void Consume()
+      // {
+      //    Available = false;
+      // }
    }
 }

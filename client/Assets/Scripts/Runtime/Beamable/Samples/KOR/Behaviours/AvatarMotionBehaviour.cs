@@ -65,7 +65,7 @@ namespace Beamable.Samples.KOR.Behaviours
       void OnNetworkUpdate(TimeUpdate timeUpdate)
       {
          var tick = (long) (timeUpdate.ElapsedTime * NetworkController.NetworkFramesPerSecond);
-         foreach (var message in NetworkController.Instance.Log.GetMessagesForTick(tick, consumerId))
+         foreach (var message in timeUpdate.Events)
          {
             if (message.PlayerDbid != AvatarView.playerDbid) continue; // this message doesn't belong to the player we care about
 
