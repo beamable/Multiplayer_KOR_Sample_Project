@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4348895522687995505}
   - component: {fileID: 4348895522687995519}
   - component: {fileID: 4348895522687995518}
+  - component: {fileID: 3051802603054490033}
   m_Layer: 5
   m_Name: KORLeaderboardHeaderUI
   m_TagString: Untagged
@@ -35,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &4348895522687995519
@@ -78,6 +79,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!225 &3051802603054490033
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4348895522687995504}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &8522347175571123585
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87,7 +100,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 194834732253564879, guid: ee5167d2cc7d2e64290f7bdaffe60fcd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3319592346907655188, guid: ee5167d2cc7d2e64290f7bdaffe60fcd, type: 3}
       propertyPath: m_Name

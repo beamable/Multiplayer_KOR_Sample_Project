@@ -1,7 +1,5 @@
-﻿using Beamable.Samples.KOR.UI;
-using Beamable.Samples.KOR.Views;
+﻿using Beamable.Samples.KOR.Views;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Beamable.Samples.KOR
 {
@@ -15,30 +13,23 @@ namespace Beamable.Samples.KOR
         [SerializeField]
         private LeaderboardUIView _leaderboardUIView = null;
 
-        [SerializeField]
-        private KORLeaderboardMainMenu _korLeaderboardMainMenu = null;
-        
-        [SerializeField]
-        private Button _closeButton = null;
-
-
         //  Unity Methods   ------------------------------
         protected void Start()
         {
-            _closeButton.onClick.AddListener(CloseButton_OnClicked);
+            _leaderboardUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
 
-            _korLeaderboardMainMenu.OnRendered.AddListener(KORLeaderboardMainMenu_OnRendered);
+            _leaderboardUIView.KORLeaderboardMainMenu.OnRendered.AddListener(KORLeaderboardMainMenu_OnRendered);
             
             // For KOR, use a custom UI for the leaderboard rows
-            _korLeaderboardMainMenu.KORLeaderboardItem = _leaderboardUIView.KORLeaderboardItem;
+            _leaderboardUIView.KORLeaderboardMainMenu.KORLeaderboardItem = _leaderboardUIView.KORLeaderboardItem;
             
             Debug.Log("Calling refresh");
-            _korLeaderboardMainMenu.Render();
+            _leaderboardUIView.KORLeaderboardMainMenu.Render();
             
         }
 
         //  Event Handlers -------------------------------
-        private void CloseButton_OnClicked()
+        private void BackButton_OnClicked()
         {
             KORHelper.PlayAudioForUIClick();
             

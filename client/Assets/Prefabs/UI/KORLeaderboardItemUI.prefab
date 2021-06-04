@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 6140618892088028601}
   - component: {fileID: 5886722220713667270}
   m_Layer: 5
-  m_Name: KORLeaderboardRowUI
+  m_Name: KORLeaderboardItemUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
