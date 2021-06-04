@@ -64,7 +64,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          {
             if (_pendingHashValidations.TryGetValue(tick, out var existingHash))
             {
-               if (Equals(existingHash, hash)) return; // the pending hash has already been stored. 
+               if (Equals(existingHash, hash)) return; // the pending hash has already been stored.
 
                Debug.LogError("QUEUED HASH MISMATCH!!! FOR TICK " + tick);
                latestInvalidFrame = tick;
@@ -90,7 +90,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          }
          else
          {
-            Debug.Log("Hash pass for tick: " + tick);
             latestValidFrame = tick;
             return true;
          }
