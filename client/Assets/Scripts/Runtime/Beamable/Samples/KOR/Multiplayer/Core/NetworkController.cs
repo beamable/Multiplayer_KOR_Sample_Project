@@ -41,6 +41,13 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             _sim.OnTick(HandleOnTick);
         }
 
+        public void Cleanup()
+        {
+            Log = new SimulationLog();
+            LocalDbid = 0;
+            _sim = null;
+        }
+
         private void HandleOnInit(string seed)
         {
             RandomSeed = seed;

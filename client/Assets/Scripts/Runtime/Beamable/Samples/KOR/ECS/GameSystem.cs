@@ -18,14 +18,7 @@ namespace Beamable.Samples.KOR.Multiplayer
          var time = World.Time.ElapsedTime;
          var frame = (long) (time * NetworkController.NetworkFramesPerSecond);
 
-         var messages = network.Log.GetMessagesForTick(frame).ToList();
-
          network.Log.NotifyConsumers(frame, (float)time, (float)World.Time.DeltaTime);
-         //
-         // foreach (var message in messages)
-         // {
-         //    GameSceneManager.Instance.HandleNetworkEvent(message);
-         // }
       }
    }
 }

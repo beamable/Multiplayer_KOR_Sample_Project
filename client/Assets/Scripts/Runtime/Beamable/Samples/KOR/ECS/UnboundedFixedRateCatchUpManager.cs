@@ -4,7 +4,7 @@ using Unity.Mathematics;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
-/// <summary>
+    /// <summary>
     /// The only difference between this class and the FixedRateCatchUpManager is that there is no upper bound to the max delta time.
     /// </summary>
     public class UnboundedFixedRateCatchUpManager : IFixedRateManager

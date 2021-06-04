@@ -18,7 +18,6 @@ namespace Beamable.Samples.KOR.Multiplayer
     [UpdateAfter(typeof(ExportPhysicsWorld))]
     public class GameController : SystemBase
     {
-
         public static Promise<GameController> OnInstance = new Promise<GameController>();
 
         public static GameController Instance;
@@ -31,29 +30,14 @@ namespace Beamable.Samples.KOR.Multiplayer
         private Dictionary<(float3 size, UnityS.Physics.Material material), BlobAssetReference<UnityS.Physics.Collider>> boxColliders = new Dictionary<(float3 size, UnityS.Physics.Material material), BlobAssetReference<UnityS.Physics.Collider>>();
         private readonly List<ComponentType> componentTypes = new List<ComponentType>(20);
 
-        private PCG _rand = default;
-        private bool randInitialized = false;
-
-        public PCG Random
-        {
-            get
-            {
-                if (!randInitialized)
-                {
-                    _rand = new PCG(0, (ulong)1); // TODO: Get this seed from the sim client.
-                    randInitialized = true;
-                }
-
-                return _rand;
-            }
-        }
-
-
         protected override void OnDestroy()
         {
             base.OnDestroy();
             OnInstance = new Promise<GameController>();
             Instance = null;
+            objects.Clear();
+            componentTypes.Clear();
+            boxColliders.Clear();
         }
 
         protected override void OnCreate()

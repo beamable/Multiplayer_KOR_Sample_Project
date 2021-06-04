@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Beamable.Common.Content;
 using Beamable.Common.Inventory;
@@ -37,7 +38,7 @@ namespace Beamable.Samples.KOR
       private GameUIView _gameUIView = null;
 
       private Dictionary<long, AvatarView> _dbidToAvatar = new Dictionary<long, AvatarView>();
-
+      private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
 
       //  Unity Methods   ------------------------------
       protected void Start()
@@ -92,6 +93,9 @@ namespace Beamable.Samples.KOR
 
          // Initialize Networking
          await NetworkController.Instance.Init();
+
+         // Set Available Spawns
+         _unusedSpawnPoints = AvailableSpawnPoints.ToList();
 
          NetworkController.Instance.Log.CreateNewConsumer(HandleNetworkUpdate);
          // Optional: Stuff to use later when player moves are incoming
@@ -152,8 +156,8 @@ namespace Beamable.Samples.KOR
          }
 
          // get random spawn point...
-         var spawnIndex = NetworkController.Instance.rand.Next(0, AvailableSpawnPoints.Count);
-         var spawnPoint = AvailableSpawnPoints[spawnIndex];
+         var spawnIndex = NetworkController.Instance.rand.Next(0, _unusedSpawnPoints.Count);
+         var spawnPoint = _unusedSpawnPoints[spawnIndex];
 
          var isLocal = joinEvent.PlayerDbid == NetworkController.Instance.LocalDbid;
          var avatarData = isLocal
@@ -168,7 +172,7 @@ namespace Beamable.Samples.KOR
          _gameUIView.AvatarViews.Add(avatarView);
 
          // clean up spawn point so no one else can use it...
-         AvailableSpawnPoints.Remove(spawnPoint);
+         _unusedSpawnPoints.Remove(spawnPoint);
       }
 
       public void HandleNetworkUpdate(TimeUpdate update)
@@ -208,6 +212,8 @@ namespace Beamable.Samples.KOR
 
          // Clean up manager
          _dbidToAvatar.Clear();
+         _unusedSpawnPoints.Clear();
+         NetworkController.Instance.Cleanup();
 
          // Destroy ECS
          SystemManager.DestroyGameSystems();
