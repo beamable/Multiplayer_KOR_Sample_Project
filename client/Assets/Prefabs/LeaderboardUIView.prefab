@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 0}
+  _willRecolorCamera: 1
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
   _canvasGroups:
   - {fileID: 0}
+  _korLeaderboardRowUIPrefab: {fileID: 5886722220713667270, guid: ee5167d2cc7d2e64290f7bdaffe60fcd, type: 3}
