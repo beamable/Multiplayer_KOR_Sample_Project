@@ -17,7 +17,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
         private SimClient _sim;
 
-        public SimulationLog Log;
+        public SimulationLog Log = new SimulationLog();
         public long LocalDbid;
 
         public System.Random rand;
@@ -28,14 +28,13 @@ namespace Beamable.Examples.Features.Multiplayer.Core
         {
             HighestSeenNetworkFrame = 0;
             NetworkInitialized = false;
-            Log = new SimulationLog();
             // roomId = string.IsNullOrEmpty(roomIdOverride) ? roomId : roomIdOverride;
 
             var beamable = await API.Instance;
 
             var roomId = RuntimeDataStorage.Instance.RoomId;
             LocalDbid = beamable.User.id;
-            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 1);
+            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 4);
             _sim.OnInit(HandleOnInit);
             _sim.OnConnect(HandleOnConnect);
             _sim.OnDisconnect(HandleOnDisconnect);
@@ -86,7 +85,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             Debug.Log("Sim client has disconnection from " + dbid);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _sim?.Update();
         }

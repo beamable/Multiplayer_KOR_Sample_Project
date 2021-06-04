@@ -67,8 +67,10 @@ namespace Beamable.Examples.Features.Multiplayer.Core
                Debug.LogError("QUEUED HASH MISMATCH!!! FOR TICK " + tick);
                latestInvalidFrame = tick;
             }
-
-            _pendingHashValidations.Add(tick, hash);
+            else
+            {
+               _pendingHashValidations.Add(tick, hash);
+            }
             return;
          }
 

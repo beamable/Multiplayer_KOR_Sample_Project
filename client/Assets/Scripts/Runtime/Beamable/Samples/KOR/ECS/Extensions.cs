@@ -13,11 +13,34 @@ namespace Beamable.Samples.KOR.Multiplayer
          World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(entity, new Translation()
          {
             Value = new float3(
-               (sfloat)position.x,
-               (sfloat)position.y,
-               (sfloat)position.z
+               position.x.ToSFloat(),
+               position.y.ToSFloat(),
+               position.z.ToSFloat()
                )
          });
+      }
+
+      public static uint ToRawSFloat(this float number)
+      {
+         return ((sfloat) number).RawValue;
+      }
+
+      public static sfloat ToSFloat(this float number, sfloat tolerance=default)
+      {
+         var lowestTolerance = (sfloat) .01f;
+         if (tolerance < lowestTolerance)
+         {
+            tolerance = lowestTolerance;
+         }
+         var roughCast = (sfloat) number;
+         var cell = math.floor(roughCast / tolerance);
+         cell *= tolerance;
+         return cell;
+      }
+
+      public static sfloat ToSFloat(this uint raw)
+      {
+         return sfloat.FromRaw(raw);
       }
    }
 }

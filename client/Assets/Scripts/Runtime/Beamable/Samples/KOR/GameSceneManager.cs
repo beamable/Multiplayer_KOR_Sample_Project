@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Beamable.Common.Content;
+using Beamable.Common.Inventory;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Audio;
@@ -33,6 +35,8 @@ namespace Beamable.Samples.KOR
 
       [SerializeField]
       private GameUIView _gameUIView = null;
+
+      private Dictionary<long, AvatarView> _dbidToAvatar = new Dictionary<long, AvatarView>();
 
 
       //  Unity Methods   ------------------------------
@@ -141,6 +145,12 @@ namespace Beamable.Samples.KOR
 
       public void AddPlayer(PlayerJoinedEvent joinEvent)
       {
+         // don't respawn a player if they had already joined.
+         if (_dbidToAvatar.ContainsKey(joinEvent.PlayerDbid))
+         {
+            return;
+         }
+
          // get random spawn point...
          var spawnIndex = NetworkController.Instance.rand.Next(0, AvailableSpawnPoints.Count);
          var spawnPoint = AvailableSpawnPoints[spawnIndex];
@@ -152,6 +162,7 @@ namespace Beamable.Samples.KOR
 
          var avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
          avatarView.transform.SetPhysicsPosition(spawnPoint.transform.position);
+         _dbidToAvatar.Add(joinEvent.PlayerDbid, avatarView);
 
          avatarView.SetForPlayer(joinEvent.PlayerDbid);
          _gameUIView.AvatarViews.Add(avatarView);
@@ -194,6 +205,9 @@ namespace Beamable.Samples.KOR
       private void BackButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClick();
+
+         // Clean up manager
+         _dbidToAvatar.Clear();
 
          // Destroy ECS
          SystemManager.DestroyGameSystems();

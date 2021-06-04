@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Beamable.Common;
@@ -112,6 +113,8 @@ namespace Beamable.Samples.KOR.Multiplayer
                 renderer.material = GameResourceManager.Instance.colorMaterials[((int)i)%GameResourceManager.Instance.colorMaterials.Length];
 
             }
+
+            //
         }
 
 
@@ -140,7 +143,7 @@ namespace Beamable.Samples.KOR.Multiplayer
 
         protected override void OnUpdate()
         {
-
+            ConvertToNetworkedPhysics.ConvertAll(this);
             // Set all positions
             Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r) =>
             {
@@ -185,7 +188,23 @@ namespace Beamable.Samples.KOR.Multiplayer
         public Entity GetEntity(GameObject obj)
         {
             // TODO: Replace this with a better data structure...
-            return objects.First(kvp => kvp.Value == obj).Key;
+
+            foreach (var kvp in objects)
+            {
+                if (kvp.Value == obj)
+                {
+                    return kvp.Key;
+                }
+            }
+
+            var converter = obj.GetComponent<ConvertToNetworkedPhysics>();
+            if (converter == null)
+            {
+                throw new Exception(
+                    "Cannot get entity that hasn't been created in soft dots physics, or that doesn't have a converter element");
+            }
+            converter.Convert(this);
+            return converter.Entity;
         }
 
 
