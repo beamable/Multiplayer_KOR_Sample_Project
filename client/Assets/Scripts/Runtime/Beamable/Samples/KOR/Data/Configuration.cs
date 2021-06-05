@@ -148,9 +148,6 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private Color _cameraBackgroundColor = Color.white;
 
-      [SerializeField]
-      private List<AvatarData> _avatarDatas = null;
-         
       [Header("Cosmetic Delays")]
       [SerializeField]
       private float _delayBeforeLoadScene = 0;
