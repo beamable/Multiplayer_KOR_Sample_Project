@@ -31,18 +31,19 @@ MonoBehaviour:
     Id: stores.Store01
   _cameraBackgroundColor: {r: 0.7372549, g: 0.9019608, b: 1, a: 1}
   _avatarDatas:
+  - _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
+  - _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
+  - _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
+  - _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
+  - _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
+  - _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
+  _avatarSlotDatas:
   - _color: {r: 0.7372549, g: 0.9019608, b: 1, a: 1}
-    _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
   - _color: {r: 0.53333336, g: 0.8, b: 0.9647059, a: 1}
-    _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
   - _color: {r: 0.3254902, g: 0.6509804, b: 0.84705883, a: 1}
-    _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
   - _color: {r: 0.1764706, g: 0.5137255, b: 0.7137255, a: 1}
-    _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
   - _color: {r: 0.003921569, g: 0.36078432, b: 0.57254905, a: 1}
-    _avatarViewPrefab: {fileID: 7974972315190908841, guid: cbe580ced7b01c14192bafa714296cea, type: 3}
   - _color: {r: 0, g: 0.2723486, b: 0.4339623, a: 1}
-    _avatarViewPrefab: {fileID: 4282913003019678735, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
   _delayBeforeLoadScene: 0.1
   _statusMessageMinDuration: 1
   delayBetweenBetweenFadeInUI: 0.25

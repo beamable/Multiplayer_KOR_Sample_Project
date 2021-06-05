@@ -4,6 +4,8 @@ using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
 using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Beamable.Samples.KOR
 {
@@ -47,6 +49,8 @@ namespace Beamable.Samples.KOR
                 _beamableAPI = null;
                 de.ConnectivityService.OnConnectivityChanged -= ConnectivityService_OnConnectivityChanged;
             });
+
+            CharacterManager.Instance.OnChoiceHasBeenMade -= UpdateCharacterChoice;
         }
 
         //  Other Methods --------------------------------
@@ -92,6 +96,10 @@ namespace Beamable.Samples.KOR
                 _isBeamableSDKInstalledErrorMessage = e.Message;
                 ConnectivityService_OnConnectivityChanged(false);
             }
+
+            CharacterManager.Instance.OnChoiceHasBeenMade += UpdateCharacterChoice;
+            if (CharacterManager.Instance.CurrentlyChosenCharacter != null)
+                UpdateCharacterChoice();
         }
 
         /// <summary>
@@ -133,14 +141,44 @@ namespace Beamable.Samples.KOR
             RenderUI();
         }
 
+        private void UpdateCharacterChoice()
+        {
+            CharacterManager cm = CharacterManager.Instance;
+
+            _introUIView.CharacterInfoText = cm.CurrentlyChosenCharacter.ReadableName;
+
+            int characterIndex = cm.AllCharacterContentObjects.IndexOf(cm.CurrentlyChosenCharacter);
+            int charactersCount = cm.AllCharacterContentObjects.Count;
+
+            _introUIView.PreviousCharacterButton.interactable = characterIndex > 0;
+            _introUIView.NextCharacterButton.interactable = characterIndex < charactersCount - 1;
+
+            AsyncOperationHandle<Texture2D> asyncIconLoad = Addressables.LoadAssetAsync<Texture2D>(cm.CurrentlyChosenCharacter.bigIcon);
+            asyncIconLoad.Completed += OnAsyncIconLoadCompleted;
+        }
+
+        public void OnAsyncIconLoadCompleted(AsyncOperationHandle<Texture2D> handle)
+        {
+            _introUIView.CharacterImage = handle.Result;
+        }
+
         private void PreviousCharacterButton_OnClicked()
         {
-            Debug.Log("Prev Char");
+            CharacterManager cm = CharacterManager.Instance;
+            int characterIndex = cm.GetChosenCharacterIndex();
+
+            if (characterIndex > 0)
+                cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex - 1]);
         }
 
         private void NextCharacterButton_OnClicked()
         {
-            Debug.Log("Next Char");
+            CharacterManager cm = CharacterManager.Instance;
+            int characterIndex = cm.GetChosenCharacterIndex();
+            int charactersCount = cm.AllCharacterContentObjects.Count;
+
+            if (characterIndex < charactersCount - 1)
+                cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex + 1]);
         }
 
         private void StartGame01Button_OnClicked()

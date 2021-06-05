@@ -12,6 +12,8 @@ namespace Beamable.Samples.KOR.Views
         //  Properties -----------------------------------
         public string AboutBodyText { set { _aboutBodyText.text = value; } }
 
+        public Texture2D CharacterImage { set { _characterImage.texture = value; } }
+
         public string CharacterInfoText { set { _characterInfoText.text = value; } }
 
         public Button PreviousCharacterButton { get { return previousCharacterButton; } }
@@ -54,6 +56,9 @@ namespace Beamable.Samples.KOR.Views
 
         [SerializeField]
         private CanvasGroup _buttonsCanvasGroup = null;
+
+        [SerializeField]
+        private RawImage _characterImage = null;
 
         //  Unity Methods   ------------------------------
         public void Start()
