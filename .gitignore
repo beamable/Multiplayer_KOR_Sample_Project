@@ -9,10 +9,11 @@
 /client/[Tt]emp/
 /client/[Oo]bj/
 /client/[Ll]ogs/
+/client/[Uu]ser[Ss]ettings/
 /[Bb]uild/
 /[Bb]uilds/
 /[Mm]emoryCaptures/
-/[Uu]ser[Ss]ettings/
+
 # /[Mm]icroservice/ IGNORE THIS LATER #
 
 # Logging
