@@ -19,7 +19,7 @@ namespace Beamable.Samples.KOR.UI
     /// </summary>
     public class KORLeaderboardMainMenu : MenuBase
     {
-       //  Fields ---------------------------------------
+       //  Events ---------------------------------------
        public UnityEvent OnRendered = new UnityEvent();
 
        //  Fields ---------------------------------------
