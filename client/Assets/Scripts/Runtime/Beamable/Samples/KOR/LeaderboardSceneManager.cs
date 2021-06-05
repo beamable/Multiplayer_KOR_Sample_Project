@@ -23,7 +23,6 @@ namespace Beamable.Samples.KOR
             // For KOR, use a custom UI for the leaderboard rows
             _leaderboardUIView.KORLeaderboardMainMenu.KORLeaderboardItem = _leaderboardUIView.KORLeaderboardItem;
             
-            Debug.Log("Calling refresh");
             _leaderboardUIView.KORLeaderboardMainMenu.Render();
             
         }

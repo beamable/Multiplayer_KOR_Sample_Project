@@ -32,6 +32,10 @@ namespace Beamable.Samples.KOR
       protected void Start()
       {
          _lobbyUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
+         
+         _lobbyUIView.BufferedText.SetText("",
+            TMP_BufferedText.BufferedTextMode.Immediate);
+         
          MyKorMatchmakingOnProgress(null);
 
          SetupBeamable();
