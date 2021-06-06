@@ -64,6 +64,7 @@ namespace Beamable.Samples.KOR.Views
         public void Awake()
         {
             _characterInfoText.text = "";
+            _characterImage.texture = null;
         }
 
         public void Start()
