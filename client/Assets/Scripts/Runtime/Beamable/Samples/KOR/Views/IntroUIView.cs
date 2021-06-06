@@ -61,6 +61,11 @@ namespace Beamable.Samples.KOR.Views
         private RawImage _characterImage = null;
 
         //  Unity Methods   ------------------------------
+        public void Awake()
+        {
+            _characterInfoText.text = "";
+        }
+
         public void Start()
         {
             CanvasGroupsDoFadeOut();

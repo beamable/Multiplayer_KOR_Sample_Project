@@ -56,9 +56,11 @@ namespace Beamable.Samples.KOR
             if (allCurrentUserStats.TryGetValue(ChosenCharacterStatKey, out chosenCharacterName))
             {
                 if (!_mapCharacterObjectNameToContent.TryGetValue(chosenCharacterName, out _currentlyChosenCharacter))
-                    throw new InvalidOperationException(
-                        $"Chosen character name={chosenCharacterName} from stats does not refer to an existing character content object. " +
-                        "You've probably removed this recently.");
+                {
+                    Debug.Log($"Chosen character name={ chosenCharacterName} from stats does not refer to an existing character content object. " +
+                        "You've probably removed this recently. Choosing default character");
+                    ChooseCharacter(_allCharacterContentObjects[0]);
+                }
 
                 OnChoiceHasBeenMade?.Invoke();
             }
