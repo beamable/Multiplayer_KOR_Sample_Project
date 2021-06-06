@@ -672,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 899589363, guid: d349b26339919d940b7c37f7992492db, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -129.29568
+      value: -140.43631
       objectReference: {fileID: 0}
     - target: {fileID: 101996629323421099, guid: d349b26339919d940b7c37f7992492db, type: 3}
       propertyPath: m_AnchorMax.y
@@ -909,6 +909,10 @@ PrefabInstance:
     - target: {fileID: 1454333846248996680, guid: d349b26339919d940b7c37f7992492db, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705721207683665858, guid: d349b26339919d940b7c37f7992492db, type: 3}
+      propertyPath: m_Name
+      value: CharacterSelectionPanel
       objectReference: {fileID: 0}
     - target: {fileID: 2209552595665592984, guid: d349b26339919d940b7c37f7992492db, type: 3}
       propertyPath: m_AnchorMax.y
