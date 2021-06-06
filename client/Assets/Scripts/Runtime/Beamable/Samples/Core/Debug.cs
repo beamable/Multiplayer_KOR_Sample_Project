@@ -5,9 +5,6 @@ namespace Beamable.Core.Debugging
     /// </summary>
     public class Debugger
     {
-        //  Properties ---------------------------------------
-        public DebugLogLevel DebugLogLevel { get { return _debugLogLevel; } }
-
         //  Fields ---------------------------------------
         private DebugLogLevel _debugLogLevel;
 
@@ -22,13 +19,13 @@ namespace Beamable.Core.Debugging
         public void Log(string message, DebugLogLevel messageDebugLogLevel = DebugLogLevel.Simple)
         {
             // Logging off?
-            if (DebugLogLevel == DebugLogLevel.Disabled)
+            if (_debugLogLevel == DebugLogLevel.Disabled)
             {
                 return;
             } 
          
             // Logging level too low?
-            if (DebugLogLevel == DebugLogLevel.Verbose && 
+            if (_debugLogLevel == DebugLogLevel.Verbose && 
                 messageDebugLogLevel == DebugLogLevel.Simple)
             {
                 return;

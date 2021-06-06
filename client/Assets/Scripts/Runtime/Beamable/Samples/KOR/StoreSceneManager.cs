@@ -3,6 +3,7 @@ using System.Text;
 using Beamable.Api.Payments;
 using Beamable.Common.Api.Inventory;
 using Beamable.Common.Shop;
+using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
@@ -38,6 +39,7 @@ namespace Beamable.Samples.KOR
       protected void Start()
       {
          _storeUIView.BuyButton.onClick.AddListener(BuyButton_OnClicked);
+         _storeUIView.ResetButton.onClick.AddListener(ResetButton_OnClicked);
          _storeUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
          SetupBeamable();
       }
@@ -122,12 +124,9 @@ namespace Beamable.Samples.KOR
       
       private async void BuySelectedStoreItem()
       {
-         Debug.Log( ("buy item"));
          var storeSymbol = _storeContent.Id;
          var listingSymbol = _playerStoreView.listings[0].symbol;
          var x = await _beamableAPI.CommerceService.Purchase(storeSymbol, listingSymbol);
-         
-         Debug.Log( ("buy item2"));
       }
 
 
@@ -159,7 +158,7 @@ namespace Beamable.Samples.KOR
          foreach (KeyValuePair<string, long> kvp  in inventoryViewForCurrencies.currencies)
          {
             _currencyAmount = (int)kvp.Value;
-            Debug.Log(("Currency_OnChanged() CurrencyAmount: " + _currencyAmount));
+            Configuration.Debugger.Log("Currency_OnChanged() CurrencyAmount: " + _currencyAmount);
             break;
          }
          
@@ -196,9 +195,19 @@ namespace Beamable.Samples.KOR
          BuySelectedStoreItem();
       }
 
+      private void ResetButton_OnClicked()
+      {
+         KORHelper.PlayAudioForUIClick();
 
-
-
+         Configuration.Debugger.Log(
+            "Reset! This deletes the local player, " +
+            "creates a new one, and restarts the game. " +
+            "Do not use this in production.");
+         
+         ExampleProjectHacks.ClearDeviceUsersAndReloadGame();
+      }
+      
+      
       private void BackButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClick();
