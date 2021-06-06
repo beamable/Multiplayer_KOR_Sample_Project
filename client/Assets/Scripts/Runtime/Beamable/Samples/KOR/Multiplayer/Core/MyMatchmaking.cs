@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Beamable.Common.Content;
+using Beamable.Core.Debugging;
 using Beamable.Experimental.Api.Matchmaking;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
-using Timer = System.Timers.Timer;
 
 /// <summary>
 /// Reusable matchmaking that is not game-specific.
@@ -69,7 +66,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       //  Properties  -------------------------------------
       public MyMatchmakingResult MyMatchmakingResult { get { return _myMatchmakingResult; } }
-
+      
       //  Fields  -----------------------------------------
       public const string DefaultRoomId = "DefaultRoom";
       public const int Delay = 1000;
@@ -78,19 +75,21 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       private MatchmakingService _matchmakingService;
       private SimGameType _simGameType;
       private CancellationTokenSource _matchmakingOngoing;
-      private bool _isDebugLog = false;
 
       public MyMatchmaking(MatchmakingService matchmakingService,
-         SimGameType simGameType, long LocalPlayerDbid, bool isDebugLog = false)
+         SimGameType simGameType, long LocalPlayerDbid)
       {
          _matchmakingService = matchmakingService;
          _simGameType = simGameType;
-         _isDebugLog = isDebugLog;
 
          _myMatchmakingResult = new MyMatchmakingResult(LocalPlayerDbid, _simGameType.maxPlayers);
       }
 
-      //  Other Methods  ----------------------------------
+      //  Other Methods   ------------------------------
+      protected virtual void DebugLog(string message)
+      {
+         //Override to implement
+      }
 
       /// <summary>
       /// Start the matchmaking process
@@ -153,14 +152,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       {
          await _matchmakingService.CancelMatchmaking(_simGameType.Id);
          _matchmakingOngoing?.Cancel();
-      }
-
-      private void DebugLog(string message)
-      {
-         if (_isDebugLog)
-         {
-            Debug.Log(message);
-         }
       }
    }
 }

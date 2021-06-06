@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Beamable.Common.Content;
-using Beamable.Common.Inventory;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.Core;
-using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Behaviours;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
@@ -48,13 +45,11 @@ namespace Beamable.Samples.KOR
       }
 
 
-      //  Other Methods  -----------------------------
+      //  Other Methods   ------------------------------
       private void DebugLog(string message)
       {
-         if (_configuration.IsDebugLog)
-         {
-            Debug.Log(message);
-         }
+         // Respects Configuration.IsDebugLog Checkbox
+         Configuration.Debugger.Log(message);
       }
 
 

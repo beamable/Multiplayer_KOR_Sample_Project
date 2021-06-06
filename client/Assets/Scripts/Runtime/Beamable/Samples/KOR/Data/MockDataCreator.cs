@@ -6,6 +6,7 @@ using Beamable.Api.Leaderboard;
 using Beamable.Api.Stats;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
+using Beamable.Core.Debugging;
 using UnityEngine;
 using Random = System.Random;
 
@@ -17,7 +18,17 @@ namespace Beamable.Samples.KOR.Data
    /// </summary>
    public static class MockDataCreator
    {
-      //  Other Methods --------------------------------
+      //  Other Methods   ------------------------------
+      private static void DebugLog(string message)
+      {
+         // Respects Configuration.IsDebugLog Checkbox
+         
+         // Show when SIMPLE or VERBOSE
+         Configuration.Debugger.Log(message);
+         
+         // Show when VERBOSE
+         Configuration.Debugger.Log(message, DebugLogLevel.Verbose);
+      }
 
       /// <summary>
       /// Because this game is NOT a production game with real users, it is helpful
@@ -50,7 +61,7 @@ namespace Beamable.Samples.KOR.Data
 
          if (currentRowCount < leaderboardMinRowCount)
          {
-            Debug.Log($"PopulateLeaderboardWithMockData() BEFORE, rowCount = {currentRowCount}, targetRowCount = {leaderboardMinRowCount}");
+            DebugLog($"PopulateLeaderboardWithMockData() BEFORE, rowCount = {currentRowCount}, targetRowCount = {leaderboardMinRowCount}");
 
             if (currentRowCount < leaderboardMinRowCount)
             {
@@ -72,7 +83,7 @@ namespace Beamable.Samples.KOR.Data
                   mockScore = KORHelper.GetRoundedScore(mockScore);
                   await leaderboardService.SetScore(leaderboardContent.Id, mockScore);
 
-                  Debug.Log($"PopulateLeaderboardWithMockData() Created Mock User. Alias = {alias}, score = {mockScore}.");
+                  DebugLog($"PopulateLeaderboardWithMockData() Created Mock User. Alias = {alias}, score = {mockScore}.");
 
                }
             }
@@ -80,7 +91,7 @@ namespace Beamable.Samples.KOR.Data
             LeaderBoardView leaderboardViewAfter = leaderboardViewToReturn = 
                await leaderboardService.GetBoard(leaderboardContent.Id, 0, 100);
             
-            Debug.Log($"PopulateLeaderboardWithMockData() AFTER, rowCount = {leaderboardViewAfter.rankings.Count}, " +
+            DebugLog($"PopulateLeaderboardWithMockData() AFTER, rowCount = {leaderboardViewAfter.rankings.Count}, " +
                       $"targetRowCount = {leaderboardMinRowCount}");
 
             // Login again as local user
@@ -91,7 +102,7 @@ namespace Beamable.Samples.KOR.Data
             return leaderboardViewAfter;
          }
          
-         Debug.Log($"PopulateLeaderboardWithMockData() Data is valid! rowCount = {leaderboardViewToReturn.rankings.Count}," +
+         DebugLog($"PopulateLeaderboardWithMockData() Data is valid! rowCount = {leaderboardViewToReturn.rankings.Count}," +
                    $"targetRowCount = {leaderboardMinRowCount}");
          return leaderboardViewToReturn;
       }

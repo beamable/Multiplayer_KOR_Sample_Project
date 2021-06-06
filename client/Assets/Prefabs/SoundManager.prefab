@@ -434,6 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ccfe5b8ac23bc4baa33f3a899755e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
   _audioClips:
   - {fileID: 8300000, guid: 16ff88a73ccca2f498e753eeb4288bad, type: 3}
   - {fileID: 8300000, guid: 25bcbb1c661a8fd458cab40d91b3d43c, type: 3}

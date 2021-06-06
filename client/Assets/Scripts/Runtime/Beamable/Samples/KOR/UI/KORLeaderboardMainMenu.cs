@@ -3,6 +3,7 @@ using Beamable.Api;
 using Beamable.Common;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Leaderboards;
+using Beamable.Samples.KOR.Data;
 using Beamable.UI.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
@@ -38,7 +39,14 @@ namespace Beamable.Samples.KOR.UI
          }
       }
 
-      //  Other Methods ---------------------------------
+      //  Other Methods   ------------------------------
+      private void DebugLog(string message)
+      {
+         // Respects Configuration.IsDebugLog Checkbox
+         Configuration.Debugger.Log(message);
+      }
+      
+      
       public async void Render()
       {
          var de = await API.Instance;
@@ -61,7 +69,7 @@ namespace Beamable.Samples.KOR.UI
                   retry++;
                   if (retry == maxRetries)
                   {
-                     Debug.LogError(e.Message);
+                     DebugLog(e.Message);
                   }
                }
                else
@@ -71,7 +79,7 @@ namespace Beamable.Samples.KOR.UI
             }
          }
 
-         Debug.LogError("Unable to load. Please check LeaderboardFlow GameObject has Leaderboard field set.");
+         DebugLog("Unable to load. Please check LeaderboardFlow GameObject has Leaderboard field set.");
       }
 
 

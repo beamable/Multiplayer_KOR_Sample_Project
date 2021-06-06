@@ -15,6 +15,8 @@ namespace Beamable.Samples.KOR.Audio
 		private const float UnsetFloat = -1;
 		private const float PitchDefault = 1;
 
+		[SerializeField] private Configuration _configuration = null;
+		
 		[SerializeField]
 		private List<AudioClip> _audioClips = new List<AudioClip>();
 
@@ -43,6 +45,7 @@ namespace Beamable.Samples.KOR.Audio
 				stringBuilder.AppendLine($"public const string {audioClip.name} = \"{audioClip.name}\";");
 			}
 
+			//Keep as "Debug.Log"
 			Debug.Log(stringBuilder.ToString());
 		}
 
@@ -129,7 +132,7 @@ namespace Beamable.Samples.KOR.Audio
 					audioSource.pitch = pitch;
 					if (delay == UnsetFloat)
 					{
-						if (!Configuration.Instance.IsAudioMuted)
+						if (!_configuration.IsAudioMuted)
 						{
 							audioSource.Play();
 						}
@@ -137,7 +140,7 @@ namespace Beamable.Samples.KOR.Audio
 					}
 					else
 					{
-						if (!Configuration.Instance.IsAudioMuted)
+						if (!_configuration.IsAudioMuted)
 						{
 							//delay in seconds
 							audioSource.PlayDelayed(delay);

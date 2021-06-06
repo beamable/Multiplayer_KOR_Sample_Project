@@ -45,11 +45,10 @@ namespace Beamable.Samples.KOR
       //  Other Methods   ------------------------------
       private void DebugLog(string message)
       {
-         if (_configuration.IsDebugLog)
-         {
-            Debug.Log(message);
-         }
+         // Respects Configuration.IsDebugLog Checkbox
+         Configuration.Debugger.Log(message);
       }
+      
       
       private async void SetupBeamable()
       {
