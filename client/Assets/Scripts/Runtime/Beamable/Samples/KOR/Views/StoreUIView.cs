@@ -14,9 +14,9 @@ namespace Beamable.Samples.KOR.Views
       public TMP_BufferedText BufferedText { get { return _bufferedText; } }
       public PanelUI InventoryPanelUI { get { return inventoryPanelUI; } }
       public PanelUI StorePanelUI { get { return storePanelUI; } }
-      
       public Button BuyButton { get { return _buyButton; } }
       public Button BackButton { get { return _backButton; } }
+      public Button ResetButton { get { return _resetButton; } }
       
       //  Fields ---------------------------------------
       [Header("UI")]
@@ -33,7 +33,11 @@ namespace Beamable.Samples.KOR.Views
       private Button _buyButton = null;
       
       [SerializeField]
+      private Button _resetButton = null;
+
+      [SerializeField]
       private Button _backButton = null;
+      
 
       //  Unity Methods   ------------------------------
       public void Start()
