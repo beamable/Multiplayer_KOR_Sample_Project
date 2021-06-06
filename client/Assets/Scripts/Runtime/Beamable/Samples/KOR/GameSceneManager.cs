@@ -118,7 +118,10 @@ namespace Beamable.Samples.KOR
          for (int i = 0; i < 5; i++)
          {
             // AvatarData avatarData = _configuration.AvatarDatas[i];
-            _gameUIView.AvatarUIViews[i].AvatarData = _configuration.LocalAvatar; // TODO: This is incorrect, now. We need to spawn huds based on who is in the game
+            // TODO: Spawn Avatars according to chosen character per DBID
+            // For now, just use a fixed prefab for everyone.
+            // TODO: Only show HUD for players that are actually in the game.
+            _gameUIView.AvatarUIViews[i].AvatarData = _configuration.LocalAvatar;
             _gameUIView.AvatarUIViews[i].Health = 100;
             _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
             _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
