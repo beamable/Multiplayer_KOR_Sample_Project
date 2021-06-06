@@ -6,7 +6,6 @@ using Beamable.Api.Leaderboard;
 using Beamable.Api.Stats;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
-using Beamable.Core.Debugging;
 using UnityEngine;
 using Random = System.Random;
 
@@ -22,12 +21,7 @@ namespace Beamable.Samples.KOR.Data
       private static void DebugLog(string message)
       {
          // Respects Configuration.IsDebugLog Checkbox
-         
-         // Show when SIMPLE or VERBOSE
          Configuration.Debugger.Log(message);
-         
-         // Show when VERBOSE
-         Configuration.Debugger.Log(message, DebugLogLevel.Verbose);
       }
 
       /// <summary>
