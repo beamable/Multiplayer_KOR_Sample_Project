@@ -60,9 +60,9 @@ namespace Beamable.Samples.KOR
          // Do this after calling "Beamable.API.Instance" for smoother UI
          _storeUIView.CanvasGroupsDoFadeIn();
          
-         DebugLog($"Store with dbid = {_beamableAPI.User.id}");
-         
          _storeContent = await _configuration.StoreRef.Resolve();
+         DebugLog($"Store Scene, dbid = {_beamableAPI.User.id}");
+         DebugLog($"StoreContent, listings.Count = {_storeContent.listings.Count}");
          
          LoadServices();
          
@@ -87,7 +87,6 @@ namespace Beamable.Samples.KOR
 
       }
 
-      
       private void CheckLoadServicesStatus()
       {
          if (_inventoryView == null || _playerStoreView == null)
@@ -118,6 +117,17 @@ namespace Beamable.Samples.KOR
             storeStringBuilder.AppendLine($"•{item}");
          }  
          _storeUIView.StorePanelUI.BodyText.text = storeStringBuilder.ToString();
+      }
+      
+      
+      private async void BuySelectedStoreItem()
+      {
+         Debug.Log( ("buy item"));
+         var storeSymbol = _storeContent.Id;
+         var listingSymbol = _playerStoreView.listings[0].symbol;
+         var x = await _beamableAPI.CommerceService.Purchase(storeSymbol, listingSymbol);
+         
+         Debug.Log( ("buy item2"));
       }
 
 
@@ -153,6 +163,7 @@ namespace Beamable.Samples.KOR
          foreach (KeyValuePair<string, long> kvp  in inventoryViewForCurrencies.currencies)
          {
             _currencyAmount = (int)kvp.Value;
+            Debug.Log(("Currency_OnChanged() CurrencyAmount: " + _currencyAmount));
             break;
          }
          
@@ -185,11 +196,13 @@ namespace Beamable.Samples.KOR
       private void BuyButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClick();
-         
-         DebugLog("TODO: Enable this on item selection. Disable after purchase.");
+
+         BuySelectedStoreItem();
       }
-      
-      
+
+
+
+
       private void BackButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClick();
