@@ -32,11 +32,6 @@ namespace Beamable.Samples.KOR
             SetupBeamable();
         }
 
-        //private void Start()
-        //{
-        //    SetupBeamable();
-        //}
-
         private async void SetupBeamable()
         {
             _beamableAPI = await Beamable.API.Instance;
@@ -55,25 +50,37 @@ namespace Beamable.Samples.KOR
                 _mapCharacterObjectNameToContent.Add(cco.ContentName, cco);
             }
 
-            Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", _beamableAPI.User.id);
+            CharacterContentObject chosenCCO = await GetChosenCharacterByDBID(_beamableAPI.User.id);
+
+            if (chosenCCO == null)
+                ChooseCharacter(_allCharacterContentObjects[0]);
+            else
+            {
+                _currentlyChosenCharacter = chosenCCO;
+                OnChoiceHasBeenMade?.Invoke();
+            }
+        }
+
+        public async Task<CharacterContentObject> GetChosenCharacterByDBID(long dbid)
+        {
+            Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
 
             foreach (KeyValuePair<string, string> entry in allCurrentUserStats)
                 Debug.Log($"CharacterContentObject key={entry.Key} value={entry.Value}");
 
             string chosenCharacterName;
-            if (allCurrentUserStats.TryGetValue(ChosenCharacterStatKey, out chosenCharacterName))
-            {
-                if (!_mapCharacterObjectNameToContent.TryGetValue(chosenCharacterName, out _currentlyChosenCharacter))
-                {
-                    Debug.LogError($"Chosen character name={ chosenCharacterName} from stats does not refer to an existing character content object. " +
-                        "You've probably removed/renamed this recently. Choosing default character ...");
-                    ChooseCharacter(_allCharacterContentObjects[0]);
-                }
+            if (!allCurrentUserStats.TryGetValue(ChosenCharacterStatKey, out chosenCharacterName))
+                return null;
 
-                OnChoiceHasBeenMade?.Invoke();
+            CharacterContentObject cco;
+            if (!_mapCharacterObjectNameToContent.TryGetValue(chosenCharacterName, out cco))
+            {
+                Debug.LogError($"Chosen character name={ chosenCharacterName} by dbid={dbid} from stats does not refer to an existing character content object. " +
+                    "You've probably removed/renamed this recently.");
+                return null;
             }
-            else
-                ChooseCharacter(_allCharacterContentObjects[0]);
+
+            return cco;
         }
 
         public int GetChosenCharacterIndex()
