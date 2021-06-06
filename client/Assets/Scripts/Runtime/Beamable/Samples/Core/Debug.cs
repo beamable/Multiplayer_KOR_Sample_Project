@@ -25,8 +25,8 @@ namespace Beamable.Core.Debugging
             } 
          
             // Logging level too low?
-            if (_debugLogLevel == DebugLogLevel.Verbose && 
-                messageDebugLogLevel == DebugLogLevel.Simple)
+            if (_debugLogLevel == DebugLogLevel.Simple && 
+                messageDebugLogLevel == DebugLogLevel.Verbose)
             {
                 return;
             }

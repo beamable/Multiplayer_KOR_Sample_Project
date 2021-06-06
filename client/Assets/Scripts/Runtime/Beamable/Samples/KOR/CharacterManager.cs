@@ -9,6 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Beamable.Core.Debugging;
+using Beamable.Samples.KOR.Data;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR
@@ -46,7 +48,10 @@ namespace Beamable.Samples.KOR
 
             foreach (var cco in _allCharacterContentObjects)
             {
-                Debug.Log($"CharacterContentObject name={cco.ContentName} type={cco.ContentType} id={cco.Id} something={cco.ReadableName}");
+                Configuration.Debugger.Log($"CharacterContentObject name={cco.ContentName} " +
+                                           $"type={cco.ContentType} id={cco.Id} something={cco.ReadableName}",
+                    DebugLogLevel.Verbose);
+                
                 _mapCharacterObjectNameToContent.Add(cco.ContentName, cco);
             }
 
@@ -66,7 +71,10 @@ namespace Beamable.Samples.KOR
             Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
 
             foreach (KeyValuePair<string, string> entry in allCurrentUserStats)
-                Debug.Log($"CharacterContentObject key={entry.Key} value={entry.Value}");
+            {
+                Configuration.Debugger.Log($"CharacterContentObject key={entry.Key} " +
+                                           $"value={entry.Value}", DebugLogLevel.Verbose);
+            }
 
             string chosenCharacterName;
             if (!allCurrentUserStats.TryGetValue(ChosenCharacterStatKey, out chosenCharacterName))

@@ -6,6 +6,7 @@ using Beamable.Api.Leaderboard;
 using Beamable.Api.Stats;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
+using Beamable.Samples.KOR.CustomContent;
 using UnityEngine;
 using Random = System.Random;
 
@@ -69,6 +70,12 @@ namespace Beamable.Samples.KOR.Data
                   // Rename NEW user
                   string alias = MockDataCreator.CreateNewRandomAlias("Player");
                   MockDataCreator.SetCurrentUserAlias(statsService, alias);
+                  
+                  // Add Character to NEW user
+                  List<CharacterContentObject> characterContentObjects =
+                     RuntimeDataStorage.Instance.CharacterManager.AllCharacterContentObjects;
+                  int randomIndex = UnityEngine.Random.Range(0, characterContentObjects.Count);
+                  MockDataCreator.SetCurrentUserCharacterObject(characterContentObjects[randomIndex]);
 
                   // Submit mock score for NEW user
                   double mockScore = UnityEngine.Random.Range(leaderboardMockScoreMin,
@@ -101,6 +108,8 @@ namespace Beamable.Samples.KOR.Data
          return leaderboardViewToReturn;
       }
 
+
+
       /// <summary>
       /// The the user alias which is visible in the Leaderboard Scene
       /// </summary>
@@ -114,6 +123,16 @@ namespace Beamable.Samples.KOR.Data
             });
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="statsService"></param>
+      /// <param name="characterContentObject"></param>
+      /// <exception cref="NotImplementedException"></exception>
+      private static void SetCurrentUserCharacterObject(CharacterContentObject characterContentObject)
+      {
+         RuntimeDataStorage.Instance.CharacterManager.ChooseCharacter(characterContentObject);
+      }
 
       /// <summary>
       /// Inspired by http://developer.qbapi.com/Generate-a-Random-Username.aspx

@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Beamable.Samples.KOR.Animation
 {
@@ -33,6 +34,43 @@ namespace Beamable.Samples.KOR.Animation
          }
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="spriteRenderer"></param>
+      /// <param name="fromAlpha"></param>
+      /// <param name="toAlpha"></param>
+      /// <param name="duration"></param>
+      /// <param name="delayStart"></param>
+      public static void SpriteRendererDoFade(SpriteRenderer spriteRenderer,
+         float fromAlpha, float toAlpha, float duration, float delayStart)
+      {
+            // Fade out immediately
+            spriteRenderer.DOFade(fromAlpha, 0);
+            
+            // Fade in slowly
+            spriteRenderer.DOFade(toAlpha, duration).SetDelay(delayStart);
+      }
+      
+      
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="fromAlpha"></param>
+      /// <param name="toAlpha"></param>
+      /// <param name="duration"></param>
+      /// <param name="delayStart"></param>
+      public static void ImageDoFade(Image image,
+         float fromAlpha, float toAlpha, float duration, float delayStart)
+      {
+         // Fade out immediately
+         image.DOFade(fromAlpha, 0);
+         
+         // Fade in slowly
+         image.DOFade(toAlpha, duration).SetDelay(delayStart);
+      }
+      
       /// <summary>
       /// Fades opacity of a 3D object over time.
       /// </summary>
