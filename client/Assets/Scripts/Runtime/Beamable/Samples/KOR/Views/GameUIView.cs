@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Beamable.Samples.KOR.Animation;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
@@ -29,7 +30,7 @@ namespace Beamable.Samples.KOR.Views
 
       [SerializeField]
       private RingView _ringView = null;
-      
+
       [SerializeField]
       private List<AvatarUIView> _avatarUIViews = null;
 
@@ -38,5 +39,9 @@ namespace Beamable.Samples.KOR.Views
       [SerializeField]
       private List<AvatarView> _avatarViews = new List<AvatarView>();
 
+      public AvatarView GetAvatarViewForDbid(long dbid)
+      {
+         return AvatarViews.FirstOrDefault(view => view.playerDbid == dbid);
+      }
    }
 }

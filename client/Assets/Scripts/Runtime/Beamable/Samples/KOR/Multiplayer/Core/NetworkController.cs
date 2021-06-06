@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using Beamable.Samples.Core;
+using Beamable.Samples.KOR;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer.Events;
 using UnityEngine;
@@ -15,32 +17,41 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
         private SimClient _sim;
 
-        public static string roomIdOverride;
-
-        public SimulationLog Log;
+        public SimulationLog Log = new SimulationLog();
         public long LocalDbid;
+
+        public System.Random rand;
+
+        public string RandomSeed { get; private set; }
 
         public async Task Init()
         {
             HighestSeenNetworkFrame = 0;
             NetworkInitialized = false;
-            Log = new SimulationLog();
             // roomId = string.IsNullOrEmpty(roomIdOverride) ? roomId : roomIdOverride;
 
             var beamable = await API.Instance;
 
             var roomId = RuntimeDataStorage.Instance.RoomId;
             LocalDbid = beamable.User.id;
-            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 1);
+            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 4);
             _sim.OnInit(HandleOnInit);
             _sim.OnConnect(HandleOnConnect);
             _sim.OnDisconnect(HandleOnDisconnect);
             _sim.OnTick(HandleOnTick);
         }
 
+        public void Cleanup()
+        {
+            Log = new SimulationLog();
+            LocalDbid = 0;
+            _sim = null;
+        }
+
         private void HandleOnInit(string seed)
         {
-            Debug.Log("Sim client has initialized " + seed);
+            RandomSeed = seed;
+            rand = new System.Random(seed.GetHashCode());
             NetworkInitialized = true;
         }
 
@@ -59,7 +70,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
             // ListenForEventFrom<PlayerSpawnCubeMessage>(dbid);
             // ListenForEventFrom<PlayerDestroyAllMessage>(dbid);
-            // ListenForEventFrom<PlayerInputMessage>(dbid);
+            ListenForEventFrom<PlayerMoveStartedEvent>(dbid);
+            ListenForEventFrom<PlayerMoveEndEvent>(dbid);
             _sim.On<ChecksumEvent>(nameof(ChecksumEvent), dbid, hashCheck =>
             {
                 hashCheck.SetPlayerDbid(dbidNumber);
@@ -80,7 +92,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             Debug.Log("Sim client has disconnection from " + dbid);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _sim?.Update();
         }

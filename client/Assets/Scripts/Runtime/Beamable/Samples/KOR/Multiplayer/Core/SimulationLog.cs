@@ -43,7 +43,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          if (!HasHashForTick(tick))
          {
             throw new Exception("No hash has been calculated for tick " + tick);
-
          }
 
          return _tickToHash[tick];
@@ -63,12 +62,17 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       {
          if (!HasHashForTick(tick))
          {
-            if (_pendingHashValidations.ContainsKey(tick))
+            if (_pendingHashValidations.TryGetValue(tick, out var existingHash))
             {
-               throw new Exception("There is already a pending hash validation for tick " + tick);
-            }
+               if (Equals(existingHash, hash)) return; // the pending hash has already been stored.
 
-            _pendingHashValidations.Add(tick, hash);
+               Debug.LogError("QUEUED HASH MISMATCH!!! FOR TICK " + tick);
+               latestInvalidFrame = tick;
+            }
+            else
+            {
+               _pendingHashValidations.Add(tick, hash);
+            }
             return;
          }
 
@@ -80,13 +84,12 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          var actualHash = _tickToHash[tick];
          if (!Equals(actualHash, hash))
          {
-            Debug.LogWarning("HASH MISMATCH!!! FOR TICK " + tick);
+            Debug.LogError("HASH MISMATCH!!! FOR TICK " + tick);
             latestInvalidFrame = tick;
             return false;
          }
          else
          {
-            Debug.Log("Hash pass for tick: " + tick);
             latestValidFrame = tick;
             return true;
          }
@@ -117,16 +120,23 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          return _nextConsumerId;
       }
 
-      public void NotifyConsumers(float elapsedTime, float deltaTime)
+      public void NotifyConsumers(long tick, float elapsedTime, float deltaTime)
       {
-         var update = new TimeUpdate
+         foreach (var kvp in _consumerIdToUpdater)
          {
-            ElapsedTime = elapsedTime,
-            DeltaTime = deltaTime
-         };
-         foreach (var updater in _consumerIdToUpdater.Values)
-         {
-            updater(update);
+            var consumerId = kvp.Key;
+            var updateFunction = kvp.Value;
+            var messages = GetMessagesForTick(tick, consumerId).ToList();
+
+            var update = new TimeUpdate
+            {
+               Tick = tick,
+               ElapsedTime = elapsedTime,
+               DeltaTime = deltaTime,
+               Events = messages
+            };
+
+            updateFunction(update);
          }
       }
 
@@ -140,7 +150,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          var messages = _tickToMessages[tick];
          foreach (var message in messages)
          {
-            if (!message.Available) continue;
             yield return message;
          }
       }
@@ -177,7 +186,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             {
                ElapsedTime = elapsedTime,
                DeltaTime = timestep,
-               Messages = messages
+               Events = messages
             };
          }
       }
@@ -205,8 +214,9 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
    public class TimeUpdate
    {
+      public long Tick;
       public float ElapsedTime;
       public float DeltaTime;
-      public List<KOREvent> Messages;
+      public List<KOREvent> Events;
    }
 }

@@ -7,190 +7,188 @@ using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
 {
-    /// <summary>
-    /// Store the common configuration for easy editing ats
-    /// EditTime and RuntTime with the Unity Inspector Window.
-    /// </summary>
-    [CreateAssetMenu(
-       fileName = Title,
-       menuName = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_SAMPLES + "/" +
-       "Multiplayer/Create New " + Title,
-       order = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_ORDER_1)]
-    public class Configuration : ScriptableObject
-    {
-        private static Configuration _instance = null;
-
-        public static Configuration Instance
-        {
-            get
+   /// <summary>
+   /// Store the common configuration for easy editing ats
+   /// EditTime and RuntTime with the Unity Inspector Window.
+   /// </summary>
+   [CreateAssetMenu(
+      fileName = Title,
+      menuName = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_SAMPLES + "/" +
+      "Multiplayer/Create New " + Title,
+      order = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_ORDER_1)]
+   public class Configuration : ScriptableObject
+   {
+      private static Configuration _instance = null;
+      public static Configuration Instance
+      {
+         get
+         {
+            // NOTE: This is a light implementation that does not
+            // autocreate. Relies on awake being called before Instance
+            if (_instance == null)
             {
-                // NOTE: This is a light implementation that does not
-                // autocreate. Relies on awake being called before Instance
-                if (_instance == null)
-                {
-                    Debug.LogWarning("Configuration.Instance getter called but not ready. Try later.");
-                }
-                return _instance;
+               Debug.LogWarning("Configuration.Instance getter called but not ready. Try later.");
             }
-        }
+            return _instance;
+         }
+      }
+      
+      //  Constants  -----------------------------------
+      private const string Title = "KOR Configuration";
 
-        //  Constants  -----------------------------------
-        private const string Title = "KOR Configuration";
+      //  Properties -----------------------------------
+      public bool IsDemoMode { get { return _isDemoMode; } }
+      public bool IsDebugLog { get { return _isDebugLog; } }
+      public bool IsAudioMuted { get { return _isAudioMuted; } }
+      
+      /// <summary>
+      /// This defines the matchmaking criteria including "NumberOfPlayers"
+      /// </summary>
+      public SimGameTypeRef SimGameType01Ref { get { return _simGameType01Ref; } }
 
-        //  Properties -----------------------------------
-        public bool IsDemoMode { get { return _isDemoMode; } }
+      /// <summary>
+      /// This defines the matchmaking criteria including "NumberOfPlayers"
+      /// </summary>
+      public SimGameTypeRef SimGameType02Ref { get { return _simGameType02Ref; } }
 
-        public bool IsDebugLog { get { return _isDebugLog; } }
-        public bool IsAudioMuted { get { return _isAudioMuted; } }
+      /// <summary>
+      /// This defines the leaderboard, shared across game players
+      /// </summary>
+      public LeaderboardRef LeaderboardRef { get { return _leaderboardRef; } }
 
-        /// <summary>
-        /// This defines the matchmaking criteria including "NumberOfPlayers"
-        /// </summary>
-        public SimGameTypeRef SimGameType01Ref { get { return _simGameType01Ref; } }
+      /// <summary>
+      /// This defines the store, for IPA by game players
+      /// </summary>
+      public StoreRef StoreRef { get { return _storeRef; } }
 
-        /// <summary>
-        /// This defines the matchmaking criteria including "NumberOfPlayers"
-        /// </summary>
-        public SimGameTypeRef SimGameType02Ref { get { return _simGameType02Ref; } }
+      public string IntroSceneName { get { return _introSceneName; } }
 
-        /// <summary>
-        /// This defines the leaderboard, shared across game players
-        /// </summary>
-        public LeaderboardRef LeaderboardRef { get { return _leaderboardRef; } }
+      public string LobbySceneName { get { return _lobbySceneName; } }
 
-        /// <summary>
-        /// This defines the store, for IPA by game players
-        /// </summary>
-        public StoreRef StoreRef { get { return _storeRef; } }
+      public string GameSceneName { get { return _gameSceneName; } }
 
-        public string IntroSceneName { get { return _introSceneName; } }
+      public string StoreSceneName { get { return _storeSceneName; } }
 
-        public string LobbySceneName { get { return _lobbySceneName; } }
+      public string LeaderboardSceneName { get { return _leaderboardSceneName; } }
 
-        public string GameSceneName { get { return _gameSceneName; } }
+      public float DelayBeforeLoadScene { get { return _delayBeforeLoadScene; } }
+      public float DelayBetweenFadeInUI { get { return delayBetweenBetweenFadeInUI; } }
+      public float DelayBeforeFadeInUI { get { return _delayBeforeFadeInUI; } }
+      public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
+      public AvatarData LocalAvatar { get { return _localAvatar; } }
+      public AvatarData RemoteAvatar { get { return _remoteAvatar; } }
+      public int LeaderboardMinRowCount { get { return _leaderboardMinRowCount; } }
+      public int LeaderboardMockScoreMin { get { return _leaderboardMockScoreMin; } }
+      public int LeaderboardMockScoreMax { get { return _leaderboardMockScoreMax; } }
 
-        public string StoreSceneName { get { return _storeSceneName; } }
+      /// <summary>
+      /// Duration in seconds
+      /// </summary>
+      public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
 
-        public string LeaderboardSceneName { get { return _leaderboardSceneName; } }
+      public Color CameraBackgroundColor { get { return _cameraBackgroundColor; } }
 
-        public float DelayBeforeLoadScene { get { return _delayBeforeLoadScene; } }
-        public float DelayBetweenFadeInUI { get { return delayBetweenBetweenFadeInUI; } }
-        public float DelayBeforeFadeInUI { get { return _delayBeforeFadeInUI; } }
-        public float DelayGameBeforeMove { get { return _delayGameBeforeMove; } }
-        public List<AvatarData> AvatarDatas { get { return _avatarDatas; } }
-        public List<AvatarSlotData> AvatarSlotDatas { get { return _avatarSlotDatas; } }
-        public int LeaderboardMinRowCount { get { return _leaderboardMinRowCount; } }
-        public int LeaderboardMockScoreMin { get { return _leaderboardMockScoreMin; } }
-        public int LeaderboardMockScoreMax { get { return _leaderboardMockScoreMax; } }
+      //  Fields ---------------------------------------
 
-        /// <summary>
-        /// Duration in seconds
-        /// </summary>
-        public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
+      /// <summary>
+      /// Determines if we are demo mode. Demo mode does several operations
+      /// which are not recommended in a production project including
+      /// creating mock data for the game.
+      /// </summary>
+      [Header("Debug")]
+      [SerializeField]
+      private bool _isDebugLog = true;
 
-        public Color CameraBackgroundColor { get { return _cameraBackgroundColor; } }
+      [SerializeField]
+      private bool _isDemoMode = true;
+      
+      [SerializeField]
+      private bool _isAudioMuted = false;
 
-        //  Fields ---------------------------------------
+      [Header("Scene Names")]
+      [SerializeField]
+      private string _introSceneName = "";
 
-        /// <summary>
-        /// Determines if we are demo mode. Demo mode does several operations
-        /// which are not recommended in a production project including
-        /// creating mock data for the game.
-        /// </summary>
-        [Header("Debug")]
-        [SerializeField]
-        private bool _isDebugLog = true;
+      [SerializeField]
+      private string _lobbySceneName = "";
 
-        [SerializeField]
-        private bool _isDemoMode = true;
+      [SerializeField]
+      private string _gameSceneName = "";
 
-        [SerializeField]
-        private bool _isAudioMuted = false;
+      [SerializeField]
+      private string _storeSceneName = "";
 
-        [Header("Scene Names")]
-        [SerializeField]
-        private string _introSceneName = "";
+      [SerializeField]
+      private string _leaderboardSceneName = "";
 
-        [SerializeField]
-        private string _lobbySceneName = "";
+      [Header("Game Data")]
+      [SerializeField]
+      private float _delayGameBeforeMove = 1;
 
-        [SerializeField]
-        private string _gameSceneName = "";
+      [Header("Game Content")]
+      [SerializeField]
+      private SimGameTypeRef _simGameType01Ref = null;
 
-        [SerializeField]
-        private string _storeSceneName = "";
+      [SerializeField]
+      private SimGameTypeRef _simGameType02Ref = null;
 
-        [SerializeField]
-        private string _leaderboardSceneName = "";
+      [SerializeField]
+      private LeaderboardRef _leaderboardRef = null;
 
-        [Header("Game Data")]
-        [SerializeField]
-        private float _delayGameBeforeMove = 1;
+      [SerializeField]
+      private StoreRef _storeRef = null;
 
-        [Header("Game Content")]
-        [SerializeField]
-        private SimGameTypeRef _simGameType01Ref = null;
+      [Header("Game Visuals")]
+      [SerializeField]
+      private AvatarData _localAvatar;
 
-        [SerializeField]
-        private SimGameTypeRef _simGameType02Ref = null;
+      [SerializeField]
+      private AvatarData _remoteAvatar;
 
-        [SerializeField]
-        private LeaderboardRef _leaderboardRef = null;
+      [SerializeField]
+      private Color _cameraBackgroundColor = Color.white;
 
-        [SerializeField]
-        private StoreRef _storeRef = null;
+      [Header("Cosmetic Delays")]
+      [SerializeField]
+      private float _delayBeforeLoadScene = 0;
 
-        [Header("Game Visuals")]
-        [SerializeField]
-        private Color _cameraBackgroundColor = Color.white;
+      [Range (0,3)]
+      [SerializeField]
+      private float _statusMessageMinDuration = 3000;
 
-        [SerializeField]
-        private List<AvatarData> _avatarDatas = null;
+      [SerializeField]
+      private float delayBetweenBetweenFadeInUI = 0.25f;
 
-        [SerializeField]
-        private List<AvatarSlotData> _avatarSlotDatas = null;
+      [SerializeField]
+      private float _delayBeforeFadeInUI = 0.25f;
 
-        [Header("Cosmetic Delays")]
-        [SerializeField]
-        private float _delayBeforeLoadScene = 0;
+      [Header("Mock Data")]
+      [SerializeField]
+      private int _leaderboardMinRowCount = 10;
 
-        [Range(0, 3)]
-        [SerializeField]
-        private float _statusMessageMinDuration = 3000;
+      [SerializeField]
+      private int _leaderboardMockScoreMin = 1;
 
-        [SerializeField]
-        private float delayBetweenBetweenFadeInUI = 0.25f;
+      [SerializeField]
+      private int _leaderboardMockScoreMax = 10;
 
-        [SerializeField]
-        private float _delayBeforeFadeInUI = 0.25f;
+      //  Unity Methods ---------------------------------------
+      protected void OnEnable()
+      {
+         _instance = this;
+      }
 
-        [Header("Mock Data")]
-        [SerializeField]
-        private int _leaderboardMinRowCount = 10;
+      protected void OnDisable()
+      {
+         _instance = null;
+      }
 
-        [SerializeField]
-        private int _leaderboardMockScoreMin = 1;
-
-        [SerializeField]
-        private int _leaderboardMockScoreMax = 10;
-
-        //  Unity Methods ---------------------------------------
-        protected void OnEnable()
-        {
-            _instance = this;
-        }
-
-        protected void OnDisable()
-        {
-            _instance = null;
-        }
-
-        protected void OnValidate()
-        {
-            // Example validation, remove as needed
-            _leaderboardMinRowCount = Mathf.Clamp(_leaderboardMinRowCount, 0, 20);
-            _leaderboardMockScoreMin = Mathf.Max(_leaderboardMockScoreMin, 0);
-            _leaderboardMockScoreMax = Mathf.Max(_leaderboardMockScoreMin, _leaderboardMockScoreMax);
-        }
-    }
+      protected void OnValidate()
+      {
+         // Example validation, remove as needed
+         _leaderboardMinRowCount = Mathf.Clamp(_leaderboardMinRowCount, 0, 20);
+         _leaderboardMockScoreMin = Mathf.Max(_leaderboardMockScoreMin, 0);
+         _leaderboardMockScoreMax = Mathf.Max(_leaderboardMockScoreMin, _leaderboardMockScoreMax);
+      }
+   }
 }

@@ -1,7 +1,5 @@
-﻿using Beamable.Samples.KOR.Data;
-using Beamable.Samples.KOR.Views;
+﻿using Beamable.Samples.KOR.Views;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Beamable.Samples.KOR
 {
@@ -10,32 +8,37 @@ namespace Beamable.Samples.KOR
     /// </summary>
     public class LeaderboardSceneManager : MonoBehaviour
     {
+
         //  Fields ---------------------------------------
         [SerializeField]
-        private Configuration _configuration = null;
-
-        [SerializeField]
         private LeaderboardUIView _leaderboardUIView = null;
-
-        [SerializeField]
-        private Button _closeButton = null;
-
 
         //  Unity Methods   ------------------------------
         protected void Start()
         {
-            _closeButton.onClick.AddListener(CloseButton_OnClicked);
+            _leaderboardUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
+
+            _leaderboardUIView.KORLeaderboardMainMenu.OnRendered.AddListener(KORLeaderboardMainMenu_OnRendered);
             
-            _leaderboardUIView.CanvasGroupsDoFadeIn();
+            // For KOR, use a custom UI for the leaderboard rows
+            _leaderboardUIView.KORLeaderboardMainMenu.KORLeaderboardItem = _leaderboardUIView.KORLeaderboardItem;
+            
+            _leaderboardUIView.KORLeaderboardMainMenu.Render();
+            
         }
 
         //  Event Handlers -------------------------------
-        private void CloseButton_OnClicked()
+        private void BackButton_OnClicked()
         {
             KORHelper.PlayAudioForUIClick();
             
-            StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
-                _configuration.DelayBeforeLoadScene));
+            StartCoroutine(KORHelper.LoadScene_Coroutine(_leaderboardUIView.Configuration.IntroSceneName,
+                _leaderboardUIView.Configuration.DelayBeforeLoadScene));
+        }
+        
+        protected void KORLeaderboardMainMenu_OnRendered()
+        {
+            _leaderboardUIView.CanvasGroupsDoFadeIn();
         }
     }
 }
