@@ -10,6 +10,8 @@ namespace Beamable.Samples.KOR.Data
     public class RuntimeDataStorage : SingletonMonobehavior<RuntimeDataStorage>
     {
         //  Properties  ----------------------------------
+        public CharacterManager CharacterManager { get { if (_characterManager == null) { _characterManager = new CharacterManager(); } return _characterManager; } }
+
         public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
 
         public int TargetPlayerCount { get { return _targetPlayerCount; } set { _targetPlayerCount = value; } }
@@ -72,6 +74,7 @@ namespace Beamable.Samples.KOR.Data
         private int _targetPlayerCount;
         private SimGameType _activeSimGameType;
         private bool _hasChosenCharacter = false;
+        private CharacterManager _characterManager;
 
         //  Unity Methods  --------------------------------
         protected override void Awake()

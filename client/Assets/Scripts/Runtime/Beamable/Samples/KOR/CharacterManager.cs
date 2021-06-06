@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Beamable.Samples.KOR
 {
-    public class CharacterManager : SingletonMonobehavior<CharacterManager>
+    public class CharacterManager
     {
         private IBeamableAPI _beamableAPI = null;
         private List<CharacterContentObject> _allCharacterContentObjects = null;
@@ -27,10 +27,15 @@ namespace Beamable.Samples.KOR
 
         public event Action OnChoiceHasBeenMade;
 
-        private void Start()
+        public CharacterManager()
         {
             SetupBeamable();
         }
+
+        //private void Start()
+        //{
+        //    SetupBeamable();
+        //}
 
         private async void SetupBeamable()
         {
@@ -39,7 +44,10 @@ namespace Beamable.Samples.KOR
             _allCharacterContentObjects = await GetAllCharacterContentObjects();
 
             if (_allCharacterContentObjects.Count == 0)
-                throw new InvalidOperationException("No characters found in manifest. Did you forget to add some?");
+            {
+                Debug.LogError("No characters found in manifest. Did you forget to add some? This will break.");
+                return;
+            }
 
             foreach (var cco in _allCharacterContentObjects)
             {
@@ -57,8 +65,8 @@ namespace Beamable.Samples.KOR
             {
                 if (!_mapCharacterObjectNameToContent.TryGetValue(chosenCharacterName, out _currentlyChosenCharacter))
                 {
-                    Debug.Log($"Chosen character name={ chosenCharacterName} from stats does not refer to an existing character content object. " +
-                        "You've probably removed this recently. Choosing default character");
+                    Debug.LogError($"Chosen character name={ chosenCharacterName} from stats does not refer to an existing character content object. " +
+                        "You've probably removed/renamed this recently. Choosing default character ...");
                     ChooseCharacter(_allCharacterContentObjects[0]);
                 }
 

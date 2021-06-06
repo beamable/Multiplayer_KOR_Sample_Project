@@ -50,7 +50,7 @@ namespace Beamable.Samples.KOR
                 de.ConnectivityService.OnConnectivityChanged -= ConnectivityService_OnConnectivityChanged;
             });
 
-            CharacterManager.Instance.OnChoiceHasBeenMade -= UpdateCharacterChoice;
+            RuntimeDataStorage.Instance.CharacterManager.OnChoiceHasBeenMade -= UpdateCharacterChoice;
         }
 
         //  Other Methods --------------------------------
@@ -97,8 +97,9 @@ namespace Beamable.Samples.KOR
                 ConnectivityService_OnConnectivityChanged(false);
             }
 
-            CharacterManager.Instance.OnChoiceHasBeenMade += UpdateCharacterChoice;
-            if (CharacterManager.Instance.CurrentlyChosenCharacter != null)
+            CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
+            cm.OnChoiceHasBeenMade += UpdateCharacterChoice;
+            if (cm.CurrentlyChosenCharacter != null)
                 UpdateCharacterChoice();
         }
 
@@ -143,7 +144,7 @@ namespace Beamable.Samples.KOR
 
         private void UpdateCharacterChoice()
         {
-            CharacterManager cm = CharacterManager.Instance;
+            CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
 
             _introUIView.CharacterInfoText = cm.CurrentlyChosenCharacter.ReadableName;
 
@@ -164,7 +165,7 @@ namespace Beamable.Samples.KOR
 
         private void PreviousCharacterButton_OnClicked()
         {
-            CharacterManager cm = CharacterManager.Instance;
+            CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
 
             if (characterIndex > 0)
@@ -173,7 +174,7 @@ namespace Beamable.Samples.KOR
 
         private void NextCharacterButton_OnClicked()
         {
-            CharacterManager cm = CharacterManager.Instance;
+            CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
             int charactersCount = cm.AllCharacterContentObjects.Count;
 
