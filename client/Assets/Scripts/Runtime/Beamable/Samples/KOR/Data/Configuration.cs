@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Beamable.Common.Content;
+﻿using Beamable.Common.Content;
 using Beamable.Common.Leaderboards;
 using Beamable.Common.Shop;
+using Beamable.Core.Debugging;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data
@@ -18,27 +17,13 @@ namespace Beamable.Samples.KOR.Data
       order = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_ORDER_1)]
    public class Configuration : ScriptableObject
    {
-      private static Configuration _instance = null;
-      public static Configuration Instance
-      {
-         get
-         {
-            // NOTE: This is a light implementation that does not
-            // autocreate. Relies on awake being called before Instance
-            if (_instance == null)
-            {
-               Debug.LogWarning("Configuration.Instance getter called but not ready. Try later.");
-            }
-            return _instance;
-         }
-      }
       
       //  Constants  -----------------------------------
       private const string Title = "KOR Configuration";
 
       //  Properties -----------------------------------
       public bool IsDemoMode { get { return _isDemoMode; } }
-      public bool IsDebugLog { get { return _isDebugLog; } }
+      public DebugLogLevel DebugLogLevel { get { return _debugLogLevel; } }
       public bool IsAudioMuted { get { return _isAudioMuted; } }
       
       /// <summary>
@@ -97,7 +82,7 @@ namespace Beamable.Samples.KOR.Data
       /// </summary>
       [Header("Debug")]
       [SerializeField]
-      private bool _isDebugLog = true;
+      private DebugLogLevel _debugLogLevel = DebugLogLevel.Disabled;
 
       [SerializeField]
       private bool _isDemoMode = true;
@@ -175,12 +160,12 @@ namespace Beamable.Samples.KOR.Data
       //  Unity Methods ---------------------------------------
       protected void OnEnable()
       {
-         _instance = this;
+         SetInstance();
       }
 
       protected void OnDisable()
       {
-         _instance = null;
+         ClearInstance();
       }
 
       protected void OnValidate()
@@ -189,6 +174,40 @@ namespace Beamable.Samples.KOR.Data
          _leaderboardMinRowCount = Mathf.Clamp(_leaderboardMinRowCount, 0, 20);
          _leaderboardMockScoreMin = Mathf.Max(_leaderboardMockScoreMin, 0);
          _leaderboardMockScoreMax = Mathf.Max(_leaderboardMockScoreMin, _leaderboardMockScoreMax);
+         
+         SetInstance();
       }
+      
+      
+      //  Subsystem -------------------------------------------
+#region DebugLog
+
+      // KEEP AS PRIVATE : Not intended as full Singleton implementation.
+      // This is just to ease global use of Configuration.Debugger.Log("Hello World").
+      private static Configuration _instance = null;
+      
+      public static Debugger Debugger { get { return _debugger;} }
+
+      private static Debugger _debugger = null;
+      
+      private void SetInstance()
+      {
+         // When OnEnable (Always) and also...
+         // When OnValidate (only when app is running)
+         // Do update the debugging
+         if (!Application.isPlaying)
+         {
+            //return;
+         }
+         _instance = this;
+         _debugger = new Debugger(_instance.DebugLogLevel);
+      }
+      private void ClearInstance()
+      {
+         _instance = null;
+         _debugger = null;
+      }
+#endregion
+
    }
 }

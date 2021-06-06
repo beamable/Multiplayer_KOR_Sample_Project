@@ -1,6 +1,7 @@
 ﻿using Beamable.Common.Content;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Experimental.Api.Matchmaking;
+using Beamable.Samples.KOR.Data;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
@@ -27,8 +28,15 @@ namespace Beamable.Samples.KOR.Multiplayer
 
       public KORMatchmaking( MatchmakingService matchmakingService, 
          SimGameType simGameType, long LocalPlayerDbid, bool isDebugLog = false) :
-         base(matchmakingService, simGameType, LocalPlayerDbid, isDebugLog)
+         base(matchmakingService, simGameType, LocalPlayerDbid)
       {
+      }
+      
+      //  Other Methods   ------------------------------
+      protected override void DebugLog(string message)
+      {
+         // Respects Configuration.IsDebugLog Checkbox
+         Configuration.Debugger.Log(message);
       }
    }
 }

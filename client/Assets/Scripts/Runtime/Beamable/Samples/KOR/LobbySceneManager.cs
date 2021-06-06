@@ -5,7 +5,6 @@ using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
-using TMPro;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR
@@ -51,10 +50,8 @@ namespace Beamable.Samples.KOR
       //  Other Methods   ------------------------------
       private void DebugLog(string message)
       {
-         if (_configuration.IsDebugLog)
-         {
-            Debug.Log(message);
-         }
+         // Respects Configuration.IsDebugLog Checkbox
+         Configuration.Debugger.Log(message);
       }
       
       private async void SetupBeamable()
@@ -88,11 +85,9 @@ namespace Beamable.Samples.KOR
          RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
          
          // Do matchmaking
-         bool isDebugLog = _configuration.IsDebugLog;
-         _korMatchmaking = new KORMatchmaking(_beamableAPI.Experimental.MatchmakingService, 
+         _korMatchmaking = new KORMatchmaking(_beamableAPI.Experimental.MatchmakingService,
             RuntimeDataStorage.Instance.ActiveSimGameType,
-            _beamableAPI.User.id,
-            isDebugLog);
+            _beamableAPI.User.id);
          
          _korMatchmaking.OnProgress += MyKorMatchmakingOnProgress;
          _korMatchmaking.OnComplete += MyKorMatchmakingOnComplete;
