@@ -16,7 +16,7 @@ MonoBehaviour:
   price:
     type: currency
     symbol: currency.Coins
-    amount: 15
+    amount: 10
   offer:
     titles:
       HasValue: 1
@@ -30,7 +30,7 @@ MonoBehaviour:
         - Powerful description
     obtainCurrency: []
     obtainItems:
-    - contentId: items.Item01
+    - contentId: items.Item02
       properties: []
   activePeriod:
     HasValue: 0

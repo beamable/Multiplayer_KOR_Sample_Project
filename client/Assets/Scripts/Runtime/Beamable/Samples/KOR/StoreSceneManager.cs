@@ -139,16 +139,12 @@ namespace Beamable.Samples.KOR
          _inventoryItems.Clear();
          foreach (KeyValuePair<string, List<ItemView>> kvp in _inventoryView.items)
          {
-            // User can have multiple of EACH item. Show simpler info here
-            foreach (ItemView itemView in kvp.Value)
-            {
-               int itemCount = kvp.Value.Count;
-               string itemName = kvp.Key.Replace("items.", "");
-               string itemDisplayName = $"\t{itemName} x {itemCount}";
+            int itemCount = kvp.Value.Count;
+            string itemName = kvp.Key.Replace("items.", "");
+            string itemDisplayName = $"\t{itemName} x {itemCount}";
                
-               //TODO: Replace List<string> with List<blah> to hold more data?
-               _inventoryItems.Add(itemDisplayName);
-            }
+            //TODO: Replace List<string> with List<blah> to hold more data?
+            _inventoryItems.Add(itemDisplayName);
          }
          
          DebugLog($"InventoryService_OnChanged() _inventoryView = {_inventoryView}");
