@@ -17,6 +17,8 @@ namespace Beamable.Samples.KOR.Behaviours
    {
       public AvatarView AvatarView;
 
+      public MovePreviewBehaviour PreviewBehaviour;
+
       public ConvertToNetworkedPhysics NetworkedPhysics;
 
       public int MaxPower = 22;
@@ -30,6 +32,10 @@ namespace Beamable.Samples.KOR.Behaviours
 
       [ReadOnly]
       public PlayerMoveStartedEvent startEvt;
+
+      private float3 direction;
+      private sfloat deltaTime;
+      private sfloat magnitude;
 
       private void Start()
       {
@@ -62,6 +68,24 @@ namespace Beamable.Samples.KOR.Behaviours
          return ratio;
       }
 
+      private void SetDirection(uint x, uint y)
+      {
+         var dirX = sfloat.FromRaw(x);
+         var dirY = sfloat.FromRaw(y);
+         var dir = new float3(dirX, sfloat.Zero, dirY);
+         // var mag =
+         magnitude = math.length(dir);
+         direction = math.normalize(dir);
+      }
+
+      private void SetDeltaTime(uint time)
+      {
+         var startTime = sfloat.FromRaw(startEvt.startTime);
+         var endTime = sfloat.FromRaw(time);
+
+         deltaTime = endTime - startTime;
+      }
+
       void OnNetworkUpdate(TimeUpdate timeUpdate)
       {
          var tick = (long) (timeUpdate.ElapsedTime * NetworkController.NetworkFramesPerSecond);
@@ -71,38 +95,35 @@ namespace Beamable.Samples.KOR.Behaviours
 
             switch (message)
             {
+               case PlayerMoveProgressEvent progressEvt:
+                  if (startEvt == null) break; // can't move without start event...
+
+                  SetDirection(progressEvt.dirX, progressEvt.dirY);
+                  SetDeltaTime(progressEvt.endTime);
+
+                  PreviewBehaviour?.Set(true, new Vector3((float)direction.x, 0, (float)direction.z), (float)GetPowerRatioForDeltaTime(deltaTime));
+                  break;
+
                case PlayerMoveEndEvent evt:
                   if (startEvt == null) break; // can't move without start event...
 
                   var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-                  var dirX = sfloat.FromRaw(evt.dirX);
-                  var dirY = sfloat.FromRaw(evt.dirY);
-                  var dir = new float3(dirX, sfloat.Zero, dirY);
-                  // var mag =
-                  dir = math.normalize(dir);
+                  SetDirection(evt.dirX, evt.dirY);
+                  SetDeltaTime(evt.endTime);
 
-                  var translation = entityManager.GetComponentData<Translation>(NetworkedPhysics
-                     .Entity);
                   var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
                      .Entity);
-
-                  var delta = dir;
-                  delta.y = sfloat.Zero;
-
-                  var startTime = sfloat.FromRaw(startEvt.startTime);
-                  var endTime = sfloat.FromRaw(evt.endTime);
-
-                  var deltaTime = endTime - startTime;
 
                   var power = GetPowerForDeltaTime(deltaTime);
                   var speed =  power / mass.InverseMass;
 
                   entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
                   {
-                     Impulse = delta * speed
+                     Impulse = direction * magnitude * speed
                   });
 
+                  PreviewBehaviour?.Set(false, Vector3.right, 0);
                   startEvt = null;
                   break;
 

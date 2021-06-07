@@ -23,6 +23,7 @@ namespace Beamable.Samples.KOR.Behaviours
       public float Amplitude = 1;
       public float Offset = 0;
       public bool UseAbs = false;
+      public bool FlipY = false;
 
       private float3 _startingPosition;
       private bool _first = true;
@@ -53,6 +54,11 @@ namespace Beamable.Samples.KOR.Behaviours
          if (UseAbs)
          {
             rise = math.abs(rise);
+         }
+
+         if (FlipY)
+         {
+            rise = -rise;
          }
          translation.Value.y = _startingPosition.y + rise;
 

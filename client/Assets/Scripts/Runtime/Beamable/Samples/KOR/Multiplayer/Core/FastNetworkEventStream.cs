@@ -8,7 +8,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 {
    public class FastNetworkEventStream : SimNetworkInterface
    {
-      private static long REQ_FREQ_MS = 1000;
+      private static long REQ_FREQ_MS = 10;
 
       public string ClientId { get; private set; }
       public bool Ready { get; private set; }

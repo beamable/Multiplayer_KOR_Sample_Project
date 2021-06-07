@@ -72,6 +72,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             // ListenForEventFrom<PlayerDestroyAllMessage>(dbid);
             ListenForEventFrom<PlayerMoveStartedEvent>(dbid);
             ListenForEventFrom<PlayerMoveEndEvent>(dbid);
+            ListenForEventFrom<PlayerMoveProgressEvent>(dbid);
             _sim.On<ChecksumEvent>(nameof(ChecksumEvent), dbid, hashCheck =>
             {
                 hashCheck.SetPlayerDbid(dbidNumber);
@@ -92,7 +93,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             Debug.Log("Sim client has disconnection from " + dbid);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             _sim?.Update();
         }

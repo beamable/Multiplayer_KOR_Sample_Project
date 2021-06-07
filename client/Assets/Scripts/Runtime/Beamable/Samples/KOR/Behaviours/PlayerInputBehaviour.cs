@@ -15,6 +15,8 @@ namespace Beamable.Samples.KOR.Behaviours
 
       public float VisualArrowLength;
 
+      public MovePreviewBehaviour PreviewBehaviour;
+
       [ReadOnly]
       public Vector3 direction;
 
@@ -26,6 +28,9 @@ namespace Beamable.Samples.KOR.Behaviours
 
       [ReadOnly]
       public float powerRatio;
+
+      [ReadOnly]
+      public long sentOnTick;
 
       private void OnDrawGizmos()
       {
@@ -44,6 +49,8 @@ namespace Beamable.Samples.KOR.Behaviours
       {
          TrackPower();
          CheckForInputs();
+
+         PreviewBehaviour.Set(isPowering, direction, powerRatio);
       }
 
       void TrackPower()
@@ -59,6 +66,7 @@ namespace Beamable.Samples.KOR.Behaviours
 
          var dt = now - started;
          powerRatio = (float)MotionBehaviour.GetPowerRatioForDeltaTime(dt);
+
       }
 
       void CheckForInputs()
@@ -76,11 +84,19 @@ namespace Beamable.Samples.KOR.Behaviours
             var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = true;
             NetworkController.Instance.SendNetworkMessage(new PlayerMoveStartedEvent(time, direction));
+            sentOnTick = NetworkController.HighestSeenNetworkFrame;
          } else if (Input.GetMouseButtonUp(0))
          {
             var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = false;
             NetworkController.Instance.SendNetworkMessage(new PlayerMoveEndEvent(time, direction));
+            sentOnTick = NetworkController.HighestSeenNetworkFrame;
+         } else if (isPowering && sentOnTick != NetworkController.HighestSeenNetworkFrame)
+         {
+            // we only need to send one message per tick...
+            var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
+            NetworkController.Instance.SendNetworkMessage(new PlayerMoveProgressEvent(time, direction));
+            sentOnTick = NetworkController.HighestSeenNetworkFrame;
          }
 
       }
