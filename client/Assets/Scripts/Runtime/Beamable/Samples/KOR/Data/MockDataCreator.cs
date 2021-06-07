@@ -8,7 +8,6 @@ using Beamable.Common.Api;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
 using Beamable.Samples.KOR.CustomContent;
-using UnityEngine;
 using Random = System.Random;
 
 namespace Beamable.Samples.KOR.Data
@@ -104,7 +103,7 @@ namespace Beamable.Samples.KOR.Data
             return leaderboardViewAfter;
          }
          
-         DebugLog($"PopulateLeaderboardWithMockData() Data is valid! rowCount = {leaderboardViewToReturn.rankings.Count}," +
+         DebugLog($"PopulateLeaderboardWithMockData() Data is valid. rowCount = {leaderboardViewToReturn.rankings.Count}, " +
                    $"targetRowCount = {leaderboardMinRowCount}");
          return leaderboardViewToReturn;
       }

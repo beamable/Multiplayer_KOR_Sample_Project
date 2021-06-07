@@ -6,7 +6,7 @@ namespace Beamable.Core.Debugging
     public class Debugger
     {
         //  Fields ---------------------------------------
-        private DebugLogLevel _debugLogLevel;
+        private readonly DebugLogLevel _debugLogLevel;
 
         //  Constructor ---------------------------------------
 

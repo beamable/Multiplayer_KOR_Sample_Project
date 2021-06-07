@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Beamable.Common.Api.Inventory;
 using Beamable.Core.Debugging;
 using Beamable.Samples.KOR.Data;
 using UnityEngine;
@@ -130,27 +131,37 @@ namespace Beamable.Samples.KOR
         /// <returns></returns>
         public async Task<Attributes> GetChosenPlayerAttributes()
         {
-            if (_beamableAPI == null)
+            CharacterContentObject characterContentObject = 
+                await GetChosenCharacterByDBID(_beamableAPI.User.id);
+
+            // Very early in play session, this may not be ready
+            if (characterContentObject == null)
             {
-                _beamableAPI = await Beamable.API.Instance;
+                return new Attributes(0, 0);
             }
-            
-            return await GetPlayerAttributesByDBID(_beamableAPI.User.id);
-        }
-        
-        /// <summary>
-        /// Get sum total of pay-to-play attributes to impact gameplay
-        /// </summary>
-        /// <param name="dbid"></param>
-        /// <returns></returns>
-        public async Task<Attributes> GetPlayerAttributesByDBID (long dbid)
-        {
-            CharacterContentObject characterContentObject = await GetChosenCharacterByDBID(dbid);
+            else
+            {
+                var chargeSpeed = characterContentObject.ChargeSpeed;
+                var movementSpeed = characterContentObject.MovementSpeed;
 
-            var chargeSpeed = characterContentObject.ChargeSpeed;
-            var movementSpeed = characterContentObject.MovementSpeed;
+                // #1 GET ALL ITEMS
+                InventoryView inventoryView = 
+                    await _beamableAPI.InventoryService.GetCurrent(KORConstants.ItemContentType);
+                
+                foreach (KeyValuePair<string, List<ItemView>> kvp in inventoryView.items)
+                {
+                    int itemCount = kvp.Value.Count;
+                    KORItemContent y = await _beamableAPI.ContentService.GetContent(kvp.Key, typeof(KORItemContent)) as KORItemContent;
+                    
+                    //Reward user for each TYPE and COUNT of Inventory
+                    chargeSpeed += (y.ChargeSpeed * itemCount);
+                    movementSpeed += (y.MovementSpeed * itemCount);
+                }
+                
 
-            return new Attributes(chargeSpeed, movementSpeed);
+                // #2 RETURN FINAL VALUES
+                return new Attributes(chargeSpeed, movementSpeed);
+            }
         }
     }
 }

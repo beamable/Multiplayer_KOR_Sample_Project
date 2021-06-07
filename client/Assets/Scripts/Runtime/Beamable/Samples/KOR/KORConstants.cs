@@ -5,9 +5,10 @@
    /// </summary>
    public static class KORConstants
    {
+      //  Consts ---------------------------------------
+      public const string ItemContentType = "items";
+      public const string CurrencyContentType = "currency";
       
-      //  Fields ---------------------------------------
-
       /// <summary>
       /// Used as a 'null' value.
       /// </summary>
