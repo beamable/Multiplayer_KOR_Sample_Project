@@ -104,6 +104,10 @@ namespace Beamable.Samples.KOR
 
          // Optional: Show queueable status text onscreen
          SetStatusText(KORConstants.GameUIView_Playing, TMP_BufferedText.BufferedTextMode.Immediate);
+         
+         // Show the player's attributes in the UI of this scene
+         Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
+         _gameUIView.AttributesPanelUI.Attributes = attributes;    
 
          // Optional: Add easily configurable delays
          await Task.Delay(TimeSpan.FromSeconds(_configuration.DelayGameBeforeMove));

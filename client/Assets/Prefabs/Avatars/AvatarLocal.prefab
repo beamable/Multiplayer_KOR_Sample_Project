@@ -1160,6 +1160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MotionBehaviour: {fileID: 7768912920684403029}
   VisualArrowLength: 8
+  PreviewBehaviour: {fileID: 5956093517062666145}
   direction: {x: 0, y: 0, z: 0}
   isPowering: 0
   startedPoweringAt: 0
@@ -1231,6 +1232,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3821721727158368489, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: _x
+      value: 3227684700
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821721727158368489, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: _rotW
+      value: 1065353216
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821721727158368489, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: _rotY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4202046324630264043, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6928970518923597896, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: _animator
       value: 
@@ -1253,6 +1270,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3585649607945959136, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
   m_PrefabInstance: {fileID: 1046082958368116705}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5956093517062666145 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6641724884132689984, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+  m_PrefabInstance: {fileID: 1046082958368116705}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f734e7f11cc4932ace8f04e0c3dde43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2808320354336794915 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2917565731528861378, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}

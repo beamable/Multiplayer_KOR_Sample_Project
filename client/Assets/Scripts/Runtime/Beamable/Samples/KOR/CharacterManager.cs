@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Beamable.Common.Api.Inventory;
 using Beamable.Core.Debugging;
 using Beamable.Samples.KOR.Data;
 using UnityEngine;
@@ -60,7 +61,7 @@ namespace Beamable.Samples.KOR
             CharacterContentObject chosenCCO = await GetChosenCharacterByDBID(_beamableAPI.User.id);
 
             if (chosenCCO == null)
-                ChooseCharacter(_allCharacterContentObjects[0]);
+                await ChooseCharacter(_allCharacterContentObjects[0]);
             else
             {
                 _currentlyChosenCharacter = chosenCCO;
@@ -120,7 +121,7 @@ namespace Beamable.Samples.KOR
             return _allCharacterContentObjects.IndexOf(_currentlyChosenCharacter);
         }
 
-        public void ChooseCharacter(CharacterContentObject newlyChosenCharacter)
+        public async Task<EmptyResponse> ChooseCharacter(CharacterContentObject newlyChosenCharacter)
         {
             _currentlyChosenCharacter = newlyChosenCharacter;
             SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.ContentName);
@@ -145,6 +146,46 @@ namespace Beamable.Samples.KOR
             });
             var results = await filteredManifest.ResolveAll();
             return results.Cast<CharacterContentObject>().ToList();
+        }
+
+        /// <summary>
+        /// Get sum total of pay-to-play attributes to impact gameplay
+        /// </summary>
+        /// <param name="dbid"></param>
+        /// <returns></returns>
+        public async Task<Attributes> GetChosenPlayerAttributes()
+        {
+            CharacterContentObject characterContentObject = 
+                await GetChosenCharacterByDBID(_beamableAPI.User.id);
+
+            // Very early in play session, this may not be ready
+            if (characterContentObject == null)
+            {
+                return new Attributes(0, 0);
+            }
+            else
+            {
+                var chargeSpeed = characterContentObject.ChargeSpeed;
+                var movementSpeed = characterContentObject.MovementSpeed;
+
+                // #1 GET ALL ITEMS
+                InventoryView inventoryView = 
+                    await _beamableAPI.InventoryService.GetCurrent(KORConstants.ItemContentType);
+                
+                foreach (KeyValuePair<string, List<ItemView>> kvp in inventoryView.items)
+                {
+                    int itemCount = kvp.Value.Count;
+                    KORItemContent y = await _beamableAPI.ContentService.GetContent(kvp.Key, typeof(KORItemContent)) as KORItemContent;
+                    
+                    //Reward user for each TYPE and COUNT of Inventory
+                    chargeSpeed += (y.ChargeSpeed * itemCount);
+                    movementSpeed += (y.MovementSpeed * itemCount);
+                }
+                
+
+                // #2 RETURN FINAL VALUES
+                return new Attributes(chargeSpeed, movementSpeed);
+            }
         }
     }
 }

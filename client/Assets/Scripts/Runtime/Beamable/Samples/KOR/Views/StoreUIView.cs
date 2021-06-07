@@ -12,8 +12,9 @@ namespace Beamable.Samples.KOR.Views
    {
       //  Properties -----------------------------------
       public TMP_BufferedText BufferedText { get { return _bufferedText; } }
-      public PanelUI InventoryPanelUI { get { return inventoryPanelUI; } }
-      public PanelUI StorePanelUI { get { return storePanelUI; } }
+      public AttributesPanelUI AttributesPanelUI { get { return _attributesPanelUI; } }
+      public PanelUI InventoryPanelUI { get { return _inventoryPanelUI; } }
+      public PanelUI StorePanelUI { get { return _storePanelUI; } }
       public Button BuyButton { get { return _buyButton; } }
       public Button BackButton { get { return _backButton; } }
       public Button ResetButton { get { return _resetButton; } }
@@ -24,10 +25,13 @@ namespace Beamable.Samples.KOR.Views
       private TMP_BufferedText _bufferedText = null;
 
       [SerializeField]
-      private PanelUI inventoryPanelUI = null;
+      private AttributesPanelUI _attributesPanelUI = null;
+
+      [SerializeField]
+      private PanelUI _inventoryPanelUI = null;
       
       [SerializeField]
-      private PanelUI storePanelUI = null;
+      private PanelUI _storePanelUI = null;
       
       [SerializeField]
       private Button _buyButton = null;

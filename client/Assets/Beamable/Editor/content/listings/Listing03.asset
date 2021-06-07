@@ -22,7 +22,7 @@ MonoBehaviour:
       HasValue: 1
       Value:
         listData:
-        - The first item
+        - The third item
     descriptions:
       HasValue: 1
       Value:
@@ -30,7 +30,7 @@ MonoBehaviour:
         - Powerful description
     obtainCurrency: []
     obtainItems:
-    - contentId: items.Item03
+    - contentId: items.KORItem.KORItem03
       properties: []
   activePeriod:
     HasValue: 0

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Beamable.Samples.KOR.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ namespace Beamable.Samples.KOR.Views
     {
         //  Properties -----------------------------------
         public string AboutBodyText { set { _aboutBodyText.text = value; } }
+        public AttributesPanelUI AttributesPanelUI { get { return _attributesPanelUI; } }
 
         public Texture2D CharacterImage { set { _characterImage.texture = value; } }
 
@@ -29,6 +31,9 @@ namespace Beamable.Samples.KOR.Views
 
         //  Fields ---------------------------------------
         [Header("UI")]
+        [SerializeField]
+        private AttributesPanelUI _attributesPanelUI = null;
+        
         [SerializeField]
         private TMP_Text _characterInfoText = null;
 
