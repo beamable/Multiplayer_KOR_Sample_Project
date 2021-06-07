@@ -193,7 +193,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public void RecordEvent(KOREvent message)
       {
-         Debug.Log("Adding " + message.GetType().Name + " at " + _highestTick + " from " + message.PlayerDbid);
+//         Debug.Log("Adding " + message.GetType().Name + " at " + _highestTick + " from " + message.PlayerDbid);
          RecordEvent(_highestTick, message);
       }
 

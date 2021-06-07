@@ -93,7 +93,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             Debug.Log("Sim client has disconnection from " + dbid);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _sim?.Update();
         }
