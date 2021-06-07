@@ -5,6 +5,7 @@ using Beamable.Api.Payments;
 using Beamable.Common.Api;
 using Beamable.Common.Api.Inventory;
 using Beamable.Common.Shop;
+using Beamable.Extensions;
 using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
@@ -97,8 +98,8 @@ namespace Beamable.Samples.KOR
          // Set loading text
          _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Loading_Store, 
             TMP_BufferedText.BufferedTextMode.Immediate);
-         _storeUIView.InventoryPanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Inventory;
-         _storeUIView.StorePanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Store;
+         _storeUIView.RightPanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Inventory;
+         _storeUIView.LeftPanelUI.BodyText.text = KORConstants.StoreUIView_Loading_Store;
 
          // Reload the services
          _beamableAPI.InventoryService.Subscribe(KORConstants.ItemContentType, Inventory_OnChanged);
@@ -116,25 +117,41 @@ namespace Beamable.Samples.KOR
             KORConstants.StoreUIView_CurrencyName);
          _storeUIView.BufferedText.SetText(instructions, 
             TMP_BufferedText.BufferedTextMode.Immediate);
-
-         // Render inventory
-         StringBuilder inventoryStringBuilder = new StringBuilder();
-         inventoryStringBuilder.AppendLine();
+         
+         // RENDER #1 - INVENTORY
+         _storeUIView.LeftPanelUI.BodyText.text = "You have";
+         _storeUIView.LeftPanelUI.VerticalLayoutGroup.transform.ClearChildren();
          foreach (var item in _inventoryItems)
          {
-            inventoryStringBuilder.AppendLine($"•{item}");
+            StoreItemUI inventoryItem = GameObject.Instantiate<StoreItemUI>(_storeUIView.StoreItemUIPrefab,
+               _storeUIView.LeftPanelUI.VerticalLayoutGroup.transform);
+            inventoryItem.transform.SetAsLastSibling();
+            inventoryItem.TitleText.text = item;
+            
+            inventoryItem.Button.onClick.AddListener(() =>
+            {
+               Debug.Log("Clicked i: " + inventoryItem.TitleText.text);
+            });
          }
-         _storeUIView.InventoryPanelUI.BodyText.text = inventoryStringBuilder.ToString();
-
-         // Render store
-         StringBuilder storeStringBuilder = new StringBuilder();
-         storeStringBuilder.AppendLine();
+         
+         
+         // RENDER #2 - STORE
+         _storeUIView.RightPanelUI.BodyText.text = "You can buy";
+         _storeUIView.RightPanelUI.VerticalLayoutGroup.transform.ClearChildren();
          foreach (var item in _storeItems)
          {
-            storeStringBuilder.AppendLine($"•{item}");
+            StoreItemUI storeItemUI = GameObject.Instantiate<StoreItemUI>(_storeUIView.StoreItemUIPrefab,
+               _storeUIView.RightPanelUI.VerticalLayoutGroup.transform);
+            storeItemUI.transform.SetAsLastSibling();
+            storeItemUI.TitleText.text = item;
+            
+            storeItemUI.Button.onClick.AddListener(() =>
+            {
+               Debug.Log("Clicked s: " + storeItemUI.TitleText.text);
+            });
+            
          }  
-         _storeUIView.StorePanelUI.BodyText.text = storeStringBuilder.ToString();
-
+         
       }
       
       
