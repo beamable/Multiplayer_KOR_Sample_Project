@@ -1,4 +1,6 @@
-﻿using Beamable.Common.Api.Leaderboards;
+﻿using Beamable.Common;
+using Beamable.Common.Api;
+using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
@@ -39,6 +41,7 @@ namespace Beamable.Samples.KOR
             _introUIView.LeaderboardButton.onClick.AddListener(LeaderboardButton_OnClicked);
             _introUIView.StoreButton.onClick.AddListener(StoreButton_OnClicked);
             _introUIView.QuitButton.onClick.AddListener(QuitButton_OnClicked);
+            _introUIView.PlayerAliasInputField.onValueChanged.AddListener(PlayerAliasInputField_OnValueChanged);
             SetupBeamable();
         }
 
@@ -62,9 +65,6 @@ namespace Beamable.Samples.KOR
         {
             // Attempt Connection to Beamable
             _beamableAPI = await Beamable.API.Instance;
-
-            // Do this after calling "Beamable.API.Instance" for smoother UI
-            _introUIView.CanvasGroupsDoFade();
 
             try
             {
@@ -101,6 +101,19 @@ namespace Beamable.Samples.KOR
             cm.OnChoiceHasBeenMade += UpdateCharacterChoice;
             if (cm.CurrentlyChosenCharacter != null)
                 UpdateCharacterChoice();
+
+            string playerAlias = await cm.GetPlayerAliasByDBID(_beamableAPI.User.id);
+
+            if (playerAlias == null)
+            {
+                playerAlias = MockDataCreator.CreateNewRandomAlias(CharacterManager.DefaultPlayerAliasPrefix);
+                cm.SetCurrentPlayerAlias(playerAlias);
+            }
+
+            _introUIView.PlayerAliasInputField.SetTextWithoutNotify(playerAlias);
+
+            // Do this here to hide network delay
+            _introUIView.CanvasGroupsDoFade();
         }
 
         /// <summary>
@@ -161,6 +174,30 @@ namespace Beamable.Samples.KOR
         public void OnAsyncIconLoadCompleted(AsyncOperationHandle<Texture2D> handle)
         {
             _introUIView.CharacterImage = handle.Result;
+        }
+
+        private string _latestNotYetSetNewAlias = null;
+        private Promise<EmptyResponse> _setPlayerAliasPromise = null;
+
+        private void PlayerAliasInputField_OnValueChanged(string newValue)
+        {
+            if (_setPlayerAliasPromise != null && !_setPlayerAliasPromise.IsCompleted)
+            {
+                _latestNotYetSetNewAlias = newValue;
+                return;
+            }
+
+            _latestNotYetSetNewAlias = newValue;
+            string currentlyUpdatingValue = newValue;
+            _setPlayerAliasPromise = RuntimeDataStorage.Instance.CharacterManager.SetCurrentPlayerAlias(currentlyUpdatingValue).Then(er =>
+            {
+                Configuration.Debugger.Log($"NEW alias={currentlyUpdatingValue} set!", Beamable.Core.Debugging.DebugLogLevel.Verbose);
+
+                if (currentlyUpdatingValue.Equals(_latestNotYetSetNewAlias))
+                    _latestNotYetSetNewAlias = null;
+                else
+                    PlayerAliasInputField_OnValueChanged(_latestNotYetSetNewAlias);
+            });
         }
 
         private void PreviousCharacterButton_OnClicked()

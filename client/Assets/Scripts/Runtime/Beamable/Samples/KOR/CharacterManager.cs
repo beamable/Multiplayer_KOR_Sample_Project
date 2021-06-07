@@ -20,7 +20,9 @@ namespace Beamable.Samples.KOR
         private IBeamableAPI _beamableAPI = null;
         private List<CharacterContentObject> _allCharacterContentObjects = null;
         private Dictionary<string, CharacterContentObject> _mapCharacterObjectNameToContent = new Dictionary<string, CharacterContentObject>();
-        private const string ChosenCharacterStatKey = "ChosenCharacterContentID";
+        public const string ChosenCharacterStatKey = "ChosenCharacterContentID";
+        public const string PlayerAliasStatKey = "alias";
+        public const string DefaultPlayerAliasPrefix = "Player";
         private CharacterContentObject _currentlyChosenCharacter = null;
 
         public List<CharacterContentObject> AllCharacterContentObjects { get { return _allCharacterContentObjects; } }
@@ -51,7 +53,7 @@ namespace Beamable.Samples.KOR
                 Configuration.Debugger.Log($"CharacterContentObject name={cco.ContentName} " +
                                            $"type={cco.ContentType} id={cco.Id} something={cco.ReadableName}",
                     DebugLogLevel.Verbose);
-                
+
                 _mapCharacterObjectNameToContent.Add(cco.ContentName, cco);
             }
 
@@ -70,14 +72,8 @@ namespace Beamable.Samples.KOR
         {
             Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
 
-            foreach (KeyValuePair<string, string> entry in allCurrentUserStats)
-            {
-                Configuration.Debugger.Log($"CharacterContentObject key={entry.Key} " +
-                                           $"value={entry.Value}", DebugLogLevel.Verbose);
-            }
-
-            string chosenCharacterName;
-            if (!allCurrentUserStats.TryGetValue(ChosenCharacterStatKey, out chosenCharacterName))
+            string chosenCharacterName = await GetStatKeyByDBID(ChosenCharacterStatKey, dbid);
+            if (chosenCharacterName == null)
                 return null;
 
             CharacterContentObject cco;
@@ -91,6 +87,31 @@ namespace Beamable.Samples.KOR
             return cco;
         }
 
+        public async Task<string> GetPlayerAliasByDBID(long dbid)
+        {
+            return await GetStatKeyByDBID(PlayerAliasStatKey, dbid);
+        }
+
+        private async Task<string> GetStatKeyByDBID(string statKey, long dbid)
+        {
+            Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
+
+            Configuration.Debugger.Log($"Stats count={allCurrentUserStats.Count} for dbid={dbid}", DebugLogLevel.Verbose);
+            foreach (KeyValuePair<string, string> entry in allCurrentUserStats)
+                Configuration.Debugger.Log($"Stat dbid={dbid} key={entry.Key} value={entry.Value}", DebugLogLevel.Verbose);
+
+            string value;
+            if (!allCurrentUserStats.TryGetValue(statKey, out value))
+            {
+                Configuration.Debugger.Log($"dbid={dbid} has no key for stat={statKey}!", DebugLogLevel.Verbose);
+                return null;
+            }
+
+            Configuration.Debugger.Log($"dbid={dbid} has value={value} for stat key={statKey}", DebugLogLevel.Verbose);
+
+            return value;
+        }
+
         public int GetChosenCharacterIndex()
         {
             if (_allCharacterContentObjects == null || _currentlyChosenCharacter == null)
@@ -102,13 +123,18 @@ namespace Beamable.Samples.KOR
         public void ChooseCharacter(CharacterContentObject newlyChosenCharacter)
         {
             _currentlyChosenCharacter = newlyChosenCharacter;
-
-            _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>()
-            {
-               { ChosenCharacterStatKey, newlyChosenCharacter.ContentName }
-            });
-
+            SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.ContentName);
             OnChoiceHasBeenMade?.Invoke();
+        }
+
+        public Promise<EmptyResponse> SetCurrentPlayerAlias(string newPlayerAlias)
+        {
+            return SetStatsKeyForCurrentUser(PlayerAliasStatKey, newPlayerAlias);
+        }
+
+        private Promise<EmptyResponse> SetStatsKeyForCurrentUser(string statsKey, string newValue)
+        {
+            return _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>() { { statsKey, newValue } });
         }
 
         private async Task<List<CharacterContentObject>> GetAllCharacterContentObjects()
