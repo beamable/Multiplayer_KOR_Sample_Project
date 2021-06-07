@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Beamable.Api.Auth;
 using Beamable.Api.Leaderboard;
 using Beamable.Api.Stats;
+using Beamable.Common.Api;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
 using Beamable.Samples.KOR.CustomContent;
@@ -75,7 +76,7 @@ namespace Beamable.Samples.KOR.Data
                   List<CharacterContentObject> characterContentObjects =
                      RuntimeDataStorage.Instance.CharacterManager.AllCharacterContentObjects;
                   int randomIndex = UnityEngine.Random.Range(0, characterContentObjects.Count);
-                  MockDataCreator.SetCurrentUserCharacterObject(characterContentObjects[randomIndex]);
+                  await MockDataCreator.SetCurrentUserCharacterObject(characterContentObjects[randomIndex]);
 
                   // Submit mock score for NEW user
                   double mockScore = UnityEngine.Random.Range(leaderboardMockScoreMin,
@@ -129,9 +130,9 @@ namespace Beamable.Samples.KOR.Data
       /// <param name="statsService"></param>
       /// <param name="characterContentObject"></param>
       /// <exception cref="NotImplementedException"></exception>
-      private static void SetCurrentUserCharacterObject(CharacterContentObject characterContentObject)
+      private static async Task<EmptyResponse> SetCurrentUserCharacterObject(CharacterContentObject characterContentObject)
       {
-         RuntimeDataStorage.Instance.CharacterManager.ChooseCharacter(characterContentObject);
+         return await RuntimeDataStorage.Instance.CharacterManager.ChooseCharacter(characterContentObject);
       }
 
       /// <summary>

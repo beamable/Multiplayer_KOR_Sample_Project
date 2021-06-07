@@ -54,14 +54,23 @@ namespace Beamable.Samples.KOR
       
       private async void SetupBeamable()
       {
+         // Immediately: Show default text
          _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Loading_Store, 
             TMP_BufferedText.BufferedTextMode.Queue);
 
+         _storeUIView.AttributesPanelUI.BodyText.text = "";
+
+         // Slowly: Load beamable data
          _beamableAPI= await Beamable.API.Instance;
          
          // Do this after calling "Beamable.API.Instance" for smoother UI
          _storeUIView.CanvasGroupsDoFadeIn();
+
+         // Show the player's attributes in the UI of this scene
+         Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
+         _storeUIView.AttributesPanelUI.Attributes = attributes;    
          
+         //
          _storeContent = await _configuration.StoreRef.Resolve();
          DebugLog($"Store Scene, dbid = {_beamableAPI.User.id}");
          DebugLog($"StoreContent, listings.Count = {_storeContent.listings.Count}");
@@ -138,8 +147,9 @@ namespace Beamable.Samples.KOR
          _inventoryItems.Clear();
          foreach (KeyValuePair<string, List<ItemView>> kvp in _inventoryView.items)
          {
+            string contentId = kvp.Key;
+            string itemName = KORHelper.GetKORItemDisplayNameFromContentId(contentId);
             int itemCount = kvp.Value.Count;
-            string itemName = kvp.Key.Replace("items.", "");
             string itemDisplayName = $"\t{itemName} x {itemCount}";
                
             //TODO: Replace List<string> with List<blah> to hold more data?
@@ -173,10 +183,10 @@ namespace Beamable.Samples.KOR
          
          foreach (PlayerListingView playerListingView in playerStoreView.listings)
          {
-            var title = playerListingView.offer.obtainItems[0].contentId;
+            var contentId = playerListingView.offer.obtainItems[0].contentId;
             
             int price = playerListingView.offer.price.amount;
-            string itemName = title.Replace("items.", "");
+            string itemName = KORHelper.GetKORItemDisplayNameFromContentId(contentId);
             string itemDisplayName = $"\t{itemName} ({price} {KORConstants.StoreUIView_CurrencyName})";
                
             //TODO: Replace List<string> with List<blah> to hold more data?

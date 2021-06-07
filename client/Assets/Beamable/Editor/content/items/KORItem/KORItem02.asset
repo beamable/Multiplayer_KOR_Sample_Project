@@ -19,5 +19,5 @@ MonoBehaviour:
     m_SubObjectType: 
   clientPermission:
     writeSelf: 0
-  MovementSpeed: 0
-  ChargeSpeed: 0
+  MovementSpeed: 3
+  ChargeSpeed: 4
