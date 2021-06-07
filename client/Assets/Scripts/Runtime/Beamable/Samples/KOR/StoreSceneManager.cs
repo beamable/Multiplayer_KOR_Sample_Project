@@ -66,10 +66,11 @@ namespace Beamable.Samples.KOR
          // Do this after calling "Beamable.API.Instance" for smoother UI
          _storeUIView.CanvasGroupsDoFadeIn();
 
-         Attributes playerAttributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
-         _storeUIView.AttributesPanelUI.BodyText.text = string.Format(KORConstants.Player_Attributes,
-            playerAttributes.ChargeSpeed, playerAttributes.MovementSpeed);
+         // Show the player's attributes in the UI of this scene
+         Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
+         _storeUIView.AttributesPanelUI.Attributes = attributes;    
          
+         //
          _storeContent = await _configuration.StoreRef.Resolve();
          DebugLog($"Store Scene, dbid = {_beamableAPI.User.id}");
          DebugLog($"StoreContent, listings.Count = {_storeContent.listings.Count}");

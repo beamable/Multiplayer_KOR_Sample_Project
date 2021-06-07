@@ -58,7 +58,7 @@ namespace Beamable.Samples.KOR
             CharacterContentObject chosenCCO = await GetChosenCharacterByDBID(_beamableAPI.User.id);
 
             if (chosenCCO == null)
-                ChooseCharacter(_allCharacterContentObjects[0]);
+                await ChooseCharacter(_allCharacterContentObjects[0]);
             else
             {
                 _currentlyChosenCharacter = chosenCCO;
@@ -99,16 +99,18 @@ namespace Beamable.Samples.KOR
             return _allCharacterContentObjects.IndexOf(_currentlyChosenCharacter);
         }
 
-        public void ChooseCharacter(CharacterContentObject newlyChosenCharacter)
+        public async Task<EmptyResponse> ChooseCharacter(CharacterContentObject newlyChosenCharacter)
         {
             _currentlyChosenCharacter = newlyChosenCharacter;
 
-            _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>()
+            await _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>()
             {
                { ChosenCharacterStatKey, newlyChosenCharacter.ContentName }
             });
 
             OnChoiceHasBeenMade?.Invoke();
+
+            return new EmptyResponse();
         }
 
         private async Task<List<CharacterContentObject>> GetAllCharacterContentObjects()

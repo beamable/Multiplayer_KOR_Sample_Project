@@ -73,7 +73,7 @@ namespace Beamable.Samples.KOR
                 // Handle any changes to the internet connectivity
                 _beamableAPI.ConnectivityService.OnConnectivityChanged += ConnectivityService_OnConnectivityChanged;
                 ConnectivityService_OnConnectivityChanged(_beamableAPI.ConnectivityService.HasConnectivity);
-
+                
                 // Populate the leaderboard with mock values for cosmetics
                 if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
                 {
@@ -142,7 +142,7 @@ namespace Beamable.Samples.KOR
             RenderUI();
         }
 
-        private void UpdateCharacterChoice()
+        private async void UpdateCharacterChoice()
         {
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
 
@@ -153,9 +153,14 @@ namespace Beamable.Samples.KOR
 
             _introUIView.PreviousCharacterButton.interactable = characterIndex > 0;
             _introUIView.NextCharacterButton.interactable = characterIndex < charactersCount - 1;
-
+            
             AsyncOperationHandle<Texture2D> asyncIconLoad = Addressables.LoadAssetAsync<Texture2D>(cm.CurrentlyChosenCharacter.bigIcon);
             asyncIconLoad.Completed += OnAsyncIconLoadCompleted;
+            
+            // Show the player's attributes in the UI of this scene
+            Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
+            _introUIView.AttributesPanelUI.Attributes = attributes;    
+            
         }
 
         public void OnAsyncIconLoadCompleted(AsyncOperationHandle<Texture2D> handle)
@@ -163,23 +168,23 @@ namespace Beamable.Samples.KOR
             _introUIView.CharacterImage = handle.Result;
         }
 
-        private void PreviousCharacterButton_OnClicked()
+        private async void PreviousCharacterButton_OnClicked()
         {
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
 
             if (characterIndex > 0)
-                cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex - 1]);
+                await cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex - 1]);
         }
 
-        private void NextCharacterButton_OnClicked()
+        private async void NextCharacterButton_OnClicked()
         {
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
             int charactersCount = cm.AllCharacterContentObjects.Count;
 
             if (characterIndex < charactersCount - 1)
-                cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex + 1]);
+                await cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex + 1]);
         }
 
         private void StartGame01Button_OnClicked()
