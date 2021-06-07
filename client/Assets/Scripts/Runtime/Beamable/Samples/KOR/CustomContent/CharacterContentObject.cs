@@ -11,6 +11,8 @@ namespace Beamable.Samples.KOR.CustomContent
         public string ReadableName = "";
         public UnityEngine.AddressableAssets.AssetReferenceGameObject avatarViewPrefab = null;
         public UnityEngine.AddressableAssets.AssetReferenceTexture2D bigIcon = null;
+        
+        // NOTE: If you change these variable NAMES, also change them in KORItem.cs
         public int MovementSpeed = 0;
         public int ChargeSpeed = 0;
     }
