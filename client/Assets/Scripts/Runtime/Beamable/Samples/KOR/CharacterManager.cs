@@ -120,5 +120,35 @@ namespace Beamable.Samples.KOR
             var results = await filteredManifest.ResolveAll();
             return results.Cast<CharacterContentObject>().ToList();
         }
+
+        /// <summary>
+        /// Get sum total of pay-to-play attributes to impact gameplay
+        /// </summary>
+        /// <param name="dbid"></param>
+        /// <returns></returns>
+        public async Task<Attributes> GetChosenPlayerAttributes()
+        {
+            if (_beamableAPI == null)
+            {
+                _beamableAPI = await Beamable.API.Instance;
+            }
+            
+            return await GetPlayerAttributesByDBID(_beamableAPI.User.id);
+        }
+        
+        /// <summary>
+        /// Get sum total of pay-to-play attributes to impact gameplay
+        /// </summary>
+        /// <param name="dbid"></param>
+        /// <returns></returns>
+        public async Task<Attributes> GetPlayerAttributesByDBID (long dbid)
+        {
+            CharacterContentObject characterContentObject = await GetChosenCharacterByDBID(dbid);
+
+            var chargeSpeed = characterContentObject.ChargeSpeed;
+            var movementSpeed = characterContentObject.MovementSpeed;
+
+            return new Attributes(chargeSpeed, movementSpeed);
+        }
     }
 }
