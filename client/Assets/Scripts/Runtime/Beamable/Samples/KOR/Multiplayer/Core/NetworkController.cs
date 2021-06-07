@@ -72,6 +72,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             // ListenForEventFrom<PlayerDestroyAllMessage>(dbid);
             ListenForEventFrom<PlayerMoveStartedEvent>(dbid);
             ListenForEventFrom<PlayerMoveEndEvent>(dbid);
+            ListenForEventFrom<PlayerMoveProgressEvent>(dbid);
             _sim.On<ChecksumEvent>(nameof(ChecksumEvent), dbid, hashCheck =>
             {
                 hashCheck.SetPlayerDbid(dbidNumber);
