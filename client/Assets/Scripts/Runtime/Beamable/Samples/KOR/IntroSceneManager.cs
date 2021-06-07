@@ -73,7 +73,7 @@ namespace Beamable.Samples.KOR
                 // Handle any changes to the internet connectivity
                 _beamableAPI.ConnectivityService.OnConnectivityChanged += ConnectivityService_OnConnectivityChanged;
                 ConnectivityService_OnConnectivityChanged(_beamableAPI.ConnectivityService.HasConnectivity);
-                
+
                 // Populate the leaderboard with mock values for cosmetics
                 if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
                 {
@@ -107,7 +107,7 @@ namespace Beamable.Samples.KOR
             if (playerAlias == null)
             {
                 playerAlias = MockDataCreator.CreateNewRandomAlias(CharacterManager.DefaultPlayerAliasPrefix);
-                cm.SetCurrentPlayerAlias(playerAlias);
+                await cm.SetCurrentPlayerAlias(playerAlias);
             }
 
             _introUIView.PlayerAliasInputField.SetTextWithoutNotify(playerAlias);
@@ -166,14 +166,13 @@ namespace Beamable.Samples.KOR
 
             _introUIView.PreviousCharacterButton.interactable = characterIndex > 0;
             _introUIView.NextCharacterButton.interactable = characterIndex < charactersCount - 1;
-            
+
             AsyncOperationHandle<Texture2D> asyncIconLoad = Addressables.LoadAssetAsync<Texture2D>(cm.CurrentlyChosenCharacter.bigIcon);
             asyncIconLoad.Completed += OnAsyncIconLoadCompleted;
-            
+
             // Show the player's attributes in the UI of this scene
             Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
-            _introUIView.AttributesPanelUI.Attributes = attributes;    
-            
+            _introUIView.AttributesPanelUI.Attributes = attributes;
         }
 
         public void OnAsyncIconLoadCompleted(AsyncOperationHandle<Texture2D> handle)

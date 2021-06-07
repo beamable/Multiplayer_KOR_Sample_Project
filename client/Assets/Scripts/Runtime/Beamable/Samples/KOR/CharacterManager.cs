@@ -124,8 +124,10 @@ namespace Beamable.Samples.KOR
         public async Task<EmptyResponse> ChooseCharacter(CharacterContentObject newlyChosenCharacter)
         {
             _currentlyChosenCharacter = newlyChosenCharacter;
-            SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.ContentName);
+            await SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.ContentName);
             OnChoiceHasBeenMade?.Invoke();
+
+            return null;
         }
 
         public Promise<EmptyResponse> SetCurrentPlayerAlias(string newPlayerAlias)
@@ -155,7 +157,7 @@ namespace Beamable.Samples.KOR
         /// <returns></returns>
         public async Task<Attributes> GetChosenPlayerAttributes()
         {
-            CharacterContentObject characterContentObject = 
+            CharacterContentObject characterContentObject =
                 await GetChosenCharacterByDBID(_beamableAPI.User.id);
 
             // Very early in play session, this may not be ready
@@ -169,19 +171,18 @@ namespace Beamable.Samples.KOR
                 var movementSpeed = characterContentObject.MovementSpeed;
 
                 // #1 GET ALL ITEMS
-                InventoryView inventoryView = 
+                InventoryView inventoryView =
                     await _beamableAPI.InventoryService.GetCurrent(KORConstants.ItemContentType);
-                
+
                 foreach (KeyValuePair<string, List<ItemView>> kvp in inventoryView.items)
                 {
                     int itemCount = kvp.Value.Count;
                     KORItemContent y = await _beamableAPI.ContentService.GetContent(kvp.Key, typeof(KORItemContent)) as KORItemContent;
-                    
+
                     //Reward user for each TYPE and COUNT of Inventory
                     chargeSpeed += (y.ChargeSpeed * itemCount);
                     movementSpeed += (y.MovementSpeed * itemCount);
                 }
-                
 
                 // #2 RETURN FINAL VALUES
                 return new Attributes(chargeSpeed, movementSpeed);
