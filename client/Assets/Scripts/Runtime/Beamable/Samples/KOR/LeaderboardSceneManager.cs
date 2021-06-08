@@ -30,7 +30,7 @@ namespace Beamable.Samples.KOR
         //  Event Handlers -------------------------------
         private void BackButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClick();
+            KORHelper.PlayAudioForUIClickPrimary();
             
             StartCoroutine(KORHelper.LoadScene_Coroutine(_leaderboardUIView.Configuration.IntroSceneName,
                 _leaderboardUIView.Configuration.DelayBeforeLoadScene));

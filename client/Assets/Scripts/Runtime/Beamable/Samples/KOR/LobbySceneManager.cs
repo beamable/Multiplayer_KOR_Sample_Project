@@ -108,7 +108,7 @@ namespace Beamable.Samples.KOR
       
       private void BackButton_OnClicked()
       {
-         KORHelper.PlayAudioForUIClick();
+         KORHelper.PlayAudioForUIClickPrimary();
          
          _korMatchmaking?.Stop();
 
