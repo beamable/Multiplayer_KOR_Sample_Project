@@ -25,6 +25,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 // Internal representation is identical to IEEE binary32 floating point numbers
 [DebuggerDisplay("{ToStringInv()}")]
@@ -34,7 +35,8 @@ public struct sfloat : IEquatable<sfloat>, IComparable<sfloat>, IComparable, IFo
     /// <summary>
     /// Raw byte representation of an sfloat number
     /// </summary>
-    private readonly uint rawValue;
+    [SerializeField]
+    private uint rawValue;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private sfloat(uint raw)
