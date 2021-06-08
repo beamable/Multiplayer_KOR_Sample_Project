@@ -204,5 +204,10 @@ namespace Beamable.Samples.KOR
          var tokens = contentId.Split('.');
          return tokens[tokens.Length - 1];
       }
+
+      public static void SetSkyboxRotation(float rotation)
+      {
+         RenderSettings.skybox.SetFloat("_Rotation", rotation);
+      }
    }
 }
