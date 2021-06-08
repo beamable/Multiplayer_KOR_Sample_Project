@@ -17,6 +17,8 @@ namespace Beamable.Samples.KOR.Behaviours
 
       public MovePreviewBehaviour PreviewBehaviour;
 
+      public LayerMask CollisionMask;
+
       [ReadOnly]
       public Vector3 direction;
 
@@ -73,7 +75,9 @@ namespace Beamable.Samples.KOR.Behaviours
       {
          // where on the floor is the player clicking?
          var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-         if (!Physics.Raycast(ray, out var hit)) return;
+         if (!Physics.Raycast(ray, out var hit, CollisionMask.value)) return;
+
+
 
          direction = (hit.point - transform.position).normalized;
          _lastHit = hit.point;

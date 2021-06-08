@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AvatarView: {fileID: 6928970518923597896}
+  PreviewBehaviour: {fileID: 0}
   NetworkedPhysics: {fileID: 3821721727158368489}
   MaxPower: 45
   MinPower: 8
@@ -89,11 +90,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Collider: {fileID: 6276507837589541420}
   IsDynamic: 1
-  Mass: 3
+  Mass:
+    rawValue: 1056964608
+  Restitution:
+    rawValue: 1065353216
   XRotationLocked: 1
   YRotationLocked: 0
   ZRotationLocked: 1
-  _mass: 1077936128
+  HasExtraBounce: 1
+  ExtraBounce:
+    HasValue: 1
+    Value:
+      rawValue: 1097859072
   _x: 1124665917
   _y: 0
   _z: 0

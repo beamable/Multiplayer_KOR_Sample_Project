@@ -1161,10 +1161,14 @@ MonoBehaviour:
   MotionBehaviour: {fileID: 7768912920684403029}
   VisualArrowLength: 8
   PreviewBehaviour: {fileID: 5956093517062666145}
+  CollisionMask:
+    serializedVersion: 2
+    m_Bits: 128
   direction: {x: 0, y: 0, z: 0}
   isPowering: 0
   startedPoweringAt: 0
   powerRatio: 0
+  sentOnTick: 0
 --- !u!1001 &1046082958368116705
 PrefabInstance:
   m_ObjectHideFlags: 0

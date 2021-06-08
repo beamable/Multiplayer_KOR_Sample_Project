@@ -10,6 +10,7 @@ using UnityS.Physics;
 using UnityS.Physics.Extensions;
 using UnityS.Physics.Systems;
 using UnityS.Transforms;
+using Material = UnityS.Physics.Material;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
@@ -74,6 +75,7 @@ namespace Beamable.Samples.KOR.Multiplayer
 
             UnityS.Physics.Material material = UnityS.Physics.Material.Default;
             material.Friction = sfloat.One;
+            material.RestitutionCombinePolicy = Material.CombinePolicy.GeometricMean;
 
             PhysicsParams physicsParamsStatic = PhysicsParams.Default;
             physicsParamsStatic.isDynamic = false;

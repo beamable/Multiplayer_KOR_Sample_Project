@@ -19,17 +19,17 @@ namespace Beamable.Samples.KOR.Multiplayer
 
       public bool IsDynamic;
 
-      public float Mass = .5f;
+      public sfloat Mass = (sfloat).5f;
+      public sfloat Restitution = (sfloat) .5f;
 
       public bool XRotationLocked;
       public bool YRotationLocked;
       public bool ZRotationLocked;
 
+      public OptionalSfloat ExtraBounce;
+
 
       [Header("Internal Baked Soft Float Values")]
-      [ReadOnly]
-      [SerializeField]
-      private uint _mass;
 
       [ReadOnly]
       [SerializeField]
@@ -103,7 +103,6 @@ namespace Beamable.Samples.KOR.Multiplayer
          // only run this at edit time..
          if (Application.IsPlaying(this)) return;
 
-         _mass = ((sfloat)Mass).RawValue;
          _x = transform.position.x.ToRawSFloat();
          _y = transform.position.y.ToRawSFloat();
          _z = transform.position.z.ToRawSFloat();
@@ -176,10 +175,9 @@ namespace Beamable.Samples.KOR.Multiplayer
          if (!allowed) return;
 
          UnityS.Physics.Material material = UnityS.Physics.Material.Default;
+         material.Restitution = Restitution;
+         material.CollisionResponse = CollisionResponsePolicy.CollideRaiseCollisionEvents;
 
-
-         // TODO: render the x/y/z values on screen
-         Debug.Log("CONVERTING OBJECT " + name + " / " + _x + " / " + _y + " / " + _z);
          var position = new float3(
             _x.ToSFloat(),
             _y.ToSFloat(),
@@ -200,7 +198,7 @@ namespace Beamable.Samples.KOR.Multiplayer
          physicsParams.lockAxis.x = XRotationLocked;
          physicsParams.lockAxis.y = YRotationLocked;
          physicsParams.lockAxis.z = ZRotationLocked;
-         physicsParams.mass = _mass.ToSFloat();
+         physicsParams.mass = Mass;
 
          BlobAssetReference<Collider> collider;
 
@@ -244,6 +242,16 @@ namespace Beamable.Samples.KOR.Multiplayer
          }
 
          Entity = controller.CreatePhysicsBody(position, rotation, collider, physicsParams);
+
+         if (ExtraBounce.HasValue)
+         {
+            World.DefaultGameObjectInjectionWorld.EntityManager.AddComponent<BouncyTag>(Entity);
+            World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(Entity, new BouncyTag
+            {
+               Bounce = ExtraBounce.Value
+            });
+         }
+
          GameController.Instance.Register(Collider.gameObject, Entity);
          Converted = true;
       }

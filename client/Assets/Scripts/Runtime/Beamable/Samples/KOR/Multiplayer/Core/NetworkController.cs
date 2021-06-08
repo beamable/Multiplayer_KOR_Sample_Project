@@ -34,7 +34,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
             var roomId = RuntimeDataStorage.Instance.RoomId;
             LocalDbid = beamable.User.id;
-            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 4);
+            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 1);
             _sim.OnInit(HandleOnInit);
             _sim.OnConnect(HandleOnConnect);
             _sim.OnDisconnect(HandleOnDisconnect);
