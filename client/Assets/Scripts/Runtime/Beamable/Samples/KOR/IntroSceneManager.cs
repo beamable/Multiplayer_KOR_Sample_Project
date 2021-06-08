@@ -159,15 +159,15 @@ namespace Beamable.Samples.KOR
         {
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
 
-            _introUIView.CharacterInfoText = cm.CurrentlyChosenCharacter.ReadableName;
+            _introUIView.CharacterInfoText = cm.CurrentlyChosenCharacter.CharacterContentObject.ReadableName;
 
-            int characterIndex = cm.AllCharacterContentObjects.IndexOf(cm.CurrentlyChosenCharacter);
-            int charactersCount = cm.AllCharacterContentObjects.Count;
+            int characterIndex = cm.GetChosenCharacterIndex();
+            int charactersCount = cm.AllCharacters.Count;
 
             _introUIView.PreviousCharacterButton.interactable = characterIndex > 0;
             _introUIView.NextCharacterButton.interactable = characterIndex < charactersCount - 1;
 
-            AsyncOperationHandle<Texture2D> asyncIconLoad = Addressables.LoadAssetAsync<Texture2D>(cm.CurrentlyChosenCharacter.bigIcon);
+            AsyncOperationHandle<Texture2D> asyncIconLoad = Addressables.LoadAssetAsync<Texture2D>(cm.CurrentlyChosenCharacter.CharacterContentObject.bigIcon);
             asyncIconLoad.Completed += OnAsyncIconLoadCompleted;
 
             // Show the player's attributes in the UI of this scene
@@ -210,17 +210,17 @@ namespace Beamable.Samples.KOR
             int characterIndex = cm.GetChosenCharacterIndex();
 
             if (characterIndex > 0)
-                await cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex - 1]);
+                await cm.ChooseCharacter(cm.AllCharacters[characterIndex - 1]);
         }
 
         private async void NextCharacterButton_OnClicked()
         {
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
-            int charactersCount = cm.AllCharacterContentObjects.Count;
+            int charactersCount = cm.AllCharacters.Count;
 
             if (characterIndex < charactersCount - 1)
-                await cm.ChooseCharacter(cm.AllCharacterContentObjects[characterIndex + 1]);
+                await cm.ChooseCharacter(cm.AllCharacters[characterIndex + 1]);
         }
 
         private void StartGame01Button_OnClicked()
