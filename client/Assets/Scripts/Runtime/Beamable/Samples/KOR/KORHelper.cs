@@ -20,9 +20,20 @@ namespace Beamable.Samples.KOR
          SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
       }
       
-      public static void PlayAudioForUIClick()
+      /// <summary>
+      /// Changing scenes and other 'big' things
+      /// </summary>
+      public static void PlayAudioForUIClickPrimary()
       {
          SoundManager.Instance.PlayAudioClip(SoundConstants.Chime01);
+      }
+      
+      /// <summary>
+      /// Changing settings and other 'small' things
+      /// </summary>
+      public static void PlayAudioForUIClickSecondary()
+      {
+         SoundManager.Instance.PlayAudioClip(SoundConstants.Click01);
       }
 
       /// <summary>

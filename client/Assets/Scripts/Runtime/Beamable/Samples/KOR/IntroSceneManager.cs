@@ -206,6 +206,8 @@ namespace Beamable.Samples.KOR
 
         private async void PreviousCharacterButton_OnClicked()
         {
+            KORHelper.PlayAudioForUIClickSecondary();
+            
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
 
@@ -215,6 +217,8 @@ namespace Beamable.Samples.KOR
 
         private async void NextCharacterButton_OnClicked()
         {
+            KORHelper.PlayAudioForUIClickSecondary();
+            
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
             int charactersCount = cm.AllCharacters.Count;
@@ -225,33 +229,33 @@ namespace Beamable.Samples.KOR
 
         private void StartGame01Button_OnClicked()
         {
-            KORHelper.PlayAudioForUIClick();
+            KORHelper.PlayAudioForUIClickPrimary();
             StartGame(1);
         }
 
         private void StartGame02Button_OnClicked()
         {
-            KORHelper.PlayAudioForUIClick();
+            KORHelper.PlayAudioForUIClickPrimary();
             StartGame(6);
         }
 
         private void LeaderboardButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClick();
+            KORHelper.PlayAudioForUIClickPrimary();
             StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.LeaderboardSceneName,
                _configuration.DelayBeforeLoadScene));
         }
 
         private void StoreButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClick();
+            KORHelper.PlayAudioForUIClickPrimary();
             StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.StoreSceneName,
                _configuration.DelayBeforeLoadScene));
         }
 
         private void QuitButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClick();
+            KORHelper.PlayAudioForUIClickPrimary();
 
             if (Application.isEditor)
             {
