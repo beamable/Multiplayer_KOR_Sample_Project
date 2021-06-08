@@ -71,8 +71,6 @@ namespace Beamable.Samples.KOR
 
         public async Task<CharacterContentObject> GetChosenCharacterByDBID(long dbid)
         {
-            Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
-
             string chosenCharacterName = await GetStatKeyByDBID(ChosenCharacterStatKey, dbid);
             if (chosenCharacterName == null)
                 return null;
