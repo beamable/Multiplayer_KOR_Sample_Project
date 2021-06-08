@@ -33,9 +33,9 @@ namespace Beamable.Samples.KOR.Behaviours
       [ReadOnly]
       public PlayerMoveStartedEvent startEvt;
 
-      private float3 direction;
-      private sfloat deltaTime;
-      private sfloat magnitude;
+      public float3 direction;
+      public sfloat deltaTime;
+      public sfloat magnitude;
 
       private void Start()
       {

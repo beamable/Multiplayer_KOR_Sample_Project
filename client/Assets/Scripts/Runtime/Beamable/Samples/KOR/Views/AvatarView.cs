@@ -13,6 +13,9 @@ namespace Beamable.Samples.KOR.Views
       //  Properties -----------------------------------
 
       //  Fields ---------------------------------------
+
+      public Transform Model;
+
       [SerializeField]
       private Animator _animator = null;
 
@@ -41,6 +44,11 @@ namespace Beamable.Samples.KOR.Views
          }
       }
 
+      private MotionState _motionState = MotionState.Unset;
+      enum MotionState
+      {
+         Unset, Idle, Walk, Run
+      }
 
       //  Other Methods --------------------------------
 
@@ -51,6 +59,8 @@ namespace Beamable.Samples.KOR.Views
 
       public void PlayAnimationIdle()
       {
+         if (_motionState == MotionState.Idle) return;
+         _motionState = MotionState.Idle;
          var dummy = _collider;
          var foo = _configuration;
          _animator.SetBool(KORConstants.Avatar_WalkForward, false);
@@ -60,12 +70,16 @@ namespace Beamable.Samples.KOR.Views
 
       public void PlayAnimationWalkForward()
       {
+         if (_motionState == MotionState.Walk) return;
+         _motionState = MotionState.Walk;
          _animator.SetBool(KORConstants.Avatar_RunForward, false);
          _animator.SetBool(KORConstants.Avatar_WalkForward, true);
       }
 
       public void PlayAnimationRunForward()
       {
+         if (_motionState == MotionState.Run) return;
+         _motionState = MotionState.Run;
          _animator.SetBool(KORConstants.Avatar_WalkForward, false);
          _animator.SetBool(KORConstants.Avatar_RunForward, true);
       }

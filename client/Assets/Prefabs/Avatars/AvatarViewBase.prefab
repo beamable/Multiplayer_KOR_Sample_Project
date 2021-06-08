@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7301698164150048436}
   - component: {fileID: 3821721727158368489}
   - component: {fileID: 6276507837589541420}
+  - component: {fileID: 9176452481930775561}
   m_Layer: 0
   m_Name: AvatarViewBase
   m_TagString: Untagged
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cbe153ddbf2b614b915ec1a828d7f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Model: {fileID: 0}
   _animator: {fileID: 0}
   _collider: {fileID: 0}
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
@@ -97,7 +99,6 @@ MonoBehaviour:
   XRotationLocked: 1
   YRotationLocked: 0
   ZRotationLocked: 1
-  HasExtraBounce: 1
   ExtraBounce:
     HasValue: 1
     Value:
@@ -129,6 +130,21 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.6
   m_Center: {x: 0, y: 0.65, z: 0}
+--- !u!114 &9176452481930775561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917565731528861378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06aca7f68284475a1eda1b718344063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Avatar: {fileID: 6928970518923597896}
+  Motion: {fileID: 0}
+  Input: {fileID: 0}
 --- !u!1001 &7867974638907050411
 PrefabInstance:
   m_ObjectHideFlags: 0

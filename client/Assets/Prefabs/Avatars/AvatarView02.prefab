@@ -165,6 +165,10 @@ PrefabInstance:
       propertyPath: PreviewBehaviour
       value: 
       objectReference: {fileID: 534651553380963335}
+    - target: {fileID: 9176452481930775561, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: Motion
+      value: 
+      objectReference: {fileID: 4473064667441462003, guid: 4668c6355c5039a49a88c09c9542516d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
 --- !u!4 &7675710485414075047 stripped

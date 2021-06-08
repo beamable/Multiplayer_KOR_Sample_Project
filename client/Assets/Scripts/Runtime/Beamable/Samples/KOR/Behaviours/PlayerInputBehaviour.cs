@@ -2,6 +2,7 @@ using System;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Multiplayer.Events;
+using Beamable.Samples.KOR.Views;
 using Unity.Entities;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace Beamable.Samples.KOR.Behaviours
       public float VisualArrowLength;
 
       public MovePreviewBehaviour PreviewBehaviour;
+
+      public AvatarView AvatarView;
 
       public LayerMask CollisionMask;
 
@@ -82,8 +85,10 @@ namespace Beamable.Samples.KOR.Behaviours
          direction = (hit.point - transform.position).normalized;
          _lastHit = hit.point;
 
+
          if (Input.GetMouseButtonDown(0))
          {
+            // AvatarView.PlayAnimationAttack01();
             startedPoweringAt = World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = true;
@@ -91,6 +96,8 @@ namespace Beamable.Samples.KOR.Behaviours
             sentOnTick = NetworkController.HighestSeenNetworkFrame;
          } else if (Input.GetMouseButtonUp(0))
          {
+            AvatarView.PlayAnimationAttack02(); // TODO: How to get other players to play the animation before they move?
+
             var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = false;
             NetworkController.Instance.SendNetworkMessage(new PlayerMoveEndEvent(time, direction));
