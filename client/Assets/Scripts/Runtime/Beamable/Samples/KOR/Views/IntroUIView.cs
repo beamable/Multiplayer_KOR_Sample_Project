@@ -27,6 +27,8 @@ namespace Beamable.Samples.KOR.Views
         public Button QuitButton { get { return _quitButton; } }
         public CanvasGroup ButtonsCanvasGroup { get { return _buttonsCanvasGroup; } }
 
+        public TMP_InputField PlayerAliasInputField { get { return _playerAliasInputField; } }
+
         //  Fields ---------------------------------------
         [Header("UI")]
         [SerializeField]
@@ -64,6 +66,9 @@ namespace Beamable.Samples.KOR.Views
 
         [SerializeField]
         private RawImage _characterImage = null;
+
+        [SerializeField]
+        private TMP_InputField _playerAliasInputField = null;
 
         //  Unity Methods   ------------------------------
         public void Awake()

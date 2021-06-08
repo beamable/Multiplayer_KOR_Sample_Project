@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Beamable.Common.Api;
 using Beamable.Common.Api.Leaderboards;
@@ -17,53 +18,47 @@ namespace Beamable.Samples.KOR.UI
     /// Renders one item row of the leaderboard.
     ///
     /// NOTE: Its also used for the header atop the leaderboard
-    /// 
+    ///
     /// </summary>
     public class KORLeaderboardItem : MonoBehaviour
     {
         //  Fields ---------------------------------------
         [SerializeField]
         private TextMeshProUGUI _aliasText;
-        
+
         [SerializeField]
         private TextMeshProUGUI _rankText;
-        
+
         [SerializeField]
         private TextMeshProUGUI _scoreText;
-        
+
         [SerializeField]
         private Image _iconImage;
-        
+
         [SerializeField]
         private bool _isHeader = false;
-        
-        
+
         //  Unity Methods ---------------------------------
         public void Start()
-        { 
+        {
             _iconImage.enabled = !_isHeader;
         }
-        
-        
+
         //  Other Methods ---------------------------------
         public async void Apply(RankEntry entry)
         {
-            var beamableAPI = await API.Instance;
+            await API.Instance;
 
             // Load text
-            var stats = await beamableAPI.StatsService.GetStats("client", "public", "player", entry.gt);
-            string alias;
-            stats.TryGetValue("alias", out alias);
+            string alias = await RuntimeDataStorage.Instance.CharacterManager.GetPlayerAliasByDBID(entry.gt);
             _aliasText.text = alias;
             _rankText.text = entry.rank.ToString("000");
             _scoreText.text = entry.score.ToString("000");
-            
+
             // Load icon
             await LoadIconForDbid(entry.gt);
-         
         }
 
-        
         private async Task<EmptyResponse> LoadIconForDbid(long dbid)
         {
             TweenHelper.ImageDoFade(_iconImage, 0, 0, 0, 0); //temporarily hide icon
@@ -72,7 +67,7 @@ namespace Beamable.Samples.KOR.UI
 
             if (chosenCharacterByDbid == null)
             {
-               Configuration.Debugger.Log($"No CharacterContentObject for {dbid}.");
+                Configuration.Debugger.Log($"No CharacterContentObject for {dbid}.");
             }
             else
             {
@@ -81,13 +76,12 @@ namespace Beamable.Samples.KOR.UI
 
                 asyncOperationHandle.Completed += AsyncOperationHandle_OnCompleted;
             }
-      
+
             return new EmptyResponse();
         }
 
-
         //  Event Handlers  ---------------------------------
-        public void AsyncOperationHandle_OnCompleted (AsyncOperationHandle<Texture2D> asyncOperationHandle)
+        public void AsyncOperationHandle_OnCompleted(AsyncOperationHandle<Texture2D> asyncOperationHandle)
         {
             Texture2D texture2D = asyncOperationHandle.Result;
             _iconImage.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height),
