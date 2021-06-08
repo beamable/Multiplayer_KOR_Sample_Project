@@ -48,10 +48,9 @@ namespace Beamable.Samples.KOR.Behaviours
          power = math.pow(power, (sfloat) PowerGrowthExp);
          var minPower = (sfloat) MinPower;
          var maxPower = (sfloat) MaxPower;
-         if (power < minPower)
-         {
-            power = minPower;
-         } else if (power > maxPower)
+
+         power += minPower;
+         if (power > maxPower)
          {
             power = maxPower;
          }

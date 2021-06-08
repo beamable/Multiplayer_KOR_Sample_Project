@@ -8,6 +8,7 @@ using UnityS.Physics.Systems;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
+   [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
    [UpdateAfter(typeof(EndFramePhysicsSystem))]
    public class PlayerBounceSystem : JobComponentSystem
    {
@@ -23,6 +24,12 @@ namespace Beamable.Samples.KOR.Multiplayer
 
       protected override JobHandle OnUpdate(JobHandle inputDeps)
       {
+         if (!NetworkController.NetworkInitialized)
+         {
+            return default;
+         }
+
+
          var job = new PlayerBounceSystemJob();
          job.bouncyGroup = GetComponentDataFromEntity<BouncyTag>(true);
          job.impulseGroup = GetComponentDataFromEntity<PhysicsImpulse>();
@@ -57,6 +64,8 @@ namespace Beamable.Samples.KOR.Multiplayer
             var aHasImpulse = impulseGroup.HasComponent(a);
             var bHasImpulse = impulseGroup.HasComponent(b);
 
+            if (aIsBouncy && bIsBouncy) return; // don't do anything, because I can't figure out how correctly handle it yet...
+
             if (aIsBouncy && bHasImpulse)
             {
                // apply an explosion impulse to b.
@@ -73,16 +82,6 @@ namespace Beamable.Samples.KOR.Multiplayer
                impulseGroup[a] = aImpulse;
             }
 
-            // if (aIsBouncy && bHasImpluse && bIsBouncy && aHasImpulse)
-            // {
-            //    // apply an explosion impulse to both a and b.
-            //    var aImpulse = impulseGroup[a];
-            //    aImpulse.Impulse = collisionEvent.Normal * 10;
-            //    impulseGroup[a] = aImpulse;
-            //    var bImpulse = impulseGroup[b];
-            //    bImpulse.Impulse = collisionEvent.Normal * 10;
-            //    impulseGroup[b] = bImpulse;
-            // }
          }
       }
    }
