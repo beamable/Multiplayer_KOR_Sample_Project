@@ -96,10 +96,6 @@ namespace Beamable.Samples.KOR.Multiplayer
          // throw new NotImplementedException();
       }
 
-      private void Awake()
-      {
-         Debug.Log($"CONVERTABLE AWAKE {name} {_x} / {_y} / {_z}");
-      }
 
 #if UNITY_EDITOR
       private void Update()

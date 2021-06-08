@@ -88,6 +88,7 @@ namespace Beamable.Samples.KOR.Behaviours
 
       void OnNetworkUpdate(TimeUpdate timeUpdate)
       {
+
          var tick = (long) (timeUpdate.ElapsedTime * NetworkController.NetworkFramesPerSecond);
          foreach (var message in timeUpdate.Events)
          {
@@ -107,6 +108,9 @@ namespace Beamable.Samples.KOR.Behaviours
                case PlayerMoveEndEvent evt:
                   if (startEvt == null) break; // can't move without start event...
 
+                  Debug.Log("MOVE END RECEIVED: " + timeUpdate.Tick + " / " + timeUpdate.Events.Count);
+
+
                   var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
                   SetDirection(evt.dirX, evt.dirY);
@@ -118,6 +122,17 @@ namespace Beamable.Samples.KOR.Behaviours
                   var power = GetPowerForDeltaTime(deltaTime);
                   var speed =  power / mass.InverseMass;
 
+
+                  if (direction.x.IsNaN() || magnitude.IsNaN() || deltaTime.IsNaN() || speed.IsNaN())
+                  {
+                     Debug.Log("There was a NaN movement tick. Reseting to zero");
+                     magnitude = sfloat.Zero;
+                     direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
+                     deltaTime = sfloat.Zero;
+                     startEvt = null;
+                     break;
+                  }
+
                   entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
                   {
                      Impulse = direction * magnitude * speed
@@ -128,7 +143,7 @@ namespace Beamable.Samples.KOR.Behaviours
                   break;
 
                case PlayerMoveStartedEvent moveEvt:
-                  Debug.Log("MOVE EVENT RECEIVED: " + moveEvt.dirX);
+                  Debug.Log("MOVE EVENT RECEIVED: " + timeUpdate.Tick+ " / " + timeUpdate.Events.Count);
                   startEvt = moveEvt;
                   // TODO: throw some visualizations here....
 

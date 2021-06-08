@@ -1,7 +1,5 @@
-using System;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.KOR.Multiplayer;
-using Unity.Entities;
 using UnityEngine;
 using UnityS.Mathematics;
 using UnityS.Transforms;
@@ -19,9 +17,9 @@ namespace Beamable.Samples.KOR.Behaviours
    {
       public ConvertToNetworkedPhysics NetworkedPhysics;
 
-      public float Frequency = 1;
-      public float Amplitude = 1;
-      public float Offset = 0;
+      public sfloat Frequency;
+      public sfloat Amplitude;
+      public sfloat Offset;
       public bool UseAbs = false;
       public bool FlipY = false;
 
@@ -45,10 +43,10 @@ namespace Beamable.Samples.KOR.Behaviours
             _startingPosition = translation.Value;
          }
 
-         var freq = (sfloat) Frequency;
-         var amp = (sfloat) Amplitude;
-         var t = (sfloat) (update.ElapsedTime * 6.28f);
-         var offset = (sfloat) Offset;
+         var freq = Frequency;
+         var amp = Amplitude;
+         var t =  ((sfloat)update.ElapsedTime * math.TWO_PI);
+         var offset = Offset;
 
          var rise = amp * math.sin(t * freq + offset);
          if (UseAbs)
