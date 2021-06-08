@@ -72,10 +72,10 @@ namespace Beamable.Samples.KOR.Data
                         MockDataCreator.SetCurrentUserAlias(statsService, alias);
 
                         // Add Character to NEW user
-                        List<CharacterContentObject> characterContentObjects =
-                           RuntimeDataStorage.Instance.CharacterManager.AllCharacterContentObjects;
-                        int randomIndex = UnityEngine.Random.Range(0, characterContentObjects.Count);
-                        await MockDataCreator.SetCurrentUserCharacterObject(characterContentObjects[randomIndex]);
+                        List<CharacterManager.Character> characters =
+                           RuntimeDataStorage.Instance.CharacterManager.AllCharacters;
+                        int randomIndex = UnityEngine.Random.Range(0, characters.Count);
+                        await MockDataCreator.SetCurrentUserCharacterObject(characters[randomIndex]);
 
                         // Submit mock score for NEW user
                         double mockScore = UnityEngine.Random.Range(leaderboardMockScoreMin,
@@ -126,9 +126,9 @@ namespace Beamable.Samples.KOR.Data
         /// <param name="statsService"></param>
         /// <param name="characterContentObject"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private static async Task<EmptyResponse> SetCurrentUserCharacterObject(CharacterContentObject characterContentObject)
+        private static async Task<EmptyResponse> SetCurrentUserCharacterObject(CharacterManager.Character character)
         {
-            return await RuntimeDataStorage.Instance.CharacterManager.ChooseCharacter(characterContentObject);
+            return await RuntimeDataStorage.Instance.CharacterManager.ChooseCharacter(character);
         }
 
         /// <summary>
