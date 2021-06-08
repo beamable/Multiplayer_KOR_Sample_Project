@@ -223,14 +223,14 @@ namespace Beamable.Samples.KOR
       
       private void BuyButton_OnClicked()
       {
-         KORHelper.PlayAudioForUIClick();
+         KORHelper.PlayAudioForUIClickPrimary();
 
          BuySelectedStoreItem();
       }
 
       private void ResetButton_OnClicked()
       {
-         KORHelper.PlayAudioForUIClick();
+         KORHelper.PlayAudioForUIClickPrimary();
 
          Configuration.Debugger.Log(
             "Reset! This deletes the local player, " +
@@ -243,7 +243,7 @@ namespace Beamable.Samples.KOR
       
       private void BackButton_OnClicked()
       {
-         KORHelper.PlayAudioForUIClick();
+         KORHelper.PlayAudioForUIClickPrimary();
          
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));

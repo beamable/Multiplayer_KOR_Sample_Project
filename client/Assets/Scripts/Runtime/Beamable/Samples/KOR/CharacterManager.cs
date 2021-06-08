@@ -1,34 +1,49 @@
-using Beamable.Api.Stats;
 using Beamable.Common;
 using Beamable.Common.Api;
+using Beamable.Common.Api.Inventory;
 using Beamable.Common.Content;
-using Beamable.Samples.Core;
+using Beamable.Core.Debugging;
 using Beamable.Samples.KOR.CustomContent;
+using Beamable.Samples.KOR.Data;
+using Beamable.Samples.KOR.Views;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Beamable.Common.Api.Inventory;
-using Beamable.Core.Debugging;
-using Beamable.Samples.KOR.Data;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Beamable.Samples.KOR
 {
     public class CharacterManager
     {
-        private IBeamableAPI _beamableAPI = null;
-        private List<CharacterContentObject> _allCharacterContentObjects = null;
-        private Dictionary<string, CharacterContentObject> _mapCharacterObjectNameToContent = new Dictionary<string, CharacterContentObject>();
+        public class Character
+        {
+            public Character(CharacterContentObject characterContentObject, AvatarView avatarView)
+            {
+                CharacterContentObject = characterContentObject;
+                AvatarViewPrefab = avatarView;
+            }
+
+            public CharacterContentObject CharacterContentObject { get; }
+            public AvatarView AvatarViewPrefab { get; }
+        }
+
         public const string ChosenCharacterStatKey = "ChosenCharacterContentID";
         public const string PlayerAliasStatKey = "alias";
         public const string DefaultPlayerAliasPrefix = "Player";
-        private CharacterContentObject _currentlyChosenCharacter = null;
 
-        public List<CharacterContentObject> AllCharacterContentObjects { get { return _allCharacterContentObjects; } }
+        private List<Character> _allCharacters = null;
 
-        public CharacterContentObject CurrentlyChosenCharacter { get { return _currentlyChosenCharacter; } }
+        private IBeamableAPI _beamableAPI = null;
+
+        private Dictionary<string, CharacterContentObject> _mapCharacterObjectNameToContent = new Dictionary<string, CharacterContentObject>();
+        private Character _currentlyChosenCharacter = null;
+
+        public List<Character> AllCharacters { get { return _allCharacters; } }
+
+        public Character CurrentlyChosenCharacter { get { return _currentlyChosenCharacter; } }
 
         public event Action OnChoiceHasBeenMade;
 
@@ -41,30 +56,38 @@ namespace Beamable.Samples.KOR
         {
             _beamableAPI = await Beamable.API.Instance;
 
-            _allCharacterContentObjects = await GetAllCharacterContentObjects();
+            List<CharacterContentObject> allCCOs = await GetAllCharacterContentObjects();
 
-            if (_allCharacterContentObjects.Count == 0)
+            if (allCCOs.Count == 0)
             {
                 Debug.LogError("No characters found in manifest. Did you forget to add some? This will break.");
                 return;
             }
 
-            foreach (var cco in _allCharacterContentObjects)
+            _allCharacters = new List<Character>();
+
+            foreach (var cco in allCCOs)
             {
                 Configuration.Debugger.Log($"CharacterContentObject name={cco.ContentName} " +
-                                           $"type={cco.ContentType} id={cco.Id} something={cco.ReadableName}",
+                                           $"type={cco.ContentType} id={cco.Id} readable name={cco.ReadableName}",
                     DebugLogLevel.Verbose);
 
+                GameObject viewPrefab = await Addressables.LoadAssetAsync<GameObject>(cco.avatarViewPrefab).Task;
+                AvatarView view = viewPrefab.GetComponent<AvatarView>();
+
+                Character newCharacter = new Character(cco, view);
+
+                _allCharacters.Add(newCharacter);
                 _mapCharacterObjectNameToContent.Add(cco.ContentName, cco);
             }
 
             CharacterContentObject chosenCCO = await GetChosenCharacterByDBID(_beamableAPI.User.id);
 
             if (chosenCCO == null)
-                await ChooseCharacter(_allCharacterContentObjects[0]);
+                await ChooseCharacter(_allCharacters[0]);
             else
             {
-                _currentlyChosenCharacter = chosenCCO;
+                _currentlyChosenCharacter = _allCharacters.Where(c => c.CharacterContentObject == chosenCCO).FirstOrDefault();
                 OnChoiceHasBeenMade?.Invoke();
             }
         }
@@ -113,16 +136,16 @@ namespace Beamable.Samples.KOR
 
         public int GetChosenCharacterIndex()
         {
-            if (_allCharacterContentObjects == null || _currentlyChosenCharacter == null)
+            if (_allCharacters == null || _currentlyChosenCharacter == null)
                 return -1;
 
-            return _allCharacterContentObjects.IndexOf(_currentlyChosenCharacter);
+            return _allCharacters.IndexOf(_allCharacters.Where(c => c.CharacterContentObject == _currentlyChosenCharacter.CharacterContentObject).FirstOrDefault());
         }
 
-        public async Task<EmptyResponse> ChooseCharacter(CharacterContentObject newlyChosenCharacter)
+        public async Task<EmptyResponse> ChooseCharacter(Character newlyChosenCharacter)
         {
             _currentlyChosenCharacter = newlyChosenCharacter;
-            await SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.ContentName);
+            await SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.CharacterContentObject.ContentName);
             OnChoiceHasBeenMade?.Invoke();
 
             return null;

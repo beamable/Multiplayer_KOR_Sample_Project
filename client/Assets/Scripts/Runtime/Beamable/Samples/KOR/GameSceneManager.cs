@@ -210,7 +210,7 @@ namespace Beamable.Samples.KOR
       //  Event Handlers -------------------------------
       private void BackButton_OnClicked()
       {
-         KORHelper.PlayAudioForUIClick();
+         KORHelper.PlayAudioForUIClickPrimary();
 
          // Clean up manager
          _dbidToAvatar.Clear();
