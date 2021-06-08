@@ -51,8 +51,8 @@ namespace Beamable.Samples.KOR.Behaviours
             targetDirection = Input.direction;
          }
 
+         targetDirection = targetDirection.normalized;
          actualDirection = Vector3.SmoothDamp(actualDirection, targetDirection, ref directionVelocity, .1f, 5);
-
          Avatar.Model.transform.rotation = Quaternion.AngleAxis( 90 + Mathf.Rad2Deg * -Mathf.Atan2(actualDirection.z, actualDirection.x), Vector3.up);
 
 
