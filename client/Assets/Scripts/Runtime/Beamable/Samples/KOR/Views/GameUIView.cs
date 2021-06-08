@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Beamable.Samples.KOR.Animation;
-using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +12,7 @@ namespace Beamable.Samples.KOR.Views
    public class GameUIView : BaseUIView
    {
       //  Properties -----------------------------------
+      public AttributesPanelUI AttributesPanelUI { get { return _attributesPanelUI; } }
       public RingView RingView { get { return _ringView; } }
       public Button BackButton { get { return _backButton; } }
 
@@ -22,6 +21,9 @@ namespace Beamable.Samples.KOR.Views
       public List<AvatarUIView> AvatarUIViews { get { return _avatarUIViews; } }
 
       //  Fields ---------------------------------------
+      [SerializeField]
+      private AttributesPanelUI _attributesPanelUI = null;
+
       [SerializeField]
       private TMP_BufferedText _bufferedText = null;
 

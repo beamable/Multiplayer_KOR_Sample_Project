@@ -5,9 +5,10 @@
    /// </summary>
    public static class KORConstants
    {
+      //  Consts ---------------------------------------
+      public const string ItemContentType = "items";
+      public const string CurrencyContentType = "currency";
       
-      //  Fields ---------------------------------------
-
       /// <summary>
       /// Used as a 'null' value.
       /// </summary>
@@ -32,5 +33,6 @@
       public const string StoreUIView_Loading_Inventory = "Loading Inventory ...";
       public const string StoreUIView_Instructions = "You have {0} {1}s. Select item and 'Buy'!";
       public const string StoreUIView_CurrencyName = "Coin";
+      public static string Player_Attributes = "C:{0:000} M:{1:000}";
    }
 }

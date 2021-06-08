@@ -186,5 +186,12 @@ namespace Beamable.Samples.KOR
             return $"Scene '{sceneName}' loaded indirectly per production.";
          }
       }
+
+      public static string GetKORItemDisplayNameFromContentId(string contentId)
+      {
+         //Change "items.KORItems.Blah" to "Blah"
+         var tokens = contentId.Split('.');
+         return tokens[tokens.Length - 1];
+      }
    }
 }

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Beamable.Samples.KOR.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ namespace Beamable.Samples.KOR.Views
     {
         //  Properties -----------------------------------
         public string AboutBodyText { set { _aboutBodyText.text = value; } }
+        public AttributesPanelUI AttributesPanelUI { get { return _attributesPanelUI; } }
 
         public Texture2D CharacterImage { set { _characterImage.texture = value; } }
 
@@ -25,8 +27,13 @@ namespace Beamable.Samples.KOR.Views
         public Button QuitButton { get { return _quitButton; } }
         public CanvasGroup ButtonsCanvasGroup { get { return _buttonsCanvasGroup; } }
 
+        public TMP_InputField PlayerAliasInputField { get { return _playerAliasInputField; } }
+
         //  Fields ---------------------------------------
         [Header("UI")]
+        [SerializeField]
+        private AttributesPanelUI _attributesPanelUI = null;
+        
         [SerializeField]
         private TMP_Text _characterInfoText = null;
 
@@ -59,6 +66,9 @@ namespace Beamable.Samples.KOR.Views
 
         [SerializeField]
         private RawImage _characterImage = null;
+
+        [SerializeField]
+        private TMP_InputField _playerAliasInputField = null;
 
         //  Unity Methods   ------------------------------
         public void Awake()
