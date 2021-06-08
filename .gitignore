@@ -72,3 +72,4 @@ config-defaults.txt.meta
 /client/Assets/Beamable/Resources/
 /client/Assets/Beamable/Resources.meta
 client/UserSettings/EditorUserSettings.asset
+client/UserSettings/EditorUserSettings.asset

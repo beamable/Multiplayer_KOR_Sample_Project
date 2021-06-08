@@ -496,9 +496,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 303918780}
-  Frequency: 0.2
-  Amplitude: 8
-  Offset: 0.3
+  Frequency:
+    rawValue: 0
+  Amplitude:
+    rawValue: 0
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 1
 --- !u!114 &303918780
@@ -644,9 +647,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 338652164}
-  Frequency: 0.2
-  Amplitude: 8
-  Offset: 0.2
+  Frequency:
+    rawValue: 0
+  Amplitude:
+    rawValue: 0
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 1
 --- !u!114 &338652164
@@ -1021,9 +1027,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 552652039}
-  Frequency: 0.4
-  Amplitude: 4
-  Offset: 1.57
+  Frequency:
+    rawValue: 1045220557
+  Amplitude:
+    rawValue: 1090519040
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 0
 --- !u!1 &553128063
@@ -1598,7 +1607,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060777083}
-  m_LocalRotation: {x: 0.59424776, y: -0.000000025511483, z: 0.000000018849281, w: 0.80428207}
+  m_LocalRotation: {x: 0.59424776, y: -0.000000026653339, z: 0.000000019692951, w: 0.80428207}
   m_LocalPosition: {x: 0.01, y: 22.81, z: -6.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2022,9 +2031,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 1475587239}
-  Frequency: 0.2
-  Amplitude: 8
-  Offset: 0
+  Frequency:
+    rawValue: 0
+  Amplitude:
+    rawValue: 0
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 1
 --- !u!114 &1475587239
@@ -2267,7 +2279,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1617702623}
-  m_LocalRotation: {x: 0.59424776, y: -0.000000025511483, z: 0.000000018849281, w: 0.80428207}
+  m_LocalRotation: {x: 0.59424776, y: -0.000000026653339, z: 0.000000019692951, w: 0.80428207}
   m_LocalPosition: {x: 0.01, y: 22.81, z: -6.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2500,9 +2512,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 1806804391}
-  Frequency: 0.4
-  Amplitude: 4
-  Offset: 0
+  Frequency:
+    rawValue: 1045220557
+  Amplitude:
+    rawValue: 1090519040
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 0
 --- !u!1 &1838576818
@@ -2648,9 +2663,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 1838576820}
-  Frequency: 0.4
-  Amplitude: 4
-  Offset: 0.785
+  Frequency:
+    rawValue: 1045220557
+  Amplitude:
+    rawValue: 1090519040
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 0
 --- !u!1 &1862949970
@@ -2827,9 +2845,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 1976303292}
-  Frequency: 0.2
-  Amplitude: 8
-  Offset: 0.1
+  Frequency:
+    rawValue: 0
+  Amplitude:
+    rawValue: 0
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 1
 --- !u!114 &1976303292
