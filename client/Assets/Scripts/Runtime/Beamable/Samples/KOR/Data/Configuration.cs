@@ -71,7 +71,10 @@ namespace Beamable.Samples.KOR.Data
       /// </summary>
       public float StatusMessageMinDuration { get { return _statusMessageMinDuration; } }
 
-      public Color CameraBackgroundColor { get { return _cameraBackgroundColor; } }
+      public Material CameraSkyboxMaterial { get { return _cameraSkyboxMaterial; } }
+      public float CameraSkyboxRotationSpeed { get { return _cameraSkyboxRotationSpeed; } }
+      
+      public bool IsRotatingCameraSkybox { get { return _isRotatingCameraSkybox; } }
 
       //  Fields ---------------------------------------
 
@@ -130,8 +133,14 @@ namespace Beamable.Samples.KOR.Data
       [SerializeField]
       private AvatarData _remoteAvatar;
 
+      [SerializeField] 
+      private Material _cameraSkyboxMaterial = null;
+
       [SerializeField]
-      private Color _cameraBackgroundColor = Color.white;
+      private bool _isRotatingCameraSkybox = false;
+
+      [SerializeField]
+      private float _cameraSkyboxRotationSpeed = 1;
 
       [Header("Cosmetic Delays")]
       [SerializeField]

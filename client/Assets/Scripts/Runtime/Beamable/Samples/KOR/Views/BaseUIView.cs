@@ -39,9 +39,18 @@ namespace Beamable.Samples.KOR.Views
             return;
          }
          
-         if (_camera.backgroundColor != _configuration.CameraBackgroundColor)
+         if (RenderSettings.skybox != _configuration.CameraSkyboxMaterial)
          {
-            _camera.backgroundColor = _configuration.CameraBackgroundColor;
+            RenderSettings.skybox = _configuration.CameraSkyboxMaterial;
+         }
+      }
+      
+      protected void Update()
+      {
+         if (_configuration.IsRotatingCameraSkybox)
+         {
+            RenderSettings.skybox.SetFloat("_Rotation", 
+               Time.time *  _configuration.CameraSkyboxRotationSpeed);
          }
       }
       
