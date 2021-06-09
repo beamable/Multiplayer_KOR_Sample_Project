@@ -18,9 +18,11 @@ MonoBehaviour:
     m_AssetGUID: 4668c6355c5039a49a88c09c9542516d
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   bigIcon:
     m_AssetGUID: 87b9a19d7b14dcf4d8f12216ef1f102b
     m_SubObjectName: 
     m_SubObjectType: 
+    m_EditorAssetChanged: 0
   MovementSpeed: 120
   ChargeSpeed: 80
