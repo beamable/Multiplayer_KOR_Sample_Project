@@ -32,7 +32,7 @@ namespace Beamable.Samples.KOR
       /// </summary>
       public static void PlayAudioForUIClickPrimary()
       {
-         SoundManager.Instance.PlayAudioClip(SoundConstants.Chime01);
+         SoundManager.Instance.PlayAudioClip(SoundConstants.Chime02);
       }
       
       /// <summary>
