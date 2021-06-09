@@ -122,13 +122,12 @@ namespace Beamable.Samples.KOR
             // TODO: Spawn the HUD from player join messages...
             for (int i = 0; i < 5; i++)
             {
-                // AvatarData avatarData = _configuration.AvatarDatas[i];
                 // TODO: Spawn Avatars according to chosen character per DBID
                 // For now, just use a fixed prefab for everyone.
                 // TODO: Only show HUD for players that are actually in the game.
                 _gameUIView.AvatarUIViews[i].AvatarData = _configuration.LocalAvatar;
                 _gameUIView.AvatarUIViews[i].Health = 100;
-                _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.MinPlayerCount;
+                _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.CurrentPlayerCount;
                 _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
                 _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
                 _gameUIView.AvatarUIViews[i].Render();
