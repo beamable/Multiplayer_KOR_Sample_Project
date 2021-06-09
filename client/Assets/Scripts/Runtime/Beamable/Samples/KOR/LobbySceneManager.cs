@@ -16,7 +16,7 @@ namespace Beamable.Samples.KOR
    {
       //  Events ---------------------------------------
       private Action _onDestroy;
-      
+
       //  Fields ---------------------------------------
       [SerializeField]
       private Configuration _configuration = null;
@@ -31,10 +31,10 @@ namespace Beamable.Samples.KOR
       protected void Start()
       {
          _lobbyUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
-         
+
          _lobbyUIView.BufferedText.SetText("",
             TMP_BufferedText.BufferedTextMode.Immediate);
-         
+
          MyKorMatchmakingOnProgress(null);
 
          SetupBeamable();
@@ -45,7 +45,7 @@ namespace Beamable.Samples.KOR
       {
          _onDestroy?.Invoke();
       }
-      
+
 
       //  Other Methods   ------------------------------
       private void DebugLog(string message)
@@ -53,14 +53,14 @@ namespace Beamable.Samples.KOR
          // Respects Configuration.IsDebugLog Checkbox
          Configuration.Debugger.Log(message);
       }
-      
+
       private async void SetupBeamable()
       {
          _beamableAPI = await Beamable.API.Instance;
-         
+
          // Do this after calling "Beamable.API.Instance" for smoother UI
          _lobbyUIView.CanvasGroupsDoFadeIn();
-         
+
          // Set defaults if scene was loaded directly
          if (RuntimeDataStorage.Instance.TargetPlayerCount == KORConstants.UnsetValue)
          {
@@ -81,14 +81,14 @@ namespace Beamable.Samples.KOR
          {
             RuntimeDataStorage.Instance.ActiveSimGameType = await _configuration.SimGameType02Ref.Resolve();
          }
-         
+
          RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
-         
+
          // Do matchmaking
          _korMatchmaking = new KORMatchmaking(_beamableAPI.Experimental.MatchmakingService,
             RuntimeDataStorage.Instance.ActiveSimGameType,
             _beamableAPI.User.id);
-         
+
          _korMatchmaking.OnProgress += MyKorMatchmakingOnProgress;
          _korMatchmaking.OnComplete += MyKorMatchmakingOnComplete;
          _onDestroy = _korMatchmaking.Stop;
@@ -105,25 +105,25 @@ namespace Beamable.Samples.KOR
       }
 
       //  Event Handlers -------------------------------
-      
+
       private void BackButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClickPrimary();
-         
+
          _korMatchmaking?.Stop();
 
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }
 
-      
+
       private void MyKorMatchmakingOnProgress(MyMatchmakingResult result)
       {
          int currentPlayersCount = 0;
          int targetPlayerCount = 0;
          int secondsRemaining = 0;
          string roomId = "0";
-         
+
          if (result != null)
          {
             currentPlayersCount = result.CurrentPlayerDbidList.Count;
@@ -131,10 +131,10 @@ namespace Beamable.Samples.KOR
             roomId = result.RoomId;
             secondsRemaining = result.SecondsRemaining;
          }
-         
+
          DebugLog($"MyMatchmaking_OnProgress() ...\n " +
                   $"Players={currentPlayersCount}/{targetPlayerCount}, " +
-                  $"SecondsRemaining = {secondsRemaining}, " + 
+                  $"SecondsRemaining = {secondsRemaining}, " +
                   $"RoomId={roomId}");
 
          string text = string.Format(KORConstants.LobbyUIView_Joining,
@@ -166,6 +166,8 @@ namespace Beamable.Samples.KOR
             RuntimeDataStorage.Instance.CurrentPlayerCount = result.CurrentPlayerDbidList.Count;
             RuntimeDataStorage.Instance.RoomId = result.RoomId;
 
+
+
             StartCoroutine(LoadScene_Coroutine());
 
          }
@@ -175,7 +177,7 @@ namespace Beamable.Samples.KOR
          }
       }
 
-      
+
       private IEnumerator LoadScene_Coroutine()
       {
          //Wait for old messages to pass before changing scenes

@@ -66,7 +66,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       //  Properties  -------------------------------------
       public MyMatchmakingResult MyMatchmakingResult { get { return _myMatchmakingResult; } }
-      
+
       //  Fields  -----------------------------------------
       public const string DefaultRoomId = "DefaultRoom";
       public const int Delay = 1000;
@@ -127,6 +127,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
                _myMatchmakingResult.SecondsRemaining = (int) (estimatedCompletionTime - Time.realtimeSinceStartup);
                _myMatchmakingResult.CurrentPlayerDbidList = handle.Status.Players;
                _myMatchmakingResult.RoomId = handle.Status.GameId;
+
                OnProgress?.Invoke(_myMatchmakingResult);
                await Task.Delay(1000, token);
             } while (handle.State == MatchmakingState.Searching);
