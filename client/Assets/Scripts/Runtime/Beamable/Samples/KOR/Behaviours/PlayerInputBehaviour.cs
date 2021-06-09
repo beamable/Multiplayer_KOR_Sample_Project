@@ -37,6 +37,9 @@ namespace Beamable.Samples.KOR.Behaviours
       [ReadOnly]
       public long sentOnTick;
 
+      [ReadOnly]
+      public sfloat startedTime;
+
       private void OnDrawGizmos()
       {
          if (!isPowering) return;
@@ -80,6 +83,7 @@ namespace Beamable.Samples.KOR.Behaviours
          var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
          if (!Physics.Raycast(ray, out var hit, CollisionMask.value)) return;
 
+         var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
 
 
          direction = (hit.point - transform.position).normalized;
@@ -90,23 +94,25 @@ namespace Beamable.Samples.KOR.Behaviours
          {
             // AvatarView.PlayAnimationAttack01();
             startedPoweringAt = World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
-            var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = true;
+            startedTime = time;
             NetworkController.Instance.SendNetworkMessage(new PlayerMoveStartedEvent(time, direction));
             sentOnTick = NetworkController.HighestSeenNetworkFrame;
-         } else if (Input.GetMouseButtonUp(0))
+         } else if (isPowering && !Input.GetMouseButton(0))
          {
-
+            var dt = time - startedTime;
+            if (dt < (sfloat) .01f)
+            {
+               return;
+            }
             AvatarView.PlayAnimationAttack01(); // TODO: How to get other players to play the animation before they move?
 
-            var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = false;
             NetworkController.Instance.SendNetworkMessage(new PlayerMoveEndEvent(time, direction));
             sentOnTick = NetworkController.HighestSeenNetworkFrame;
          } else if (isPowering && sentOnTick != NetworkController.HighestSeenNetworkFrame)
          {
             // we only need to send one message per tick...
-            var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             NetworkController.Instance.SendNetworkMessage(new PlayerMoveProgressEvent(time, direction));
             sentOnTick = NetworkController.HighestSeenNetworkFrame;
          }

@@ -1,4 +1,3 @@
-using System;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Multiplayer;
@@ -8,8 +7,6 @@ using Unity.Entities;
 using UnityEngine;
 using UnityS.Mathematics;
 using UnityS.Physics;
-using UnityS.Physics.Extensions;
-using UnityS.Transforms;
 
 namespace Beamable.Samples.KOR.Behaviours
 {
@@ -32,7 +29,6 @@ namespace Beamable.Samples.KOR.Behaviours
       [ReadOnly] public PlayerMoveStartedEvent startEvt;
 
       public float3 direction;
-      public sfloat deltaTime;
       public sfloat magnitude;
 
       private void Start()
@@ -75,18 +71,17 @@ namespace Beamable.Samples.KOR.Behaviours
          direction = math.normalize(dir);
       }
 
-      private void SetDeltaTime(uint time)
+      private sfloat GetDeltaTime(uint time)
       {
          var startTime = sfloat.FromRaw(startEvt.startTime);
          var endTime = sfloat.FromRaw(time);
 
-         deltaTime = endTime - startTime;
+         var deltaTime = endTime - startTime;
+         return deltaTime;
       }
 
       private void OnNetworkUpdate(TimeUpdate timeUpdate)
       {
-
-         var tick = (long) (timeUpdate.ElapsedTime * NetworkController.NetworkFramesPerSecond);
          foreach (var message in timeUpdate.Events)
          {
             if (message.PlayerDbid != AvatarView.playerDbid)
@@ -97,7 +92,7 @@ namespace Beamable.Samples.KOR.Behaviours
                   if (startEvt == null) break; // can't move without start event...
 
                   SetDirection(progressEvt.dirX, progressEvt.dirY);
-                  SetDeltaTime(progressEvt.endTime);
+                  var deltaTime = GetDeltaTime(progressEvt.endTime);
 
                   PreviewBehaviour?.Set(true, new Vector3((float) direction.x, 0, (float) direction.z),
                      (float) GetPowerRatioForDeltaTime(deltaTime));
@@ -105,6 +100,14 @@ namespace Beamable.Samples.KOR.Behaviours
 
                case PlayerMoveEndEvent evt:
                   // start playing animation right away...
+                  if (startEvt == null) break; // can't move without start event...
+
+                  var dt = GetDeltaTime(evt.endTime);
+                  if (dt < (sfloat).01f)
+                  {
+                     return; // not long enough for anything...
+                  }
+
                   var isLocal = AvatarView.playerDbid == NetworkController.Instance.LocalDbid;
                   if (!isLocal)
                   {
@@ -122,29 +125,23 @@ namespace Beamable.Samples.KOR.Behaviours
 
                   timeUpdate.ScheduleAction(paddedDelayInTicks, () =>
                   {
-                     HandleMotionEndEvent(evt);
+                     HandleMotionEndEvent(dt, evt);
                   });
                   break;
 
                case PlayerMoveStartedEvent moveEvt:
                   startEvt = moveEvt;
-                  // TODO: throw some visualizations here....
-                  break;
-               default:
                   break;
             }
          }
       }
 
-      private void HandleMotionEndEvent(PlayerMoveEndEvent evt)
+      private void HandleMotionEndEvent(sfloat deltaTime, PlayerMoveEndEvent evt)
       {
-         if (startEvt == null) return; // can't move without start event...
 
          var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
          SetDirection(evt.dirX, evt.dirY);
-         SetDeltaTime(evt.endTime);
-         startEvt = null;
 
          var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
             .Entity);
@@ -157,14 +154,8 @@ namespace Beamable.Samples.KOR.Behaviours
             Debug.Log("There was a NaN movement tick. Reseting to zero");
             magnitude = sfloat.Zero;
             direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
-            deltaTime = sfloat.Zero;
             return;
          }
-
-         entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
-         {
-            Impulse = direction * magnitude * speed
-         });
 
          entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
          {
