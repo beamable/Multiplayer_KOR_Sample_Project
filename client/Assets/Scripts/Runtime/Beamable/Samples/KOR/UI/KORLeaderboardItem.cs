@@ -62,19 +62,25 @@ namespace Beamable.Samples.KOR.UI
         private async Task<EmptyResponse> LoadIconForDbid(long dbid)
         {
             TweenHelper.ImageDoFade(_iconImage, 0, 0, 0, 0); //temporarily hide icon
-            CharacterContentObject chosenCharacterByDbid = (await
-                RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(dbid)).CharacterContentObject;
+
+            CharacterManager.Character character = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(dbid);
+            
+            if (character == null)
+            {
+                Configuration.Debugger.Log($"No character for {dbid}.");
+                return new EmptyResponse();
+            }
+            
+            CharacterContentObject chosenCharacterByDbid = character.CharacterContentObject;
 
             if (chosenCharacterByDbid == null)
             {
                 Configuration.Debugger.Log($"No CharacterContentObject for {dbid}.");
+                return new EmptyResponse();
             }
-            else
-            {
-                //Hide image, load texture, show image
-                KORHelper.AddressablesLoadAssetAsync<Texture2D>(chosenCharacterByDbid.bigIcon, _iconImage);
-            }
-
+            
+            //Hide image, load texture, show image
+            KORHelper.AddressablesLoadAssetAsync<Texture2D>(chosenCharacterByDbid.bigIcon, _iconImage);
             return new EmptyResponse();
         }
 
