@@ -18,18 +18,6 @@ namespace Beamable.Samples.KOR
 {
     public class CharacterManager
     {
-        public class Character
-        {
-            public Character(CharacterContentObject characterContentObject, AvatarView avatarView)
-            {
-                CharacterContentObject = characterContentObject;
-                AvatarViewPrefab = avatarView;
-            }
-
-            public CharacterContentObject CharacterContentObject { get; }
-            public AvatarView AvatarViewPrefab { get; }
-        }
-
         public const string ChosenCharacterStatKey = "ChosenCharacterContentID";
         public const string PlayerAliasStatKey = "alias";
         public const string DefaultPlayerAliasPrefix = "Player";
@@ -39,58 +27,35 @@ namespace Beamable.Samples.KOR
         private IBeamableAPI _beamableAPI = null;
 
         private Dictionary<string, Character> _mapCharacterObjectNameToCharacter = new Dictionary<string, Character>();
+
         private Character _currentlyChosenCharacter = null;
+
+        private Task _bootstrapTask = null;
+
+        public event Action OnChoiceHasBeenMade;
 
         public List<Character> AllCharacters { get { return _allCharacters; } }
 
         public Character CurrentlyChosenCharacter { get { return _currentlyChosenCharacter; } }
 
-        public event Action OnChoiceHasBeenMade;
+        public Task BootstrapTask { get { return _bootstrapTask; } }
+
+        public class Character
+        {
+            public CharacterContentObject CharacterContentObject { get; }
+
+            public AvatarView AvatarViewPrefab { get; }
+
+            public Character(CharacterContentObject characterContentObject, AvatarView avatarView)
+            {
+                CharacterContentObject = characterContentObject;
+                AvatarViewPrefab = avatarView;
+            }
+        }
 
         public CharacterManager()
         {
-            SetupBeamable();
-        }
-
-        private async void SetupBeamable()
-        {
-            _beamableAPI = await Beamable.API.Instance;
-
-            List<CharacterContentObject> allCCOs = await GetAllCharacterContentObjects();
-
-            if (allCCOs.Count == 0)
-            {
-                Debug.LogError("No characters found in manifest. Did you forget to add some? This will break.");
-                return;
-            }
-
-            _allCharacters = new List<Character>();
-
-            foreach (var cco in allCCOs)
-            {
-                Configuration.Debugger.Log($"CharacterContentObject name={cco.ContentName} " +
-                                           $"type={cco.ContentType} id={cco.Id} readable name={cco.ReadableName}",
-                    DebugLogLevel.Verbose);
-
-                // GameObject viewPrefab = await Addressables.LoadAssetAsync<GameObject>(cco.avatarViewPrefab).Task;
-                GameObject viewPrefab = await cco.ResolveAvatarViewPrefab();
-                AvatarView view = viewPrefab.GetComponent<AvatarView>();
-
-                Character newCharacter = new Character(cco, view);
-
-                _allCharacters.Add(newCharacter);
-                _mapCharacterObjectNameToCharacter.Add(cco.ContentName, newCharacter);
-            }
-
-            Character chosenCharacter = await GetChosenCharacterByDBID(_beamableAPI.User.id);
-
-            if (chosenCharacter == null)
-                await ChooseCharacter(_allCharacters[0]);
-            else
-            {
-                _currentlyChosenCharacter = _allCharacters.Where(c => c.CharacterContentObject == chosenCharacter.CharacterContentObject).FirstOrDefault();
-                OnChoiceHasBeenMade?.Invoke();
-            }
+            _bootstrapTask = SetupBeamable();
         }
 
         public async Task<Character> GetChosenCharacterByDBID(long dbid)
@@ -115,26 +80,6 @@ namespace Beamable.Samples.KOR
             return await GetStatKeyByDBID(PlayerAliasStatKey, dbid);
         }
 
-        private async Task<string> GetStatKeyByDBID(string statKey, long dbid)
-        {
-            Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
-
-            Configuration.Debugger.Log($"Stats count={allCurrentUserStats.Count} for dbid={dbid}", DebugLogLevel.Verbose);
-            foreach (KeyValuePair<string, string> entry in allCurrentUserStats)
-                Configuration.Debugger.Log($"Stat dbid={dbid} key={entry.Key} value={entry.Value}", DebugLogLevel.Verbose);
-
-            string value;
-            if (!allCurrentUserStats.TryGetValue(statKey, out value))
-            {
-                Configuration.Debugger.Log($"dbid={dbid} has no key for stat={statKey}!", DebugLogLevel.Verbose);
-                return null;
-            }
-
-            Configuration.Debugger.Log($"dbid={dbid} has value={value} for stat key={statKey}", DebugLogLevel.Verbose);
-
-            return value;
-        }
-
         public int GetChosenCharacterIndex()
         {
             if (_allCharacters == null || _currentlyChosenCharacter == null)
@@ -155,21 +100,6 @@ namespace Beamable.Samples.KOR
         public Promise<EmptyResponse> SetCurrentPlayerAlias(string newPlayerAlias)
         {
             return SetStatsKeyForCurrentUser(PlayerAliasStatKey, newPlayerAlias);
-        }
-
-        private Promise<EmptyResponse> SetStatsKeyForCurrentUser(string statsKey, string newValue)
-        {
-            return _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>() { { statsKey, newValue } });
-        }
-
-        private async Task<List<CharacterContentObject>> GetAllCharacterContentObjects()
-        {
-            var filteredManifest = await _beamableAPI.ContentService.GetManifest(new ContentQuery
-            {
-                TypeConstraints = new HashSet<Type> { typeof(CharacterContentObject) }
-            });
-            var results = await filteredManifest.ResolveAll();
-            return results.Cast<CharacterContentObject>().ToList();
         }
 
         /// <summary>
@@ -216,6 +146,81 @@ namespace Beamable.Samples.KOR
                 // #2 RETURN FINAL VALUES
                 return new Attributes(chargeSpeed, movementSpeed);
             }
+        }
+
+        private async Task SetupBeamable()
+        {
+            _beamableAPI = await Beamable.API.Instance;
+
+            List<CharacterContentObject> allCCOs = await GetAllCharacterContentObjects();
+
+            if (allCCOs.Count == 0)
+            {
+                Debug.LogError("No characters found in manifest. Did you forget to add some? This will break.");
+                return;
+            }
+
+            _allCharacters = new List<Character>();
+
+            foreach (var cco in allCCOs)
+            {
+                Configuration.Debugger.Log($"CharacterContentObject name={cco.ContentName} " +
+                                           $"type={cco.ContentType} id={cco.Id} readable name={cco.ReadableName}",
+                    DebugLogLevel.Verbose);
+
+                GameObject viewPrefab = await Addressables.LoadAssetAsync<GameObject>(cco.avatarViewPrefab).Task;
+                AvatarView view = viewPrefab.GetComponent<AvatarView>();
+
+                Character newCharacter = new Character(cco, view);
+
+                _allCharacters.Add(newCharacter);
+                _mapCharacterObjectNameToCharacter.Add(cco.ContentName, newCharacter);
+            }
+
+            Character chosenCharacter = await GetChosenCharacterByDBID(_beamableAPI.User.id);
+
+            if (chosenCharacter == null)
+                await ChooseCharacter(_allCharacters[0]);
+            else
+            {
+                _currentlyChosenCharacter = _allCharacters.Where(c => c.CharacterContentObject == chosenCharacter.CharacterContentObject).FirstOrDefault();
+                OnChoiceHasBeenMade?.Invoke();
+            }
+        }
+
+        private async Task<string> GetStatKeyByDBID(string statKey, long dbid)
+        {
+            Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
+
+            Configuration.Debugger.Log($"Stats count={allCurrentUserStats.Count} for dbid={dbid}", DebugLogLevel.Verbose);
+            foreach (KeyValuePair<string, string> entry in allCurrentUserStats)
+                Configuration.Debugger.Log($"Stat dbid={dbid} key={entry.Key} value={entry.Value}", DebugLogLevel.Verbose);
+
+            string value;
+            if (!allCurrentUserStats.TryGetValue(statKey, out value))
+            {
+                Configuration.Debugger.Log($"dbid={dbid} has no key for stat={statKey}!", DebugLogLevel.Verbose);
+                return null;
+            }
+
+            Configuration.Debugger.Log($"dbid={dbid} has value={value} for stat key={statKey}", DebugLogLevel.Verbose);
+
+            return value;
+        }
+
+        private Promise<EmptyResponse> SetStatsKeyForCurrentUser(string statsKey, string newValue)
+        {
+            return _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>() { { statsKey, newValue } });
+        }
+
+        private async Task<List<CharacterContentObject>> GetAllCharacterContentObjects()
+        {
+            var filteredManifest = await _beamableAPI.ContentService.GetManifest(new ContentQuery
+            {
+                TypeConstraints = new HashSet<Type> { typeof(CharacterContentObject) }
+            });
+            var results = await filteredManifest.ResolveAll();
+            return results.Cast<CharacterContentObject>().ToList();
         }
     }
 }

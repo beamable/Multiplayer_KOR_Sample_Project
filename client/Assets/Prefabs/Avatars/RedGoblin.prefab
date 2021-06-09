@@ -171,6 +171,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3021382451611747150}
     - target: {fileID: 7301698164150048436, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: MaxPower
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301698164150048436, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: PowerGrowthSlope
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301698164150048436, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: PreviewBehaviour
       value: 
       objectReference: {fileID: 534651553380963335}

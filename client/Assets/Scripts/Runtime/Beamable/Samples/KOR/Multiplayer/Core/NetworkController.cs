@@ -14,7 +14,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
         public const int NetworkFramesPerSecond = 20; // TODO: Un-hardcode this at the server level
         public static long HighestSeenNetworkFrame;
         public static bool NetworkInitialized;
-
         private SimClient _sim;
 
         public SimulationLog Log = new SimulationLog();
@@ -30,6 +29,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             HighestSeenNetworkFrame = 0;
             NetworkInitialized = false;
             // roomId = string.IsNullOrEmpty(roomIdOverride) ? roomId : roomIdOverride;
+
 
             var beamable = await API.Instance;
 
@@ -69,8 +69,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             // listen for messages from this player...
             var dbidNumber = long.Parse(dbid);
 
-            // ListenForEventFrom<PlayerSpawnCubeMessage>(dbid);
-            // ListenForEventFrom<PlayerDestroyAllMessage>(dbid);
             ListenForEventFrom<PlayerMoveStartedEvent>(dbid);
             ListenForEventFrom<PlayerMoveEndEvent>(dbid);
             ListenForEventFrom<PlayerMoveProgressEvent>(dbid);
@@ -83,12 +81,12 @@ namespace Beamable.Examples.Features.Multiplayer.Core
                 Log.EnqueueHashAssertion(hashCheck.ForTick, hashCheck.Hash);
             });
 
+            
             var joinMsg = new PlayerJoinedEvent();
             joinMsg.SetPlayerDbid(dbidNumber);
 
             Log.RecordEvent(joinMsg);
         }
-
 
         private void HandleOnDisconnect(string dbid)
         {
@@ -111,7 +109,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             beamable.Experimental.GameRelayService.ReportResults(_roomId, results);
         }
 
-        SimClient.EventCallback<string> ListenForEventFrom<T>(string origin)
+        private SimClient.EventCallback<string> ListenForEventFrom<T>(string origin)
             where T : KOREvent
         {
             var dbid = long.Parse(origin);
@@ -121,6 +119,5 @@ namespace Beamable.Examples.Features.Multiplayer.Core
                 Log.RecordEvent(evt);
             });
         }
-
     }
 }

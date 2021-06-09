@@ -17,8 +17,6 @@ namespace Beamable.Samples.KOR.Data
         public int TargetPlayerCount { get { return _targetPlayerCount; } set { _targetPlayerCount = value; } }
         public int CurrentPlayerCount { get { return _currentPlayerCount; } set { _currentPlayerCount = value; } }
 
-        public bool HasChosenCharacter { get { return _hasChosenCharacter; } set { _hasChosenCharacter = value; } }
-
         public int MinPlayerCount
         {
             get

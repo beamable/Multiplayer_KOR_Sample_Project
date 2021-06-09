@@ -22,4 +22,4 @@ MonoBehaviour:
   clientPermission:
     writeSelf: 0
   MovementSpeed: 1
-  ChargeSpeed: 2
+  ChargeSpeed: 10
