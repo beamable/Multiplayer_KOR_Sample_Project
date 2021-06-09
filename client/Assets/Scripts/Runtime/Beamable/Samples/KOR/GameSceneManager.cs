@@ -182,6 +182,7 @@ namespace Beamable.Samples.KOR
 
             SpawnablePlayer newPlayer = new SpawnablePlayer(joinEvent.PlayerDbid, spawnPoint);
             _spawnablePlayers.Add(newPlayer);
+            await RuntimeDataStorage.Instance.CharacterManager.BootstrapTask;
             newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid); ;
 
             // Notify the rest of the clients that we are ready to roll...

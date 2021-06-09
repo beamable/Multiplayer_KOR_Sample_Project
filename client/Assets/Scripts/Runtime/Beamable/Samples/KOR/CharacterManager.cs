@@ -18,18 +18,6 @@ namespace Beamable.Samples.KOR
 {
     public class CharacterManager
     {
-        public class Character
-        {
-            public Character(CharacterContentObject characterContentObject, AvatarView avatarView)
-            {
-                CharacterContentObject = characterContentObject;
-                AvatarViewPrefab = avatarView;
-            }
-
-            public CharacterContentObject CharacterContentObject { get; }
-            public AvatarView AvatarViewPrefab { get; }
-        }
-
         public const string ChosenCharacterStatKey = "ChosenCharacterContentID";
         public const string PlayerAliasStatKey = "alias";
         public const string DefaultPlayerAliasPrefix = "Player";
@@ -39,20 +27,128 @@ namespace Beamable.Samples.KOR
         private IBeamableAPI _beamableAPI = null;
 
         private Dictionary<string, Character> _mapCharacterObjectNameToCharacter = new Dictionary<string, Character>();
+
         private Character _currentlyChosenCharacter = null;
+
+        private Task _bootstrapTask = null;
+
+        public event Action OnChoiceHasBeenMade;
 
         public List<Character> AllCharacters { get { return _allCharacters; } }
 
         public Character CurrentlyChosenCharacter { get { return _currentlyChosenCharacter; } }
 
-        public event Action OnChoiceHasBeenMade;
+        public Task BootstrapTask { get { return _bootstrapTask; } }
+
+        public class Character
+        {
+            public CharacterContentObject CharacterContentObject { get; }
+
+            public AvatarView AvatarViewPrefab { get; }
+
+            public Character(CharacterContentObject characterContentObject, AvatarView avatarView)
+            {
+                CharacterContentObject = characterContentObject;
+                AvatarViewPrefab = avatarView;
+            }
+        }
 
         public CharacterManager()
         {
-            SetupBeamable();
+            _bootstrapTask = SetupBeamable();
         }
 
-        private async void SetupBeamable()
+        public async Task<Character> GetChosenCharacterByDBID(long dbid)
+        {
+            string chosenCharacterName = await GetStatKeyByDBID(ChosenCharacterStatKey, dbid);
+            if (chosenCharacterName == null)
+                return null;
+
+            Character character;
+            if (!_mapCharacterObjectNameToCharacter.TryGetValue(chosenCharacterName, out character))
+            {
+                Debug.LogError($"Chosen character name={chosenCharacterName} by dbid={dbid} from stats does not refer to an existing character content object. " +
+                    "You've probably removed/renamed this recently.");
+                return null;
+            }
+
+            return character;
+        }
+
+        public async Task<string> GetPlayerAliasByDBID(long dbid)
+        {
+            return await GetStatKeyByDBID(PlayerAliasStatKey, dbid);
+        }
+
+        public int GetChosenCharacterIndex()
+        {
+            if (_allCharacters == null || _currentlyChosenCharacter == null)
+                return -1;
+
+            return _allCharacters.IndexOf(_allCharacters.Where(c => c.CharacterContentObject == _currentlyChosenCharacter.CharacterContentObject).FirstOrDefault());
+        }
+
+        public async Task<EmptyResponse> ChooseCharacter(Character newlyChosenCharacter)
+        {
+            _currentlyChosenCharacter = newlyChosenCharacter;
+            await SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.CharacterContentObject.ContentName);
+            OnChoiceHasBeenMade?.Invoke();
+
+            return null;
+        }
+
+        public Promise<EmptyResponse> SetCurrentPlayerAlias(string newPlayerAlias)
+        {
+            return SetStatsKeyForCurrentUser(PlayerAliasStatKey, newPlayerAlias);
+        }
+
+        /// <summary>
+        /// Get sum total of pay-to-play attributes to impact gameplay
+        /// </summary>
+        /// <param name="dbid"></param>
+        /// <returns></returns>
+        public async Task<Attributes> GetChosenPlayerAttributes()
+        {
+            var character = await GetChosenCharacterByDBID(_beamableAPI.User.id);
+
+            if (character == null)
+            {
+                Configuration.Debugger.Log($"No character for {_beamableAPI.User.id}.");
+                return new Attributes(0, 0);
+            }
+
+            CharacterContentObject characterContentObject = character.CharacterContentObject;
+
+            // Very early in play session, this may not be ready
+            if (characterContentObject == null)
+            {
+                return new Attributes(0, 0);
+            }
+            else
+            {
+                var chargeSpeed = characterContentObject.ChargeSpeed;
+                var movementSpeed = characterContentObject.MovementSpeed;
+
+                // #1 GET ALL ITEMS
+                InventoryView inventoryView =
+                    await _beamableAPI.InventoryService.GetCurrent(KORConstants.ItemContentType);
+
+                foreach (KeyValuePair<string, List<ItemView>> kvp in inventoryView.items)
+                {
+                    int itemCount = kvp.Value.Count;
+                    KORItemContent korItemContent = await KORHelper.GetKORItemContentById(_beamableAPI, kvp.Key);
+
+                    //Reward user for each TYPE and COUNT of Inventory
+                    chargeSpeed += (korItemContent.ChargeSpeed * itemCount);
+                    movementSpeed += (korItemContent.MovementSpeed * itemCount);
+                }
+
+                // #2 RETURN FINAL VALUES
+                return new Attributes(chargeSpeed, movementSpeed);
+            }
+        }
+
+        private async Task SetupBeamable()
         {
             _beamableAPI = await Beamable.API.Instance;
 
@@ -92,28 +188,6 @@ namespace Beamable.Samples.KOR
             }
         }
 
-        public async Task<Character> GetChosenCharacterByDBID(long dbid)
-        {
-            string chosenCharacterName = await GetStatKeyByDBID(ChosenCharacterStatKey, dbid);
-            if (chosenCharacterName == null)
-                return null;
-
-            Character character;
-            if (!_mapCharacterObjectNameToCharacter.TryGetValue(chosenCharacterName, out character))
-            {
-                Debug.LogError($"Chosen character name={chosenCharacterName} by dbid={dbid} from stats does not refer to an existing character content object. " +
-                    "You've probably removed/renamed this recently.");
-                return null;
-            }
-
-            return character;
-        }
-
-        public async Task<string> GetPlayerAliasByDBID(long dbid)
-        {
-            return await GetStatKeyByDBID(PlayerAliasStatKey, dbid);
-        }
-
         private async Task<string> GetStatKeyByDBID(string statKey, long dbid)
         {
             Dictionary<string, string> allCurrentUserStats = await _beamableAPI.StatsService.GetStats("client", "public", "player", dbid);
@@ -134,28 +208,6 @@ namespace Beamable.Samples.KOR
             return value;
         }
 
-        public int GetChosenCharacterIndex()
-        {
-            if (_allCharacters == null || _currentlyChosenCharacter == null)
-                return -1;
-
-            return _allCharacters.IndexOf(_allCharacters.Where(c => c.CharacterContentObject == _currentlyChosenCharacter.CharacterContentObject).FirstOrDefault());
-        }
-
-        public async Task<EmptyResponse> ChooseCharacter(Character newlyChosenCharacter)
-        {
-            _currentlyChosenCharacter = newlyChosenCharacter;
-            await SetStatsKeyForCurrentUser(ChosenCharacterStatKey, newlyChosenCharacter.CharacterContentObject.ContentName);
-            OnChoiceHasBeenMade?.Invoke();
-
-            return null;
-        }
-
-        public Promise<EmptyResponse> SetCurrentPlayerAlias(string newPlayerAlias)
-        {
-            return SetStatsKeyForCurrentUser(PlayerAliasStatKey, newPlayerAlias);
-        }
-
         private Promise<EmptyResponse> SetStatsKeyForCurrentUser(string statsKey, string newValue)
         {
             return _beamableAPI.StatsService.SetStats("public", new Dictionary<string, string>() { { statsKey, newValue } });
@@ -169,52 +221,6 @@ namespace Beamable.Samples.KOR
             });
             var results = await filteredManifest.ResolveAll();
             return results.Cast<CharacterContentObject>().ToList();
-        }
-
-        /// <summary>
-        /// Get sum total of pay-to-play attributes to impact gameplay
-        /// </summary>
-        /// <param name="dbid"></param>
-        /// <returns></returns>
-        public async Task<Attributes> GetChosenPlayerAttributes()
-        {
-            var character = await GetChosenCharacterByDBID(_beamableAPI.User.id);
-            
-            if (character == null)
-            {
-                Configuration.Debugger.Log($"No character for {_beamableAPI.User.id}.");
-                return new Attributes(0, 0);
-            }
-            
-            CharacterContentObject characterContentObject = character.CharacterContentObject;
-
-            // Very early in play session, this may not be ready
-            if (characterContentObject == null)
-            {
-                return new Attributes(0, 0);
-            }
-            else
-            {
-                var chargeSpeed = characterContentObject.ChargeSpeed;
-                var movementSpeed = characterContentObject.MovementSpeed;
-
-                // #1 GET ALL ITEMS
-                InventoryView inventoryView =
-                    await _beamableAPI.InventoryService.GetCurrent(KORConstants.ItemContentType);
-
-                foreach (KeyValuePair<string, List<ItemView>> kvp in inventoryView.items)
-                {
-                    int itemCount = kvp.Value.Count;
-                    KORItemContent korItemContent = await KORHelper.GetKORItemContentById(_beamableAPI, kvp.Key);
-                   
-                    //Reward user for each TYPE and COUNT of Inventory
-                    chargeSpeed += (korItemContent.ChargeSpeed * itemCount);
-                    movementSpeed += (korItemContent.MovementSpeed * itemCount);
-                }
-
-                // #2 RETURN FINAL VALUES
-                return new Attributes(chargeSpeed, movementSpeed);
-            }
         }
     }
 }
