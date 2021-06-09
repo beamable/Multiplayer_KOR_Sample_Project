@@ -31,11 +31,12 @@
       public const string LobbyUIView_Joined = "Player {0}/{1} joined. Ready!";
       public const string StoreUIView_Loading_Store = "Loading Store...";
       public const string StoreUIView_Loading_Inventory = "Loading Inventory ...";
-      public const string StoreUIView_InventoryTip = "You have {0} {1}{2}";
-      public const string StoreUIView_StoreTip = "Available Today!";
+      public const string StoreUIView_InventoryTip = "You Have {0} {1}{2}.";
+      public const string StoreUIView_StoreTip = "Today's Specials...";
       public const string StoreUIView_Instructions = "Select an item and 'Buy'!";
       public const string StoreUIView_SelectStoreInventory = "Gives bonus " + Player_Attributes;
-      public const string StoreUIView_SelectStoreItem = "Gives bonus " + Player_Attributes;
+      public const string StoreUIView_CannotAfford = "Can't Afford. ";
+      public const string StoreUIView_SelectStoreItem = "{2}Gives bonus " + Player_Attributes;
       public const string StoreUIView_CurrencyName = "Coin";
       public const string Player_Attributes = "C:{0:000} M:{1:000}";
    }

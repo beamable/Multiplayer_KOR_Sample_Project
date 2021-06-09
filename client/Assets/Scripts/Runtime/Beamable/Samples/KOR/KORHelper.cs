@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Beamable.Samples.KOR.Animation;
 using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.CustomContent;
+using Beamable.UI.Scripts;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
@@ -256,24 +257,32 @@ namespace Beamable.Samples.KOR
          };
       }
       
-      public static void AddressablesLoadAssetAsync<T>(AssetReferenceSprite assetReferenceSprite, Image destinationImage)
+      public static async void AddressablesLoadAssetAsync<T>(AssetReferenceSprite assetReferenceSprite, Image destinationImage)
       {
-         Debug.Log("starting: " + assetReferenceSprite);
+         // Check before await
+         if (destinationImage == null || assetReferenceSprite == null)
+         {
+            return;
+         }
+         
          // Hide it
          TweenHelper.ImageDoFade(destinationImage, 0, 0, 0, 0);
-         
-         AsyncOperationHandle<Texture2D> asyncOperationHandle1 = Addressables.LoadAssetAsync<Texture2D>(
-            assetReferenceSprite);
 
-         asyncOperationHandle1.Completed += (AsyncOperationHandle<Texture2D> asyncOperationHandle2) =>
+         Sprite sprite = await AddressableSpriteLoader.LoadSprite(assetReferenceSprite);
+
+         // Check after await
+         if (destinationImage == null || assetReferenceSprite == null)
          {
-            Texture2D texture2D = asyncOperationHandle2.Result;
-            destinationImage.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height),
-               new Vector2(0.5f, 0.5f));
-
+            return;
+         }
+         
+         if (sprite != null)
+         {
+            destinationImage.sprite = sprite;
+            
             // Show it
             TweenHelper.ImageDoFade(destinationImage, 0, 1, 0.25f, 0);
-         };
+         }
       }
    }
 }

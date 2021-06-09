@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6416588015189935973}
   - component: {fileID: 8749384451889473788}
   - component: {fileID: 8094099674962867080}
+  - component: {fileID: 4756746455669699101}
   m_Layer: 5
   m_Name: StorePanelUI
   m_TagString: Untagged
@@ -133,6 +134,26 @@ MonoBehaviour:
   _titleText: {fileID: 6623268318435175788}
   _bodyText: {fileID: 902793815916923031}
   _verticalLayoutGroup: {fileID: 6022048662654374889}
+--- !u!114 &4756746455669699101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351640137513550627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 200
+  m_MinHeight: -1
+  m_PreferredWidth: 200
+  m_PreferredHeight: -1
+  m_FlexibleWidth: 1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1757588507313613394
 GameObject:
   m_ObjectHideFlags: 0

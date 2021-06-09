@@ -1,4 +1,5 @@
 using Beamable.Samples.KOR.Data;
+using Beamable.UI.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,7 @@ namespace Beamable.Samples.KOR.UI
             
             //Hide image, load texture, show image
             KORHelper.AddressablesLoadAssetAsync<Texture2D>(_storeItemData.KORItemContent.icon, _iconImage);
+   
         }
     }
 }

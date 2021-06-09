@@ -499,9 +499,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Reset Store
+  m_text: 'Debug
 
-    <size=10>(Debug)</size>'
+    <size=10>(Reset Store)</size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 103b24d25ab014443a4035a9b8bf74b6, type: 2}
   m_sharedMaterial: {fileID: 415982472768544068, guid: 103b24d25ab014443a4035a9b8bf74b6, type: 2}
@@ -699,14 +699,14 @@ MonoBehaviour:
     m_Right: 15
     m_Top: 15
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 15
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
 --- !u!1 &6173314735695781586
 GameObject:
@@ -844,9 +844,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 130
+  m_MinWidth: 90
   m_MinHeight: 0
-  m_PreferredWidth: 130
+  m_PreferredWidth: 90
   m_PreferredHeight: 0
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
@@ -1370,9 +1370,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 130
+  m_MinWidth: 90
   m_MinHeight: 0
-  m_PreferredWidth: 130
+  m_PreferredWidth: 90
   m_PreferredHeight: 0
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
