@@ -96,7 +96,8 @@ namespace Beamable.Samples.KOR.Behaviours
             sentOnTick = NetworkController.HighestSeenNetworkFrame;
          } else if (Input.GetMouseButtonUp(0))
          {
-            AvatarView.PlayAnimationAttack02(); // TODO: How to get other players to play the animation before they move?
+
+            AvatarView.PlayAnimationAttack01(); // TODO: How to get other players to play the animation before they move?
 
             var time = (sfloat)World.DefaultGameObjectInjectionWorld.Time.ElapsedTime;
             isPowering = false;

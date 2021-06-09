@@ -39,6 +39,9 @@ namespace Beamable.Samples.KOR
 
         private Dictionary<long, SpawnablePlayer> _dbidToSpawnablePlayer = new Dictionary<long, SpawnablePlayer>();
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
+        private HashSet<long> _dbidReadyReceived = new HashSet<long>();
+        private bool _hasSpawned = false;
+
 
         //  Unity Methods   ------------------------------
         protected void Start()
@@ -182,17 +185,37 @@ namespace Beamable.Samples.KOR
             _dbidToSpawnablePlayer.Add(joinEvent.PlayerDbid, newPlayer);
             newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid); ;
 
-            if (_dbidToSpawnablePlayer.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)
+            // Notify the rest of the clients that we are ready to roll...
+            NetworkController.Instance.SendNetworkMessage(new ReadyEvent());
+            //
+            //
+            //
+            // if (_dbidToSpawnablePlayer.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)
+            //     SpawnAllPlayersAtOnce();
+        }
+
+        private void OnPlayerReady(ReadyEvent readyEvt)
+        {
+            Debug.Log("Got ready evt from " + readyEvt.PlayerDbid);
+            _dbidReadyReceived.Add(readyEvt.PlayerDbid);
+
+            Debug.Log($"OnPlayerReady Players={_dbidReadyReceived.Count}/{RuntimeDataStorage.Instance.CurrentPlayerCount}");
+            if (!_hasSpawned && _dbidReadyReceived.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)
+            {
+                _hasSpawned = true;
                 SpawnAllPlayersAtOnce();
+            }
         }
 
         private void SpawnAllPlayersAtOnce()
         {
+            // TODO: Dictionary foreach ordering may not be consistent across platforms?
             foreach (KeyValuePair<long, SpawnablePlayer> entry in _dbidToSpawnablePlayer)
             {
                 SpawnablePlayer sp = entry.Value;
 
-                Configuration.Debugger.Log($"DBID={sp.DBID} Spawning character={sp.ChosenCharacter.CharacterContentObject.ContentName}", Beamable.Core.Debugging.DebugLogLevel.Verbose);
+                Debug.Log($"DBID={sp.DBID} Spawning character={sp.ChosenCharacter.CharacterContentObject.ContentName}");
+              //  Configuration.Debugger.Log($"DBID={sp.DBID} Spawning character={sp.ChosenCharacter.CharacterContentObject.ContentName}", Beamable.Core.Debugging.DebugLogLevel.Verbose);
 
                 AvatarView avatarView = GameObject.Instantiate<AvatarView>(sp.ChosenCharacter.AvatarViewPrefab);
                 avatarView.transform.SetPhysicsPosition(sp.SpawnPointBehaviour.transform.position);
@@ -219,6 +242,9 @@ namespace Beamable.Samples.KOR
         {
             switch (korEvent)
             {
+                case ReadyEvent readyEvt:
+                    OnPlayerReady(readyEvt);
+                    break;
                 case PlayerJoinedEvent joinEvt:
                     OnPlayerJoined(joinEvt);
                     break;
@@ -243,6 +269,8 @@ namespace Beamable.Samples.KOR
             // Clean up manager
             _dbidToSpawnablePlayer.Clear();
             _unusedSpawnPoints.Clear();
+            _dbidReadyReceived.Clear();
+            _hasSpawned = false;
             NetworkController.Instance.Cleanup();
 
             // Destroy ECS

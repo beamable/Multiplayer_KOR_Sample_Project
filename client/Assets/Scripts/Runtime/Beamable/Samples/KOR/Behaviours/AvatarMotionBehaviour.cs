@@ -104,41 +104,27 @@ namespace Beamable.Samples.KOR.Behaviours
                   break;
 
                case PlayerMoveEndEvent evt:
-                  if (startEvt == null) break; // can't move without start event...
-
-                  var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
-                  SetDirection(evt.dirX, evt.dirY);
-                  SetDeltaTime(evt.endTime);
-
-                  var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
-                     .Entity);
-
-                  var power = GetPowerForDeltaTime(deltaTime);
-                  var speed = power / mass.InverseMass;
-
-                  entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+                  // start playing animation right away...
+                  var isLocal = AvatarView.playerDbid == NetworkController.Instance.LocalDbid;
+                  if (!isLocal)
                   {
-                     Impulse = direction * magnitude * speed
-                  });
-
-
-                  if (direction.x.IsNaN() || magnitude.IsNaN() || deltaTime.IsNaN() || speed.IsNaN())
-                  {
-                     Debug.Log("There was a NaN movement tick. Reseting to zero");
-                     magnitude = sfloat.Zero;
-                     direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
-                     deltaTime = sfloat.Zero;
-                     startEvt = null;
-                     break;
+                     AvatarView.PlayAnimationAttack01();
                   }
 
-                  entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+                  var sentAt = evt.endTime.ToSFloat();
+                  var currTime = (sfloat)timeUpdate.ElapsedTime;
+
+                  var latency = (currTime - sentAt);
+                  var forcedDelay = (sfloat) 2f; // half a second of forced delay...
+                  var paddedDelay = math.max(sfloat.Zero, forcedDelay - latency);
+
+                  var paddedDelayInTicks = (long) (paddedDelay * (sfloat) NetworkController.NetworkFramesPerSecond);
+
+                  Debug.Log("Pad. " + latency + " / " + paddedDelay + " = " + paddedDelayInTicks);
+                  timeUpdate.ScheduleAction(paddedDelayInTicks, () =>
                   {
-                     Impulse = direction * magnitude * speed
+                     HandleMotionEndEvent(evt);
                   });
-                  PreviewBehaviour?.Set(false, Vector3.right, 0);
-                  startEvt = null;
                   break;
 
                case PlayerMoveStartedEvent moveEvt:
@@ -150,6 +136,45 @@ namespace Beamable.Samples.KOR.Behaviours
                   break;
             }
          }
+      }
+
+      private void HandleMotionEndEvent(PlayerMoveEndEvent evt)
+      {
+         if (startEvt == null) return; // can't move without start event...
+
+         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+         SetDirection(evt.dirX, evt.dirY);
+         SetDeltaTime(evt.endTime);
+
+         var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
+            .Entity);
+
+         var power = GetPowerForDeltaTime(deltaTime);
+         var speed = power / mass.InverseMass;
+
+         entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+         {
+            Impulse = direction * magnitude * speed
+         });
+
+
+         if (direction.x.IsNaN() || magnitude.IsNaN() || deltaTime.IsNaN() || speed.IsNaN())
+         {
+            Debug.Log("There was a NaN movement tick. Reseting to zero");
+            magnitude = sfloat.Zero;
+            direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
+            deltaTime = sfloat.Zero;
+            startEvt = null;
+            return;
+         }
+
+         entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+         {
+            Impulse = direction * magnitude * speed
+         });
+         PreviewBehaviour?.Set(false, Vector3.right, 0);
+         startEvt = null;
       }
    }
 }

@@ -18,6 +18,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       private Dictionary<long, string> _pendingHashValidations = new Dictionary<long, string>();
 
+      private Dictionary<long, List<Action>> _scheduledActions = new Dictionary<long, List<Action>>();
+
       private long latestInvalidFrame = -1;
       private long latestValidFrame = -1;
 
@@ -120,8 +122,28 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          return _nextConsumerId;
       }
 
+      public void ScheduleAction(long tick, Action action)
+      {
+         if (!_scheduledActions.ContainsKey(tick))
+         {
+            _scheduledActions.Add(tick, new List<Action>());
+         }
+
+         _scheduledActions[tick].Add(action);
+      }
+
       public void NotifyConsumers(long tick, float elapsedTime, float deltaTime)
       {
+         if (_scheduledActions.TryGetValue(tick, out var scheduledActions))
+         {
+            foreach (var action in scheduledActions)
+            {
+               action();
+            }
+
+            _scheduledActions.Remove(tick);
+         }
+
          foreach (var kvp in _consumerIdToUpdater)
          {
             var consumerId = kvp.Key;
@@ -130,6 +152,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
             var update = new TimeUpdate
             {
+               Scheduler = ScheduleAction,
                Tick = tick,
                ElapsedTime = elapsedTime,
                DeltaTime = deltaTime,
@@ -218,5 +241,13 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       public float ElapsedTime;
       public float DeltaTime;
       public List<KOREvent> Events;
+      public LogActionScheduleFunc Scheduler;
+
+      public void ScheduleAction(long ticksInFuture, Action callback)
+      {
+         Scheduler(Tick + ticksInFuture, callback);
+      }
    }
+
+   public delegate void LogActionScheduleFunc(long tick, Action callback);
 }
