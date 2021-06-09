@@ -45,8 +45,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!114 &366257729468917058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,24 +61,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Collider: {fileID: 366257729468917069}
   IsDynamic: 1
-  Mass: 0.5
-  XRotationLocked: 0
+  Mass:
+    rawValue: 1056964608
+  Restitution:
+    rawValue: 1056964608
+  XRotationLocked: 1
   YRotationLocked: 0
-  ZRotationLocked: 0
-  _mass: 1056964608
-  _x: 0
-  _y: 0
-  _z: 1093664768
+  ZRotationLocked: 1
+  ExtraBounce:
+    HasValue: 0
+    Value:
+      rawValue: 0
+  _x: 3251634176
+  _y: 1073741824
+  _z: 0
   _rotX: 2147483648
-  _rotY: 2147483648
+  _rotY: 1060439284
   _rotZ: 2147483648
-  _rotW: 1065353216
+  _rotW: 1060439284
   _colliderCenterX: 0
-  _colliderCenterY: 0
+  _colliderCenterY: 3212836864
   _colliderCenterZ: 0
-  _colliderSizeX: 1103626240
-  _colliderSizeY: 1065353216
-  _colliderSizeZ: 1065353216
+  _colliderSizeX: 1103101956
+  _colliderSizeY: 1073741824
+  _colliderSizeZ: 1073741826
   _colliderRadius: 0
 --- !u!114 &366257729468917070
 MonoBehaviour:
@@ -93,9 +99,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkedPhysics: {fileID: 366257729468917058}
-  Frequency: 0.4
-  Amplitude: 4
-  Offset: 0
+  Frequency:
+    rawValue: 0
+  Amplitude:
+    rawValue: 0
+  Offset:
+    rawValue: 0
   UseAbs: 1
   FlipY: 0
 --- !u!1001 &4239217729507702785

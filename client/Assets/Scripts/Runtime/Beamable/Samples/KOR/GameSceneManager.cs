@@ -66,6 +66,7 @@ namespace Beamable.Samples.KOR
             {
                 DebugLog(KORHelper.GetSceneLoadingMessage(gameObject.scene.name, true));
                 RuntimeDataStorage.Instance.TargetPlayerCount = 1;
+                RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
                 RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
                 RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
             }

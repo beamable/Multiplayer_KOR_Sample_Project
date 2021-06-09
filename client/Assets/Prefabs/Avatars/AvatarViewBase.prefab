@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3821721727158368489}
   - component: {fileID: 6276507837589541420}
   - component: {fileID: 9176452481930775561}
+  - component: {fileID: 1626548513834465206}
   m_Layer: 0
   m_Name: AvatarViewBase
   m_TagString: Untagged
@@ -78,6 +79,17 @@ MonoBehaviour:
     dirX: 0
     dirY: 0
     startTime: 0
+  direction:
+    x:
+      rawValue: 0
+    y:
+      rawValue: 0
+    z:
+      rawValue: 0
+  deltaTime:
+    rawValue: 0
+  magnitude:
+    rawValue: 0
 --- !u!114 &3821721727158368489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,8 +155,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Avatar: {fileID: 6928970518923597896}
-  Motion: {fileID: 0}
+  Motion: {fileID: 7301698164150048436}
   Input: {fileID: 0}
+--- !u!114 &1626548513834465206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917565731528861378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4c75bcc3c84b099b5f0c5370ca76a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MotionBehaviour: {fileID: 7301698164150048436}
+  VisualArrowLength: 5
+  PreviewBehaviour: {fileID: 6641724884132689984}
+  AvatarView: {fileID: 6928970518923597896}
+  CollisionMask:
+    serializedVersion: 2
+    m_Bits: 128
+  direction: {x: 0, y: 0, z: 0}
+  isPowering: 0
+  startedPoweringAt: 0
+  powerRatio: 0
+  sentOnTick: 0
 --- !u!1001 &7867974638907050411
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -215,3 +251,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6296036543975182656, guid: 2cb3d64e725644f179508622a42facf5, type: 3}
   m_PrefabInstance: {fileID: 7867974638907050411}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6641724884132689984 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3538858063933977067, guid: 2cb3d64e725644f179508622a42facf5, type: 3}
+  m_PrefabInstance: {fileID: 7867974638907050411}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f734e7f11cc4932ace8f04e0c3dde43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -110,22 +110,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Collider: {fileID: 8701667250399609441}
   IsDynamic: 1
-  Mass: 2
+  Mass:
+    rawValue: 1082130432
+  Restitution:
+    rawValue: 1056964608
   XRotationLocked: 0
   YRotationLocked: 0
   ZRotationLocked: 0
-  _mass: 1073741824
-  _x: 1086471537
-  _y: 1075167887
-  _z: 0
+  ExtraBounce:
+    HasValue: 0
+    Value:
+      rawValue: 0
+  _x: 3248205332
+  _y: 1072735191
+  _z: 3229614080
   _rotX: 2147483648
-  _rotY: 2147483648
+  _rotY: 1060968997
   _rotZ: 2147483648
-  _rotW: 1065353216
+  _rotW: 1059884787
   _colliderCenterX: 0
   _colliderCenterY: 0
   _colliderCenterZ: 0
-  _colliderSizeX: 1077936128
+  _colliderSizeX: 1077936134
   _colliderSizeY: 1077936128
-  _colliderSizeZ: 1077936128
+  _colliderSizeZ: 1077936134
   _colliderRadius: 0
