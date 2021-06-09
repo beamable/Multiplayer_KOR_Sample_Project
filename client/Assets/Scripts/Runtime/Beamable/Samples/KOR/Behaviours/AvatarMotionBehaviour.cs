@@ -27,11 +27,9 @@ namespace Beamable.Samples.KOR.Behaviours
       public float PowerGrowthSlope = 10;
       public float PowerGrowthExp = .9f;
 
-      [ReadOnly]
-      public int consumerId;
+      [ReadOnly] public int consumerId;
 
-      [ReadOnly]
-      public PlayerMoveStartedEvent startEvt;
+      [ReadOnly] public PlayerMoveStartedEvent startEvt;
 
       public float3 direction;
       public sfloat deltaTime;
@@ -91,64 +89,67 @@ namespace Beamable.Samples.KOR.Behaviours
          var tick = (long) (timeUpdate.ElapsedTime * NetworkController.NetworkFramesPerSecond);
          foreach (var message in timeUpdate.Events)
          {
-            if (message.PlayerDbid != AvatarView.playerDbid) continue; // this message doesn't belong to the player we care about
+            if (message.PlayerDbid != AvatarView.playerDbid)
+               continue; // this message doesn't belong to the player we care about
             switch (message)
             {
-                case PlayerMoveProgressEvent progressEvt:
-                    if (startEvt == null) break; // can't move without start event...
+               case PlayerMoveProgressEvent progressEvt:
+                  if (startEvt == null) break; // can't move without start event...
 
-                    SetDirection(progressEvt.dirX, progressEvt.dirY);
-                    SetDeltaTime(progressEvt.endTime);
+                  SetDirection(progressEvt.dirX, progressEvt.dirY);
+                  SetDeltaTime(progressEvt.endTime);
 
-                    PreviewBehaviour?.Set(true, new Vector3((float)direction.x, 0, (float)direction.z), (float)GetPowerRatioForDeltaTime(deltaTime));
-                    break;
+                  PreviewBehaviour?.Set(true, new Vector3((float) direction.x, 0, (float) direction.z),
+                     (float) GetPowerRatioForDeltaTime(deltaTime));
+                  break;
 
-                case PlayerMoveEndEvent evt:
-                    if (startEvt == null) break; // can't move without start event...
+               case PlayerMoveEndEvent evt:
+                  if (startEvt == null) break; // can't move without start event...
 
-                    var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                  var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-                    SetDirection(evt.dirX, evt.dirY);
-                    SetDeltaTime(evt.endTime);
+                  SetDirection(evt.dirX, evt.dirY);
+                  SetDeltaTime(evt.endTime);
 
-                    var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
-                        .Entity);
+                  var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
+                     .Entity);
 
-                    var power = GetPowerForDeltaTime(deltaTime);
-                    var speed = power / mass.InverseMass;
+                  var power = GetPowerForDeltaTime(deltaTime);
+                  var speed = power / mass.InverseMass;
 
-                    entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
-                    {
-                        Impulse = direction * magnitude * speed
-                    });
+                  entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+                  {
+                     Impulse = direction * magnitude * speed
+                  });
 
 
-                    if (direction.x.IsNaN() || magnitude.IsNaN() || deltaTime.IsNaN() || speed.IsNaN())
-                    {
-                        Debug.Log("There was a NaN movement tick. Reseting to zero");
-                        magnitude = sfloat.Zero;
-                        direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
-                        deltaTime = sfloat.Zero;
-                        startEvt = null;
-                        break;
-                    }
+                  if (direction.x.IsNaN() || magnitude.IsNaN() || deltaTime.IsNaN() || speed.IsNaN())
+                  {
+                     Debug.Log("There was a NaN movement tick. Reseting to zero");
+                     magnitude = sfloat.Zero;
+                     direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
+                     deltaTime = sfloat.Zero;
+                     startEvt = null;
+                     break;
+                  }
 
-                    entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
-                    {
-                        Impulse = direction * magnitude * speed
-                    });
-                    PreviewBehaviour?.Set(false, Vector3.right, 0);
-                    startEvt = null;
-                    break;
+                  entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+                  {
+                     Impulse = direction * magnitude * speed
+                  });
+                  PreviewBehaviour?.Set(false, Vector3.right, 0);
+                  startEvt = null;
+                  break;
 
-                case PlayerMoveStartedEvent moveEvt:
-                    Debug.Log("MOVE EVENT RECEIVED: " + moveEvt.dirX);
-                    startEvt = moveEvt;
-                    // TODO: throw some visualizations here....
-
-                default:
-                    break;
+               case PlayerMoveStartedEvent moveEvt:
+                  Debug.Log("MOVE EVENT RECEIVED: " + moveEvt.dirX);
+                  startEvt = moveEvt;
+                  // TODO: throw some visualizations here....
+                  break;
+               default:
+                  break;
             }
-        }
-    }
+         }
+      }
+   }
 }
