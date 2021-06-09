@@ -137,10 +137,17 @@ namespace Beamable.Samples.KOR
                   $"SecondsRemaining = {secondsRemaining}, " +
                   $"RoomId={roomId}");
 
+
          string text = string.Format(KORConstants.LobbyUIView_Joining,
             currentPlayersCount,
             targetPlayerCount,
             secondsRemaining);
+         if (secondsRemaining < 0)
+         {
+            text = string.Format(KORConstants.LobbyUIView_Finalizing,
+               currentPlayersCount,
+               targetPlayerCount);
+         }
 
          _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
       }
