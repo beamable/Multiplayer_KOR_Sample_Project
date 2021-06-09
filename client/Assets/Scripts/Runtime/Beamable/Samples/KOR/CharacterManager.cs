@@ -178,8 +178,15 @@ namespace Beamable.Samples.KOR
         /// <returns></returns>
         public async Task<Attributes> GetChosenPlayerAttributes()
         {
-            CharacterContentObject characterContentObject =
-                (await GetChosenCharacterByDBID(_beamableAPI.User.id)).CharacterContentObject;
+            var character = await GetChosenCharacterByDBID(_beamableAPI.User.id);
+            
+            if (character == null)
+            {
+                Configuration.Debugger.Log($"No character for {_beamableAPI.User.id}.");
+                return new Attributes(0, 0);
+            }
+            
+            CharacterContentObject characterContentObject = character.CharacterContentObject;
 
             // Very early in play session, this may not be ready
             if (characterContentObject == null)
