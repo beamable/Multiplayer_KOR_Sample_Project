@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3911db0875ba10f4e865abf8c7093ed0, type: 3}
   m_Name: Configuration
   m_EditorClassIdentifier: 
-  _debugLogLevel: 2
+  _debugLogLevel: 1
   _isDemoMode: 1
   _isAudioMuted: 0
   _introSceneName: 1.Intro
