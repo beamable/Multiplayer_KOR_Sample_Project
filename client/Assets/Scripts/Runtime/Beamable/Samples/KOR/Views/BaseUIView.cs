@@ -49,11 +49,17 @@ namespace Beamable.Samples.KOR.Views
       {
          if (_configuration.IsRotatingCameraSkybox)
          {
-            RenderSettings.skybox.SetFloat("_Rotation", 
-               Time.time *  _configuration.CameraSkyboxRotationSpeed);
+            KORHelper.SetSkyboxRotation(Time.time * _configuration.CameraSkyboxRotationSpeed);
+             
          }
       }
       
+      protected void OnDestroy()
+      {
+         // Simply done to prevent randomly dirtying git version control on the material
+         KORHelper.SetSkyboxRotation(0);
+      }
+
       //  Other Methods   ------------------------------
       public void CanvasGroupsDoFadeOut()
       {

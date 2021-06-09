@@ -2,8 +2,15 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Threading.Tasks;
+using Beamable.Samples.KOR.Animation;
 using Beamable.Samples.KOR.Audio;
+using Beamable.Samples.KOR.CustomContent;
+using Beamable.UI.Scripts;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Beamable.Samples.KOR
 {
@@ -25,7 +32,7 @@ namespace Beamable.Samples.KOR
       /// </summary>
       public static void PlayAudioForUIClickPrimary()
       {
-         SoundManager.Instance.PlayAudioClip(SoundConstants.Chime01);
+         SoundManager.Instance.PlayAudioClip(SoundConstants.Chime02);
       }
       
       /// <summary>
@@ -203,6 +210,79 @@ namespace Beamable.Samples.KOR
          //Change "items.KORItems.Blah" to "Blah"
          var tokens = contentId.Split('.');
          return tokens[tokens.Length - 1];
+      }
+
+      public static void SetSkyboxRotation(float rotation)
+      {
+         RenderSettings.skybox.SetFloat("_Rotation", rotation);
+      }
+
+      public static async Task<KORItemContent> GetKORItemContentById(IBeamableAPI _beamableAPI, string id)
+      {
+        return  await _beamableAPI.ContentService.GetContent(id, typeof(KORItemContent)) as KORItemContent;
+      }
+
+      /// <summary>
+      /// Return pluralization or not
+      /// </summary>
+      /// <param name="count"></param>
+      /// <returns></returns>
+      public static string GetPluralization(int count)
+      {
+         return count > 1 ? "s" : "";
+      }
+
+      /// <summary>
+      /// Lazily load a AssetReferenceTexture2D into an Image
+      /// </summary>
+      /// <param name="assetReferenceTexture2D"></param>
+      /// <param name="destinationImage"></param>
+      /// <typeparam name="T"></typeparam>
+      public static void AddressablesLoadAssetAsync<T>(AssetReferenceTexture2D assetReferenceTexture2D, Image destinationImage)
+      {
+         // Hide it
+         TweenHelper.ImageDoFade(destinationImage, 0, 0, 0, 0);
+         
+         AsyncOperationHandle<Texture2D> asyncOperationHandle1 = Addressables.LoadAssetAsync<Texture2D>(
+            assetReferenceTexture2D);
+
+         asyncOperationHandle1.Completed += (AsyncOperationHandle<Texture2D> asyncOperationHandle2) =>
+         {
+            Texture2D texture2D = asyncOperationHandle2.Result;
+            destinationImage.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height),
+               new Vector2(0.5f, 0.5f));
+
+            // Show it
+            TweenHelper.ImageDoFade(destinationImage, 0, 1, 0.25f, 0);
+         };
+      }
+      
+      public static async void AddressablesLoadAssetAsync<T>(AssetReferenceSprite assetReferenceSprite, Image destinationImage)
+      {
+         // Check before await
+         if (destinationImage == null || assetReferenceSprite == null)
+         {
+            return;
+         }
+         
+         // Hide it
+         TweenHelper.ImageDoFade(destinationImage, 0, 0, 0, 0);
+
+         Sprite sprite = await AddressableSpriteLoader.LoadSprite(assetReferenceSprite);
+
+         // Check after await
+         if (destinationImage == null || assetReferenceSprite == null)
+         {
+            return;
+         }
+         
+         if (sprite != null)
+         {
+            destinationImage.sprite = sprite;
+            
+            // Show it
+            TweenHelper.ImageDoFade(destinationImage, 0, 1, 0.25f, 0);
+         }
       }
    }
 }

@@ -62,32 +62,28 @@ namespace Beamable.Samples.KOR.UI
         private async Task<EmptyResponse> LoadIconForDbid(long dbid)
         {
             TweenHelper.ImageDoFade(_iconImage, 0, 0, 0, 0); //temporarily hide icon
-            CharacterContentObject chosenCharacterByDbid = await
-                RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(dbid);
+
+            CharacterManager.Character character = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(dbid);
+            
+            if (character == null)
+            {
+                Configuration.Debugger.Log($"No character for {dbid}.");
+                return new EmptyResponse();
+            }
+            
+            CharacterContentObject chosenCharacterByDbid = character.CharacterContentObject;
 
             if (chosenCharacterByDbid == null)
             {
                 Configuration.Debugger.Log($"No CharacterContentObject for {dbid}.");
+                return new EmptyResponse();
             }
-            else
-            {
-                AsyncOperationHandle<Texture2D> asyncOperationHandle = Addressables.LoadAssetAsync<Texture2D>(
-                    chosenCharacterByDbid.bigIcon);
-
-                asyncOperationHandle.Completed += AsyncOperationHandle_OnCompleted;
-            }
-
+            
+            //Hide image, load texture, show image
+            KORHelper.AddressablesLoadAssetAsync<Texture2D>(chosenCharacterByDbid.bigIcon, _iconImage);
             return new EmptyResponse();
         }
 
         //  Event Handlers  ---------------------------------
-        public void AsyncOperationHandle_OnCompleted(AsyncOperationHandle<Texture2D> asyncOperationHandle)
-        {
-            Texture2D texture2D = asyncOperationHandle.Result;
-            _iconImage.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height),
-                new Vector2(0.5f, 0.5f));
-
-            TweenHelper.ImageDoFade(_iconImage, 0, 1, 0.25f, 0);
-        }
     }
 }

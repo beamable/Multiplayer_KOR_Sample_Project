@@ -18,6 +18,7 @@ MonoBehaviour:
     m_SubObjectName: coin
     m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+    m_EditorAssetChanged: 0
   clientPermission:
     writeSelf: 0
   startingAmount: 10
