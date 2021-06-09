@@ -168,6 +168,8 @@ namespace Beamable.Samples.KOR
 
         public async void OnPlayerJoined(PlayerJoinedEvent joinEvent)
         {
+            Configuration.Debugger.Log($"OnPlayerJoined DBID={joinEvent.PlayerDbid}", Beamable.Core.Debugging.DebugLogLevel.Verbose);
+
             if (_dbidToSpawnablePlayer.ContainsKey(joinEvent.PlayerDbid))
                 return;
 
@@ -177,10 +179,7 @@ namespace Beamable.Samples.KOR
 
             SpawnablePlayer newPlayer = new SpawnablePlayer(joinEvent.PlayerDbid, spawnPoint);
             _dbidToSpawnablePlayer.Add(joinEvent.PlayerDbid, newPlayer);
-
-            Character chosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid);
-
-            newPlayer.ChosenCharacter = chosenCharacter;
+            newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid); ;
 
             if (_dbidToSpawnablePlayer.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)
                 SpawnAllPlayersAtOnce();
@@ -191,6 +190,8 @@ namespace Beamable.Samples.KOR
             foreach (KeyValuePair<long, SpawnablePlayer> entry in _dbidToSpawnablePlayer)
             {
                 SpawnablePlayer sp = entry.Value;
+
+                Configuration.Debugger.Log($"DBID={sp.DBID} Spawning character={sp.ChosenCharacter.CharacterContentObject.ContentName}", Beamable.Core.Debugging.DebugLogLevel.Verbose);
 
                 AvatarView avatarView = GameObject.Instantiate<AvatarView>(sp.ChosenCharacter.AvatarViewPrefab);
                 avatarView.transform.SetPhysicsPosition(sp.SpawnPointBehaviour.transform.position);
