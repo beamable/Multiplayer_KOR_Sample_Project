@@ -121,7 +121,7 @@ namespace Beamable.Samples.KOR
       {
          int currentPlayersCount = 0;
          int targetPlayerCount = 0;
-         int secondsRemaining = 0;
+         int secondsRemaining = -1;
          string roomId = "0";
 
          if (result != null)
@@ -142,9 +142,15 @@ namespace Beamable.Samples.KOR
             currentPlayersCount,
             targetPlayerCount,
             secondsRemaining);
-         if (secondsRemaining < 0)
+         if (secondsRemaining == 0)
          {
             text = string.Format(KORConstants.LobbyUIView_Finalizing,
+               currentPlayersCount,
+               targetPlayerCount);
+         }
+         if (secondsRemaining == -1)
+         {
+            text = string.Format(KORConstants.LobbyUIView_Waiting,
                currentPlayersCount,
                targetPlayerCount);
          }

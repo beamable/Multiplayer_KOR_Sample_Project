@@ -19,7 +19,7 @@ namespace Beamable.Samples.KOR.Behaviours
 
         public ConvertToNetworkedPhysics NetworkedPhysics;
 
-        private const float MinPowerBase = 0.1f;
+        private const float MinPowerBase = 0.2f;
         private const float MaxPowerBase = 0.5f;
         private const float PowerGrowthSlopeBase = 0.1f;
         private const float PowerGrowthExp = 0.85f;
@@ -92,6 +92,12 @@ namespace Beamable.Samples.KOR.Behaviours
 
             var deltaTime = endTime - startTime;
             return deltaTime;
+        }
+
+        public void ClearMove()
+        {
+            PreviewBehaviour?.Set(false, Vector3.right, 0);
+            startEvt = null;
         }
 
         private void OnNetworkUpdate(TimeUpdate timeUpdate)
