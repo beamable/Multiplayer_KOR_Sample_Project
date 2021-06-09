@@ -120,7 +120,6 @@ namespace Beamable.Samples.KOR.Behaviours
 
                   var paddedDelayInTicks = (long) (paddedDelay * (sfloat) NetworkController.NetworkFramesPerSecond);
 
-                  Debug.Log("Pad. " + latency + " / " + paddedDelay + " = " + paddedDelayInTicks);
                   timeUpdate.ScheduleAction(paddedDelayInTicks, () =>
                   {
                      HandleMotionEndEvent(evt);
@@ -128,7 +127,6 @@ namespace Beamable.Samples.KOR.Behaviours
                   break;
 
                case PlayerMoveStartedEvent moveEvt:
-                  Debug.Log("MOVE EVENT RECEIVED: " + moveEvt.dirX);
                   startEvt = moveEvt;
                   // TODO: throw some visualizations here....
                   break;
@@ -146,6 +144,7 @@ namespace Beamable.Samples.KOR.Behaviours
 
          SetDirection(evt.dirX, evt.dirY);
          SetDeltaTime(evt.endTime);
+         startEvt = null;
 
          var mass = entityManager.GetComponentData<PhysicsMass>(NetworkedPhysics
             .Entity);
@@ -153,19 +152,12 @@ namespace Beamable.Samples.KOR.Behaviours
          var power = GetPowerForDeltaTime(deltaTime);
          var speed = power / mass.InverseMass;
 
-         entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
-         {
-            Impulse = direction * magnitude * speed
-         });
-
-
          if (direction.x.IsNaN() || magnitude.IsNaN() || deltaTime.IsNaN() || speed.IsNaN())
          {
             Debug.Log("There was a NaN movement tick. Reseting to zero");
             magnitude = sfloat.Zero;
             direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
             deltaTime = sfloat.Zero;
-            startEvt = null;
             return;
          }
 
@@ -173,8 +165,12 @@ namespace Beamable.Samples.KOR.Behaviours
          {
             Impulse = direction * magnitude * speed
          });
+
+         entityManager.SetComponentData(NetworkedPhysics.Entity, new PhysicsImpulse
+         {
+            Impulse = direction * magnitude * speed
+         });
          PreviewBehaviour?.Set(false, Vector3.right, 0);
-         startEvt = null;
       }
    }
 }
