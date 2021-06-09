@@ -73,6 +73,16 @@ namespace Beamable.Samples.KOR.Behaviours
          // var mag =
          magnitude = math.length(dir);
          direction = math.normalize(dir);
+
+         if (magnitude.IsNaN())
+         {
+            magnitude = sfloat.Zero;
+         }
+
+         if (direction.x.IsNaN() || direction.y.IsNaN() || direction.z.IsNaN())
+         {
+            direction = new float3(sfloat.One, sfloat.Zero, sfloat.Zero);
+         }
       }
 
       private void SetDeltaTime(uint time)

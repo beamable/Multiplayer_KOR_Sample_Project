@@ -72,7 +72,8 @@ namespace Beamable.Samples.KOR
                                            $"type={cco.ContentType} id={cco.Id} readable name={cco.ReadableName}",
                     DebugLogLevel.Verbose);
 
-                GameObject viewPrefab = await Addressables.LoadAssetAsync<GameObject>(cco.avatarViewPrefab).Task;
+                // GameObject viewPrefab = await Addressables.LoadAssetAsync<GameObject>(cco.avatarViewPrefab).Task;
+                GameObject viewPrefab = await cco.ResolveAvatarViewPrefab();
                 AvatarView view = viewPrefab.GetComponent<AvatarView>();
 
                 Character newCharacter = new Character(cco, view);
@@ -179,13 +180,13 @@ namespace Beamable.Samples.KOR
         public async Task<Attributes> GetChosenPlayerAttributes()
         {
             var character = await GetChosenCharacterByDBID(_beamableAPI.User.id);
-            
+
             if (character == null)
             {
                 Configuration.Debugger.Log($"No character for {_beamableAPI.User.id}.");
                 return new Attributes(0, 0);
             }
-            
+
             CharacterContentObject characterContentObject = character.CharacterContentObject;
 
             // Very early in play session, this may not be ready
@@ -206,7 +207,7 @@ namespace Beamable.Samples.KOR
                 {
                     int itemCount = kvp.Value.Count;
                     KORItemContent korItemContent = await KORHelper.GetKORItemContentById(_beamableAPI, kvp.Key);
-                   
+
                     //Reward user for each TYPE and COUNT of Inventory
                     chargeSpeed += (korItemContent.ChargeSpeed * itemCount);
                     movementSpeed += (korItemContent.MovementSpeed * itemCount);

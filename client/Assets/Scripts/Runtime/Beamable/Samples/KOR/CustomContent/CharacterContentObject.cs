@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Beamable.Common.Content;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
@@ -16,5 +17,21 @@ namespace Beamable.Samples.KOR.CustomContent
         public int MovementSpeed = 0;
 
         public int ChargeSpeed = 0;
+
+        public async Task<GameObject> ResolveAvatarViewPrefab()
+        {
+            var taskHandle = !avatarViewPrefab.OperationHandle.IsValid()
+                ? avatarViewPrefab.LoadAssetAsync()
+                : avatarViewPrefab.OperationHandle.Convert<GameObject>();
+            return await taskHandle.Task;
+        }
+
+        public async Task<Texture2D> ResolveBigIcon()
+        {
+            var taskHandle = !bigIcon.OperationHandle.IsValid()
+                ? bigIcon.LoadAssetAsync()
+                : bigIcon.OperationHandle.Convert<Texture2D>();
+            return await taskHandle.Task;
+        }
     }
 }
