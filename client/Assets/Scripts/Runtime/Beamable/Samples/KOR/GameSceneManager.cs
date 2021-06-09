@@ -37,7 +37,7 @@ namespace Beamable.Samples.KOR
         [SerializeField]
         private GameUIView _gameUIView = null;
 
-        private Dictionary<long, AvatarView> _dbidToAvatar = new Dictionary<long, AvatarView>();
+        private Dictionary<long, SpawnablePlayer> _dbidToSpawnablePlayer = new Dictionary<long, SpawnablePlayer>();
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
 
         //  Unity Methods   ------------------------------
@@ -149,31 +149,60 @@ namespace Beamable.Samples.KOR
             }
         }
 
+        private class SpawnablePlayer
+        {
+            public SpawnablePlayer(long dbid, SpawnPointBehaviour spawnPointBehaviour)
+            {
+                _dbid = dbid;
+                _spawnPointBehaviour = spawnPointBehaviour;
+            }
+
+            public long DBID { get { return _dbid; } }
+            public SpawnPointBehaviour SpawnPointBehaviour { get { return _spawnPointBehaviour; } }
+
+            public Character ChosenCharacter { get; set; }
+
+            private long _dbid = -1;
+            private SpawnPointBehaviour _spawnPointBehaviour;
+        }
+
         public async void OnPlayerJoined(PlayerJoinedEvent joinEvent)
         {
-            if (_dbidToAvatar.ContainsKey(joinEvent.PlayerDbid))
+            if (_dbidToSpawnablePlayer.ContainsKey(joinEvent.PlayerDbid))
                 return;
 
             var spawnIndex = NetworkController.Instance.rand.Next(0, _unusedSpawnPoints.Count);
             var spawnPoint = _unusedSpawnPoints[spawnIndex];
             _unusedSpawnPoints.Remove(spawnPoint);
 
+            SpawnablePlayer newPlayer = new SpawnablePlayer(joinEvent.PlayerDbid, spawnPoint);
+            _dbidToSpawnablePlayer.Add(joinEvent.PlayerDbid, newPlayer);
+
             Character chosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid);
 
-            AvatarView avatarView = GameObject.Instantiate<AvatarView>(chosenCharacter.AvatarViewPrefab);
-            avatarView.transform.SetPhysicsPosition(spawnPoint.transform.position);
-            _dbidToAvatar.Add(joinEvent.PlayerDbid, avatarView);
+            newPlayer.ChosenCharacter = chosenCharacter;
 
-            avatarView.SetForPlayer(joinEvent.PlayerDbid);
-            _gameUIView.AvatarViews.Add(avatarView);
+            if (_dbidToSpawnablePlayer.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)
+                SpawnAllPlayersAtOnce();
+        }
 
-            bool isLocal = joinEvent.PlayerDbid == NetworkController.Instance.LocalDbid;
-            if (isLocal)
-                avatarView.gameObject.GetComponent<AvatarMotionBehaviour>().PreviewBehaviour = null;
-            else
-                avatarView.gameObject.GetComponent<PlayerInputBehaviour>().enabled = false;
+        private void SpawnAllPlayersAtOnce()
+        {
+            foreach (KeyValuePair<long, SpawnablePlayer> entry in _dbidToSpawnablePlayer)
+            {
+                SpawnablePlayer sp = entry.Value;
 
-            // TODO: Declare game as ready to start!
+                AvatarView avatarView = GameObject.Instantiate<AvatarView>(sp.ChosenCharacter.AvatarViewPrefab);
+                avatarView.transform.SetPhysicsPosition(sp.SpawnPointBehaviour.transform.position);
+
+                avatarView.SetForPlayer(sp.DBID);
+                _gameUIView.AvatarViews.Add(avatarView);
+
+                if (sp.DBID == NetworkController.Instance.LocalDbid)
+                    avatarView.gameObject.GetComponent<AvatarMotionBehaviour>().PreviewBehaviour = null;
+                else
+                    avatarView.gameObject.GetComponent<PlayerInputBehaviour>().enabled = false;
+            }
         }
 
         public void HandleNetworkUpdate(TimeUpdate update)
@@ -210,7 +239,7 @@ namespace Beamable.Samples.KOR
             KORHelper.PlayAudioForUIClickPrimary();
 
             // Clean up manager
-            _dbidToAvatar.Clear();
+            _dbidToSpawnablePlayer.Clear();
             _unusedSpawnPoints.Clear();
             NetworkController.Instance.Cleanup();
 
