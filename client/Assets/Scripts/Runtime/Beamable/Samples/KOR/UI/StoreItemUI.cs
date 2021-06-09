@@ -1,3 +1,4 @@
+using Beamable.Samples.KOR.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +11,12 @@ namespace Beamable.Samples.KOR.UI
     public class StoreItemUI : MonoBehaviour
     {
         //  Properties -----------------------------------
-        public TMP_Text TitleText { get { return _titleText; } set { _titleText = value; }}
+        public StoreItemData StoreItemData { get { return _storeItemData; } set { _storeItemData = value; Render();}}
         public Button Button { get { return _button; }}
-        public Image IconIconImage { get { return _iconImage; } set { _iconImage = value; Render();}}
 
         //  Fields ---------------------------------------
+        private StoreItemData _storeItemData = null;
+
         [SerializeField]
         private TMP_Text _titleText = null;
         
@@ -26,7 +28,11 @@ namespace Beamable.Samples.KOR.UI
         
         //  Unity Methods ---------------------------------
         public void Render()
-        { 
+        {
+            _titleText.text = _storeItemData.Title;
+            
+            //Hide image, load texture, show image
+            KORHelper.AddressablesLoadAssetAsync<Texture2D>(_storeItemData.KORItemContent.icon, _iconImage);
         }
     }
 }

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Beamable.Api.Payments;
-using Beamable.Common.Api;
 using Beamable.Common.Api.Inventory;
 using Beamable.Common.Shop;
 using Beamable.Extensions;
 using Beamable.Samples.Core;
+using Beamable.Samples.KOR.CustomContent;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Beamable.Samples.KOR
 {
@@ -29,8 +29,8 @@ namespace Beamable.Samples.KOR
       private IBeamableAPI _beamableAPI = null;
       private InventoryView _inventoryView = null;
       private PlayerStoreView _playerStoreView = null;
-      private List<string> _inventoryItems = new List<string>();
-      private List<string> _storeItems = new List<string>();
+      private List<StoreItemData> _inventoryItemDatas = new List<StoreItemData>();
+      private List<StoreItemData> _storeItemDatas = new List<StoreItemData>();
       private StoreContent _storeContent = null;
       private int _currencyAmount = 0;
       
@@ -41,6 +41,8 @@ namespace Beamable.Samples.KOR
          _storeUIView.BuyButton.onClick.AddListener(BuyButton_OnClicked);
          _storeUIView.ResetButton.onClick.AddListener(ResetButton_OnClicked);
          _storeUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
+         _storeUIView.BackgroundButton.onClick.AddListener(BackgroundButton_OnClicked);
+         
          SetupBeamable();
       }
 
@@ -68,7 +70,7 @@ namespace Beamable.Samples.KOR
          _storeUIView.CanvasGroupsDoFadeIn();
 
          // Show the player's attributes in the UI of this scene
-         ReloadAttributes();
+         ReloadAndRenderAttributes();
          
          //
          _storeContent = await _configuration.StoreRef.Resolve();
@@ -81,11 +83,12 @@ namespace Beamable.Samples.KOR
       /// Get sum total of pay-to-play attributes to impact gameplay
       /// </summary>
       /// <returns></returns>
-      private async void ReloadAttributes()
+      private async Task<Attributes> ReloadAndRenderAttributes()
       {
          // Show the player's attributes in the UI of this scene
          Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
          _storeUIView.AttributesPanelUI.Attributes = attributes;
+         return attributes;
 
       }
 
@@ -111,43 +114,60 @@ namespace Beamable.Samples.KOR
       
       private void CheckLoadServicesStatus()
       {
-         ReloadAttributes();
+         ReloadAndRenderAttributes();
             
-         string instructions = string.Format(KORConstants.StoreUIView_Instructions, _currencyAmount, 
-            KORConstants.StoreUIView_CurrencyName);
-         _storeUIView.BufferedText.SetText(instructions, 
-            TMP_BufferedText.BufferedTextMode.Immediate);
+         // Set Default Instructions
+         BackgroundButton_OnClicked();
          
          // RENDER #1 - INVENTORY
-         _storeUIView.LeftPanelUI.BodyText.text = "You have";
+         
          _storeUIView.LeftPanelUI.VerticalLayoutGroup.transform.ClearChildren();
-         foreach (var item in _inventoryItems)
+         foreach (var itemData in _inventoryItemDatas)
          {
             StoreItemUI inventoryItem = GameObject.Instantiate<StoreItemUI>(_storeUIView.StoreItemUIPrefab,
                _storeUIView.LeftPanelUI.VerticalLayoutGroup.transform);
             inventoryItem.transform.SetAsLastSibling();
-            inventoryItem.TitleText.text = item;
             
             inventoryItem.Button.onClick.AddListener(() =>
             {
-               Debug.Log("Clicked i: " + inventoryItem.TitleText.text);
+               Attributes attributes = new Attributes(3, 2);
+               string message = string.Format(KORConstants.StoreUIView_SelectStoreInventory, 
+                  itemData.KORItemContent.ChargeSpeed,
+                  itemData.KORItemContent.MovementSpeed);
+               
+               _storeUIView.BufferedText.SetText(message, 
+                  TMP_BufferedText.BufferedTextMode.Immediate);
             });
          }
          
          
          // RENDER #2 - STORE
-         _storeUIView.RightPanelUI.BodyText.text = "You can buy";
          _storeUIView.RightPanelUI.VerticalLayoutGroup.transform.ClearChildren();
-         foreach (var item in _storeItems)
+         foreach (var itemData in _storeItemDatas)
          {
             StoreItemUI storeItemUI = GameObject.Instantiate<StoreItemUI>(_storeUIView.StoreItemUIPrefab,
                _storeUIView.RightPanelUI.VerticalLayoutGroup.transform);
             storeItemUI.transform.SetAsLastSibling();
-            storeItemUI.TitleText.text = item;
+            storeItemUI.StoreItemData = itemData;
             
-            storeItemUI.Button.onClick.AddListener(() =>
+            storeItemUI.Button.onClick.AddListener(async () =>
             {
-               Debug.Log("Clicked s: " + storeItemUI.TitleText.text);
+               string message = string.Format(KORConstants.StoreUIView_SelectStoreItem, 
+                  itemData.KORItemContent.ChargeSpeed,
+                  itemData.KORItemContent.MovementSpeed);
+               
+               _storeUIView.BufferedText.SetText(message, 
+                  TMP_BufferedText.BufferedTextMode.Immediate);
+            });
+            
+            storeItemUI.Button.onClick.AddListener(async () =>
+            {
+               string message = string.Format(KORConstants.StoreUIView_SelectStoreItem, 
+                  itemData.KORItemContent.ChargeSpeed,
+                  itemData.KORItemContent.MovementSpeed);
+               
+               _storeUIView.BufferedText.SetText(message, 
+                  TMP_BufferedText.BufferedTextMode.Immediate);
             });
             
          }  
@@ -164,20 +184,22 @@ namespace Beamable.Samples.KOR
 
 
       //  Event Handlers -------------------------------
-      private void Inventory_OnChanged(InventoryView inventoryView)
+
+      
+      private async void Inventory_OnChanged(InventoryView inventoryView)
       {
          _inventoryView = inventoryView;
          
-         _inventoryItems.Clear();
+         _inventoryItemDatas.Clear();
          foreach (KeyValuePair<string, List<ItemView>> kvp in _inventoryView.items)
          {
             string contentId = kvp.Key;
             string itemName = KORHelper.GetKORItemDisplayNameFromContentId(contentId);
-            int itemCount = kvp.Value.Count;
-            string itemDisplayName = $"\t{itemName} x {itemCount}";
-               
-            //TODO: Replace List<string> with List<blah> to hold more data?
-            _inventoryItems.Add(itemDisplayName);
+            KORItemContent korItemContent = await KORHelper.GetKORItemContentById(_beamableAPI, kvp.Key);
+            
+            string title = $"\t{itemName} x {kvp.Value.Count}";
+            StoreItemData itemData = new StoreItemData(korItemContent, title);
+            _inventoryItemDatas.Add(itemData);
          }
          
          DebugLog($"InventoryService_OnChanged() items.Count = {_inventoryView.items.Count}");
@@ -199,25 +221,42 @@ namespace Beamable.Samples.KOR
       }
       
       
-      private void CommerceService_OnChanged(PlayerStoreView playerStoreView)
+      private async void CommerceService_OnChanged(PlayerStoreView playerStoreView)
       {
          _playerStoreView = playerStoreView;
-         _storeItems.Clear();
+         _storeItemDatas.Clear();
          
          foreach (PlayerListingView playerListingView in playerStoreView.listings)
          {
-            var contentId = playerListingView.offer.obtainItems[0].contentId;
-            
             int price = playerListingView.offer.price.amount;
+            string contentId = playerListingView.offer.obtainItems[0].contentId;
             string itemName = KORHelper.GetKORItemDisplayNameFromContentId(contentId);
-            string itemDisplayName = $"\t{itemName} ({price} {KORConstants.StoreUIView_CurrencyName})";
-               
-            //TODO: Replace List<string> with List<blah> to hold more data?
-            _storeItems.Add(itemDisplayName);
+            KORItemContent korItemContent = await KORHelper.GetKORItemContentById(_beamableAPI, contentId);
+            
+            string title = $"\t{itemName} ({price} {KORConstants.StoreUIView_CurrencyName})";
+            StoreItemData itemData = new StoreItemData(korItemContent, title);
+            _storeItemDatas.Add(itemData);
          }
          
          DebugLog($"CommerceService_OnChanged() listings.Count = {_playerStoreView.listings.Count}");
          CheckLoadServicesStatus();
+      }
+      
+      /// <summary>
+      /// This handles 'did user click ANYWHERE that is NOT a button?'
+      /// </summary>
+      public void BackgroundButton_OnClicked()
+      {
+         // Text above inventory panel
+         _storeUIView.LeftPanelUI.BodyText.text = string.Format(KORConstants.StoreUIView_InventoryTip,
+            _currencyAmount, KORConstants.StoreUIView_CurrencyName, KORHelper.GetPluralization(_currencyAmount));
+         
+         // Text above store panel
+         _storeUIView.RightPanelUI.BodyText.text = KORConstants.StoreUIView_StoreTip;
+         
+         // This is the default instructions
+         _storeUIView.BufferedText.SetText(KORConstants.StoreUIView_Instructions, 
+            TMP_BufferedText.BufferedTextMode.Immediate);
       }
       
       
@@ -228,6 +267,7 @@ namespace Beamable.Samples.KOR
          BuySelectedStoreItem();
       }
 
+      
       private void ResetButton_OnClicked()
       {
          KORHelper.PlayAudioForUIClickPrimary();
@@ -248,5 +288,8 @@ namespace Beamable.Samples.KOR
          StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
             _configuration.DelayBeforeLoadScene));
       }
+      
+      
+      
    }
 }

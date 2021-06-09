@@ -198,11 +198,11 @@ namespace Beamable.Samples.KOR
                 foreach (KeyValuePair<string, List<ItemView>> kvp in inventoryView.items)
                 {
                     int itemCount = kvp.Value.Count;
-                    KORItemContent y = await _beamableAPI.ContentService.GetContent(kvp.Key, typeof(KORItemContent)) as KORItemContent;
-
+                    KORItemContent korItemContent = await KORHelper.GetKORItemContentById(_beamableAPI, kvp.Key);
+                   
                     //Reward user for each TYPE and COUNT of Inventory
-                    chargeSpeed += (y.ChargeSpeed * itemCount);
-                    movementSpeed += (y.MovementSpeed * itemCount);
+                    chargeSpeed += (korItemContent.ChargeSpeed * itemCount);
+                    movementSpeed += (korItemContent.MovementSpeed * itemCount);
                 }
 
                 // #2 RETURN FINAL VALUES
