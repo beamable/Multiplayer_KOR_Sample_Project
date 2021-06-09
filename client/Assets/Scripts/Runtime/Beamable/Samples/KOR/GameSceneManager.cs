@@ -177,13 +177,13 @@ namespace Beamable.Samples.KOR
             // TODO: Declare game as ready to start!
         }
 
-        public void HandleNetworkUpdate(TimeUpdate update)
-        {
-            foreach (var evt in update.Events)
-            {
-                HandleNetworkEvent(evt);
-            }
-        }
+      public void HandleNetworkUpdate(TimeUpdate update)
+      {
+         foreach (var evt in update.Events)
+         {
+            HandleNetworkEvent(evt);
+         }
+      }
 
         public void HandleNetworkEvent(KOREvent korEvent)
         {
@@ -195,32 +195,32 @@ namespace Beamable.Samples.KOR
             }
         }
 
-        /// <summary>
-        /// Render UI text
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="statusTextMode"></param>
-        public void SetStatusText(string message, TMP_BufferedText.BufferedTextMode statusTextMode)
-        {
-            _gameUIView.BufferedText.SetText(message, statusTextMode);
-        }
+         /// <summary>
+      /// Render UI text
+      /// </summary>
+      /// <param name="message"></param>
+      /// <param name="statusTextMode"></param>
+      public void SetStatusText(string message, TMP_BufferedText.BufferedTextMode statusTextMode)
+      {
+         _gameUIView.BufferedText.SetText(message, statusTextMode);
+      }
 
         //  Event Handlers -------------------------------
-        private void BackButton_OnClicked()
-        {
-            KORHelper.PlayAudioForUIClick();
+		private void BackButton_OnClicked()
+      {
+         KORHelper.PlayAudioForUIClickPrimary();
 
-            // Clean up manager
-            _dbidToAvatar.Clear();
-            _unusedSpawnPoints.Clear();
-            NetworkController.Instance.Cleanup();
+         // Clean up manager
+         _dbidToAvatar.Clear();
+         _unusedSpawnPoints.Clear();
+         NetworkController.Instance.Cleanup();
 
-            // Destroy ECS
-            SystemManager.DestroyGameSystems();
+         // Destroy ECS
+         SystemManager.DestroyGameSystems();
 
-            // Change scenes
-            StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
-               _configuration.DelayBeforeLoadScene));
-        }
+         // Change scenes
+         StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
+            _configuration.DelayBeforeLoadScene));
+      }
     }
 }
