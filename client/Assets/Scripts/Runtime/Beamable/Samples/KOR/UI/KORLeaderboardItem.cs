@@ -62,8 +62,8 @@ namespace Beamable.Samples.KOR.UI
         private async Task<EmptyResponse> LoadIconForDbid(long dbid)
         {
             TweenHelper.ImageDoFade(_iconImage, 0, 0, 0, 0); //temporarily hide icon
-            CharacterContentObject chosenCharacterByDbid = await
-                RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(dbid);
+            CharacterContentObject chosenCharacterByDbid = (await
+                RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(dbid)).CharacterContentObject;
 
             if (chosenCharacterByDbid == null)
             {
