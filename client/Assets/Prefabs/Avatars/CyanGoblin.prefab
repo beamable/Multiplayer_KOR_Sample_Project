@@ -483,7 +483,7 @@ Transform:
   - {fileID: 2127966447}
   - {fileID: 1403756504}
   m_Father: {fileID: 4559516092778428673}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &585248647
 Animator:
@@ -1243,7 +1243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4330894941151641541, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5345675840862055009, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
@@ -1259,7 +1259,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6667210362306855216, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6928970518923597896, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: Model
@@ -1283,6 +1283,11 @@ PrefabInstance:
       objectReference: {fileID: 5956093517062666145}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+--- !u!4 &4559516092778428673 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3585649607945959136, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+  m_PrefabInstance: {fileID: 1046082958368116705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5956093517062666145 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6641724884132689984, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
@@ -1294,8 +1299,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f734e7f11cc4932ace8f04e0c3dde43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4559516092778428673 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3585649607945959136, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
-  m_PrefabInstance: {fileID: 1046082958368116705}
-  m_PrefabAsset: {fileID: 0}
