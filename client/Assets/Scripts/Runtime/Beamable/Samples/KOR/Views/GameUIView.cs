@@ -3,6 +3,7 @@ using System.Linq;
 using Beamable.Samples.KOR.Behaviours;
 using Beamable.Samples.KOR.UI;
 using TMPro;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,8 +23,12 @@ namespace Beamable.Samples.KOR.Views
       public List<AvatarView> AvatarViews => _avatarViews;
       public List<AvatarUIView> AvatarUIViews => _avatarUIViews;
       public GameTimerBehaviour GameTimerBehaviour => _timerBehaviour;
+      public CinemachineImpulseSource CinemachineImpulseSource { get { return _cinemachineImpulseSource; } }
 
       //  Fields ---------------------------------------
+      [SerializeField]
+      private CinemachineImpulseSource _cinemachineImpulseSource = null;
+
       [SerializeField]
       private AttributesPanelUI _attributesPanelUI = null;
 
