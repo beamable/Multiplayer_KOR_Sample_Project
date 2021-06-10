@@ -243,6 +243,11 @@ namespace Beamable.Samples.KOR
             }
         }
         
+        
+        
+        /// <summary>
+        /// TODO: Remove this method
+        /// </summary>
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
