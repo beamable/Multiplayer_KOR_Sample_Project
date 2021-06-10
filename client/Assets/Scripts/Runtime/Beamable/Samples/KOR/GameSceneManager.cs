@@ -262,6 +262,11 @@ namespace Beamable.Samples.KOR
             }
         }
 
+        public void ShakeCamera(float force=1)
+        {
+            _gameUIView.CinemachineImpulseSource.GenerateImpulse();
+        }
+
         public void HandleNetworkEvent(KOREvent korEvent)
         {
             switch (korEvent)
@@ -290,17 +295,17 @@ namespace Beamable.Samples.KOR
         private void BackButton_OnClicked()
         {
             KORHelper.PlayAudioForUIClickBack();
-            
+
             _gameUIView.DialogSystem.ShowDialogBox<DialogUI>(
-                
+
                 // Renders this prefab. DUPLICATE this prefab and drag
                 // into _storeUIView to change layout
                 _gameUIView.DialogSystem.DialogUIPrefab,
-                
+
                 // Set Text
                 KORConstants.Dialog_AreYouSure,
                 "This well end your game.",
-                
+
                 // Create zero or more buttons
                 new List<DialogButtonData>
                 {
@@ -308,7 +313,7 @@ namespace Beamable.Samples.KOR
                     {
                         KORHelper.PlayAudioForUIClickPrimary();
                         _gameUIView.DialogSystem.HideDialogBox();
-                        
+
                         // Clean up manager
                         _spawnablePlayers.Clear();
                         _unusedSpawnPoints.Clear();
@@ -330,7 +335,7 @@ namespace Beamable.Samples.KOR
                     })
                 });
 
-            
+
         }
     }
 }

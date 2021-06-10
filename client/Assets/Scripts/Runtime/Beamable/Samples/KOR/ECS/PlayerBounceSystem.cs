@@ -46,22 +46,20 @@ namespace Beamable.Samples.KOR.Multiplayer
 
         private struct PlayerBounceSystemJob : ICollisionEventsJob
         {
-            [ReadOnly]
-            public ComponentDataFromEntity<BouncyTag> bouncyGroup;
+            [ReadOnly] public ComponentDataFromEntity<BouncyTag> bouncyGroup;
 
-            [ReadOnly]
-            public ComponentDataFromEntity<PhysicsVelocity> velocityGroup;
+            [ReadOnly] public ComponentDataFromEntity<PhysicsVelocity> velocityGroup;
 
             public ComponentDataFromEntity<PhysicsImpulse> impulseGroup;
 
             private sfloat GetImpulse(Entity e)
             {
                 if (!impulseGroup.HasComponent(e))
-                    return (sfloat)0.0f;
+                    return (sfloat) 0.0f;
 
                 sfloat sqrMagImpulse = impulseGroup[e].Impulse.x * impulseGroup[e].Impulse.x
-                       + impulseGroup[e].Impulse.y * impulseGroup[e].Impulse.y
-                       + impulseGroup[e].Impulse.z * impulseGroup[e].Impulse.z;
+                                       + impulseGroup[e].Impulse.y * impulseGroup[e].Impulse.y
+                                       + impulseGroup[e].Impulse.z * impulseGroup[e].Impulse.z;
 
                 return sqrMagImpulse;
             }
@@ -76,54 +74,61 @@ namespace Beamable.Samples.KOR.Multiplayer
                 var aHasImpulse = impulseGroup.HasComponent(a);
                 var bHasImpulse = impulseGroup.HasComponent(b);
 
-                sfloat minImpulse = (sfloat)0.01f;
+                sfloat minImpulse = (sfloat) 0.01f;
                 sfloat totalImpulse = GetImpulse(a) + GetImpulse(b);
                 if (totalImpulse > minImpulse)
                 {
                     GameSceneManager.Instance.EnqueueConcurrent(() =>
                     {
-                        List<string> collisionClips = new List<string>() { SoundConstants.Collision01, SoundConstants.Collision02, SoundConstants.Collision03 };
-                        SoundManager.Instance.PlayAudioClip(collisionClips[Random.Range(0, collisionClips.Count)], SoundManager.GetRandomPitch(1.0f, 0.3f));
+                        GameSceneManager.Instance.ShakeCamera();
+                        List<string> collisionClips = new List<string>()
+                            {SoundConstants.Collision01, SoundConstants.Collision02, SoundConstants.Collision03};
+                        SoundManager.Instance.PlayAudioClip(collisionClips[Random.Range(0, collisionClips.Count)],
+                            SoundManager.GetRandomPitch(1.0f, 0.3f));
                     });
                 }
 
-  if (aIsBouncy && bIsBouncy)
-            {
-               var aBounce = bouncyGroup[a];
-               var bBounce = bouncyGroup[b];
 
-               var aVelocity = velocityGroup[a];
-               var bVelocity = velocityGroup[b];
+                if (aIsBouncy && bIsBouncy)
+                {
+                    var normal = collisionEvent.Normal;
+                    var aBounce = bouncyGroup[a];
+                    var bBounce = bouncyGroup[b];
 
-               var aImpulse = impulseGroup[a];
-               var bImpulse = impulseGroup[b];
+                    var aVelocity = velocityGroup[a];
+                    var bVelocity = velocityGroup[b];
 
-               var isAFaster = math.length(aVelocity.Linear) < math.length(bVelocity.Linear);
+                    var aImpulse = impulseGroup[a];
+                    var bImpulse = impulseGroup[b];
 
-               var bouncer = isAFaster ? aBounce : bBounce;
-               var bouncee = isAFaster ? bBounce : aBounce;
-               var targetImpulse = isAFaster ? bImpulse : aImpulse;
-               var targetEntity = isAFaster ? b : a;
-               normal = isAFaster ? -normal : normal;
+                    var isAFaster = math.length(aVelocity.Linear) < math.length(bVelocity.Linear);
 
-               // two bouncy things are colliding... Normally we'd just add a lot of impulse on both characters
-               var impulse = normal * bouncer.Bounce;
-               var shield = bouncee.Shield;
-               Debug.Log(a.Index + "=" + aBounce.Shield + " / " + b.Index + "=" + bBounce.Shield);
-               impulse /= (shield + (sfloat).1f); // a shield of 1 doesn't do anything. A shield of 0 causes catastrophie...
-               var maxLength = (sfloat) 30;
-               if (math.length(impulse) > maxLength)
-               {
-                  impulse = (impulse / math.length(impulse)) * maxLength;
-               }
+                    var bouncer = isAFaster ? aBounce : bBounce;
+                    var bouncee = isAFaster ? bBounce : aBounce;
+                    var targetImpulse = isAFaster ? bImpulse : aImpulse;
+                    var targetEntity = isAFaster ? b : a;
+                    normal = isAFaster ? -normal : normal;
 
-               targetImpulse.Impulse = impulse;  // TODO: Discount it by shield.
-               impulseGroup[targetEntity] = targetImpulse;
-               // bImpulse.Impulse += collisionEvent.
+                    // two bouncy things are colliding... Normally we'd just add a lot of impulse on both characters
+                    var impulse = normal * bouncer.Bounce;
+                    var shield = bouncee.Shield;
+                    Debug.Log(a.Index + "=" + aBounce.Shield + " / " + b.Index + "=" + bBounce.Shield);
+                    impulse /= (shield +
+                                (sfloat) .1f); // a shield of 1 doesn't do anything. A shield of 0 causes catastrophie...
+                    var maxLength = (sfloat) 30;
+                    if (math.length(impulse) > maxLength)
+                    {
+                        impulse = (impulse / math.length(impulse)) * maxLength;
+                    }
 
-               return;
-               // but we'll temper it by shields
-            }
+                    targetImpulse.Impulse = impulse; // TODO: Discount it by shield.
+                    impulseGroup[targetEntity] = targetImpulse;
+                    // bImpulse.Impulse += collisionEvent.
+
+                    return;
+                    // but we'll temper it by shields
+                }
+
                 if (aIsBouncy && bHasImpulse)
                 {
                     // apply an explosion impulse to b.
@@ -138,6 +143,7 @@ namespace Beamable.Samples.KOR.Multiplayer
                     var aImpulse = impulseGroup[a];
                     aImpulse.Impulse = collisionEvent.Normal * bouncyGroup[b].Bounce;
                     impulseGroup[a] = aImpulse;
+
                 }
             }
         }
