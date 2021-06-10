@@ -23,6 +23,11 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       private long latestInvalidFrame = -1;
       private long latestValidFrame = -1;
 
+      private HashSet<int> _consumersToRemove = new HashSet<int>();
+
+      private Dictionary<int, (long, Action<TimeUpdate>)> _consumersToAdd =
+         new Dictionary<int, (long, Action<TimeUpdate>)>();
+
       public bool HasHashForTick(long tick)
       {
          return _tickToHash.ContainsKey(tick);
@@ -114,11 +119,15 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          return GetMessagesForTick(tick).Where(message => message is T).Cast<T>();
       }
 
+      public void RemoveConsumer(int consumerId)
+      {
+         _consumersToRemove.Add(consumerId);
+      }
+
       public int CreateNewConsumer(Action<TimeUpdate> onUpdate, long startTick = -1)
       {
          _nextConsumerId++;
-         _consumerIdToTick.Add(_nextConsumerId, startTick);
-         _consumerIdToUpdater.Add(_nextConsumerId, onUpdate);
+         _consumersToAdd.Add(_nextConsumerId, (startTick, onUpdate));
          return _nextConsumerId;
       }
 
@@ -134,6 +143,18 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public void NotifyConsumers(long tick, float elapsedTime, float deltaTime)
       {
+         foreach (var consumerToAdd in _consumersToAdd)
+         {
+            _consumerIdToTick.Add(consumerToAdd.Key, consumerToAdd.Value.Item1);
+            _consumerIdToUpdater.Add(consumerToAdd.Key, consumerToAdd.Value.Item2);
+         }
+         foreach (var consumerToRemove in _consumersToRemove)
+         {
+            _consumerIdToTick.Remove(consumerToRemove);
+            _consumerIdToUpdater.Remove(consumerToRemove);
+         }
+         _consumersToRemove.Clear();
+         _consumersToAdd.Clear();
          if (_scheduledActions.TryGetValue(tick, out var scheduledActions))
          {
             foreach (var action in scheduledActions)

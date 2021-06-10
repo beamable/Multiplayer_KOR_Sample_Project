@@ -38,22 +38,22 @@ namespace Beamable.Samples.KOR.Views
          {
             return;
          }
-         
+
          if (RenderSettings.skybox != _configuration.CameraSkyboxMaterial)
          {
             RenderSettings.skybox = _configuration.CameraSkyboxMaterial;
          }
       }
-      
-      protected void Update()
+
+      protected virtual void Update()
       {
          if (_configuration.IsRotatingCameraSkybox)
          {
             KORHelper.SetSkyboxRotation(Time.time * _configuration.CameraSkyboxRotationSpeed);
-             
+
          }
       }
-      
+
       protected void OnDestroy()
       {
          // Simply done to prevent randomly dirtying git version control on the material
@@ -66,7 +66,7 @@ namespace Beamable.Samples.KOR.Views
          // Instantly fade to 0
          TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 0, 0, 0, 0);
       }
-      
+
       public void CanvasGroupsDoFadeIn()
       {
          // Slowly fade to 1

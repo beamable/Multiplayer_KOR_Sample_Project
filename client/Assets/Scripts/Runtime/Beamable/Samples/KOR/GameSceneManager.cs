@@ -43,7 +43,7 @@ namespace Beamable.Samples.KOR
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
         private HashSet<long> _dbidReadyReceived = new HashSet<long>();
         private bool _hasSpawned = false;
-        // private sfloat
+
 
         //  Unity Methods   ------------------------------
         protected void Start()
@@ -166,11 +166,37 @@ namespace Beamable.Samples.KOR
             {
                 _hasSpawned = true;
                 SpawnAllPlayersAtOnce();
+                StartGameTimer();
             }
+        }
+
+        private void StartGameTimer()
+        {
+            GameUIView.GameTimerBehaviour.StartMatch();
+            GameUIView.GameTimerBehaviour.OnGameOver += () =>
+            {
+                // TODO: score the players, and end the game.
+                Debug.Log("Game over!");
+
+                // TODO: Disable input and motion behaviours.
+                foreach (var motionBehaviour in FindObjectsOfType<AvatarMotionBehaviour>())
+                {
+                    motionBehaviour.Stop();
+                    motionBehaviour.enabled = false;
+                }
+
+                foreach (var inputBehaviour in FindObjectsOfType<PlayerInputBehaviour>())
+                {
+                    inputBehaviour.enabled = false;
+                }
+
+            };
         }
 
         private void SpawnAllPlayersAtOnce()
         {
+
+
             List<CanvasGroup> avatarUiCanvasGroups = new List<CanvasGroup>();
 
             for (int p = 0; p < _spawnablePlayers.Count; p++)

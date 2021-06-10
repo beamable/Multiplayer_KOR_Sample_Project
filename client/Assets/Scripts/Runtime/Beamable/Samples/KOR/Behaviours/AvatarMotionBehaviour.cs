@@ -100,6 +100,11 @@ namespace Beamable.Samples.KOR.Behaviours
             startEvt = null;
         }
 
+        public void Stop()
+        {
+            NetworkController.Instance.Log.RemoveConsumer(consumerId);
+        }
+
         private void OnNetworkUpdate(TimeUpdate timeUpdate)
         {
             foreach (var message in timeUpdate.Events)
