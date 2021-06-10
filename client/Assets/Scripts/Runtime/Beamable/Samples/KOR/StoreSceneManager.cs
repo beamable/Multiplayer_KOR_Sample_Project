@@ -311,21 +311,23 @@ namespace Beamable.Samples.KOR
                 _storeUIView.DialogSystem.DialogUIPrefab,
                 
                 // Set Text
-                "Are you sure?",
+                KORConstants.Dialog_AreYouSure,
                 "This will delete your player history and restart the game.",
                 
                 // Create zero or more buttons
                 new List<DialogButtonData>
                 {
-                    new DialogButtonData("OK", () =>
+                    new DialogButtonData(KORConstants.Dialog_Ok, () =>
                     {
                         // TODO: Do something for "OK"
                         ExampleProjectHacks.ClearDeviceUsersAndReloadGame();
+                        KORHelper.PlayAudioForUIClickPrimary();
                         _storeUIView.DialogSystem.HideDialogBox();
                     }),
-                    new DialogButtonData("Cancel", () =>
+                    new DialogButtonData(KORConstants.Dialog_Cancel, () =>
                     {
                         // TODO: Do something for "Cancel"
+                        KORHelper.PlayAudioForUIClickSecondary();
                         _storeUIView.DialogSystem.HideDialogBox();
                     })
                 });
