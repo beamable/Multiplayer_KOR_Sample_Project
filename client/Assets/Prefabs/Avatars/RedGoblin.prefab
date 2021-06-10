@@ -172,15 +172,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4202046324630264043, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4330894941151641541, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5026046516575325172, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5345675840862055009, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6276507837589541420, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_Radius
@@ -192,7 +196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6667210362306855216, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6928970518923597896, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: Model
