@@ -68,7 +68,7 @@ namespace Beamable.Samples.KOR.Data
                         await authService.CreateUser().FlatMap(beamableAPI.ApplyToken);
 
                         // Rename NEW user
-                        string alias = MockDataCreator.CreateNewRandomAlias("Player");
+                        string alias = MockDataCreator.CreateNewRandomAlias("Plyr");
                         MockDataCreator.SetCurrentUserAlias(statsService, alias);
 
                         // Add Character to NEW user
@@ -148,14 +148,7 @@ namespace Beamable.Samples.KOR.Data
 
             Random random = new Random();
             alias += "_";
-            //
-            alias += lowers[random.Next(0, l)].ToString();
-            //
             alias += uppers[random.Next(0, u)].ToString();
-            //
-            alias += "_";
-            //
-            alias += numbers[random.Next(0, n)].ToString();
             alias += numbers[random.Next(0, n)].ToString();
             alias += numbers[random.Next(0, n)].ToString();
 

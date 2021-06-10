@@ -20,7 +20,7 @@ namespace Beamable.Samples.KOR
     {
         public const string ChosenCharacterStatKey = "ChosenCharacterContentID";
         public const string PlayerAliasStatKey = "alias";
-        public const string DefaultPlayerAliasPrefix = "Player";
+        public const string DefaultPlayerAliasPrefix = "Plyr";
 
         private List<Character> _allCharacters = null;
 
