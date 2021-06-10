@@ -12,7 +12,6 @@ using Beamable.Samples.KOR.Multiplayer.Events;
 using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
-using static Beamable.Samples.KOR.CharacterManager;
 using Beamable.Samples.KOR.Animation;
 
 namespace Beamable.Samples.KOR
@@ -20,7 +19,7 @@ namespace Beamable.Samples.KOR
     /// <summary>
     /// Handles the main scene logic: Game
     /// </summary>
-    public class GameSceneManager : SingletonMonobehavior<GameSceneManager>
+    public partial class GameSceneManager : SingletonMonobehavior<GameSceneManager>
     {
         //  Properties -----------------------------------
         public GameUIView GameUIView { get { return _gameUIView; } }
@@ -44,6 +43,7 @@ namespace Beamable.Samples.KOR
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
         private HashSet<long> _dbidReadyReceived = new HashSet<long>();
         private bool _hasSpawned = false;
+        // private sfloat
 
         //  Unity Methods   ------------------------------
         protected void Start()
@@ -127,29 +127,6 @@ namespace Beamable.Samples.KOR
             _gameUIView.AvatarViews.Clear();
         }
 
-        private class SpawnablePlayer
-        {
-            public SpawnablePlayer(long dbid, SpawnPointBehaviour spawnPointBehaviour)
-            {
-                _dbid = dbid;
-                _spawnPointBehaviour = spawnPointBehaviour;
-            }
-
-            public long DBID { get { return _dbid; } }
-            public SpawnPointBehaviour SpawnPointBehaviour { get { return _spawnPointBehaviour; } }
-
-            public Character ChosenCharacter { get; set; }
-
-            public Attributes Attributes { get { return _attributes; } set { _attributes = value; } }
-
-            public string PlayerAlias { get { return _playerAlias; } set { _playerAlias = value; } }
-
-            private long _dbid = -1;
-            private SpawnPointBehaviour _spawnPointBehaviour;
-            private Attributes _attributes;
-            private string _playerAlias;
-        }
-
         public async void OnPlayerJoined(PlayerJoinedEvent joinEvent)
         {
             if (_spawnablePlayers.Find(i => i.DBID == joinEvent.PlayerDbid) != null)
@@ -222,14 +199,10 @@ namespace Beamable.Samples.KOR
                 AvatarMotionBehaviour amb = avatarView.gameObject.GetComponent<AvatarMotionBehaviour>();
                 amb.Attributes = sp.Attributes;
 
-                _gameUIView.AvatarUIViews[p].Health = 100;
-                _gameUIView.AvatarUIViews[p].IsInGame = true;
-                _gameUIView.AvatarUIViews[p].Name = sp.PlayerAlias;
-                _gameUIView.AvatarUIViews[p].IsLocalPlayer = sp.DBID == NetworkController.Instance.LocalDbid;
+                _gameUIView.AvatarUIViews[p].Set(player, sp);
                 _gameUIView.AvatarUIViews[p].Render();
                 avatarUiCanvasGroups.Add(_gameUIView.AvatarUIViews[p].GetComponent<CanvasGroup>());
 
-                player.SetHealth(70);
             }
 
             TweenHelper.CanvasGroupsDoFade(avatarUiCanvasGroups, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f);
