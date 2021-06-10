@@ -212,6 +212,10 @@ namespace Beamable.Samples.KOR
 
         public static void SetSkyboxRotation(float rotation)
         {
+            if (RenderSettings.skybox == null)
+            {
+                return;
+            }
             RenderSettings.skybox.SetFloat("_Rotation", rotation);
         }
 

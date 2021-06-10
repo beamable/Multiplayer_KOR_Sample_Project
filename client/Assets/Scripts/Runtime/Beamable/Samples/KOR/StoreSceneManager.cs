@@ -302,9 +302,7 @@ namespace Beamable.Samples.KOR
         {
             KORHelper.PlayAudioForUIClickPrimary();
 
-            DebugLog( "Reset! This deletes the local player, " +
-               "creates a new one, and restarts the game. " +
-               "Do not use this in production.");
+
 
             _storeUIView.DialogSystem.ShowDialogBox<DialogUI>(
                 
@@ -313,8 +311,8 @@ namespace Beamable.Samples.KOR
                 _storeUIView.DialogSystem.DialogUIPrefab,
                 
                 // Set Text
-                "This is the title text",
-                "this is the body text",
+                "Are you sure?",
+                "This will delete your player history and restart the game.",
                 
                 // Create zero or more buttons
                 new List<DialogButtonData>
@@ -323,7 +321,6 @@ namespace Beamable.Samples.KOR
                     {
                         // TODO: Do something for "OK"
                         ExampleProjectHacks.ClearDeviceUsersAndReloadGame();
-                        
                         _storeUIView.DialogSystem.HideDialogBox();
                     }),
                     new DialogButtonData("Cancel", () =>

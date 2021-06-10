@@ -45,7 +45,7 @@ namespace Beamable.Core.UI.DialogSystem
                 return;
             }
             
-            GameObject.Destroy(_currentDialogUI);
+            GameObject.Destroy(_currentDialogUI.gameObject);
             _currentDialogUI = null;
         }
     }
