@@ -26,6 +26,9 @@ namespace Beamable.Samples.KOR.UI
         private Color healthLostColor = Color.black;
 
         [SerializeField]
+        private char healthBarCharacter = '-';
+
+        [SerializeField]
         private Vector3 parentCenterOffset = new Vector3(0.0f, 1.3f, 0.0f);
 
         private Camera _mainCamera = null;
@@ -63,8 +66,8 @@ namespace Beamable.Samples.KOR.UI
         {
             const int totalBlockCount = 10;
             int blocksLeft = Mathf.CeilToInt((float)healthRatio * totalBlockCount);
-            string filledBlocks = new string('-', blocksLeft);
-            string emptyBlocks = new string('-', totalBlockCount - blocksLeft);
+            string filledBlocks = new string(healthBarCharacter, blocksLeft);
+            string emptyBlocks = new string(healthBarCharacter, totalBlockCount - blocksLeft);
             healthText.text = string.Format("{0}{1}{2}{3}", _healthLeftColorString, filledBlocks, _healthLostColorString, emptyBlocks);
         }
     }

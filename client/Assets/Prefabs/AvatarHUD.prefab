@@ -207,7 +207,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -0.68}
-  m_SizeDelta: {x: 4, y: 1}
+  m_SizeDelta: {x: 6, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &639258706482354021
 MeshRenderer:
@@ -228,7 +228,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 853e31145048a6b4ea132edc57721be6, type: 2}
+  - {fileID: 2100000, guid: 92d73ceda97ce6c45af1d6551dfbafd2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -270,10 +270,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <color=#FF0000>----<color=#000000>------
+  m_text: <color=#FF0000>====<color=#000000>======
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 853e31145048a6b4ea132edc57721be6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 92d73ceda97ce6c45af1d6551dfbafd2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 1
+  m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
@@ -391,6 +391,7 @@ MonoBehaviour:
   healthText: {fileID: 7072793883677033565}
   onScreenTextSize: 0.025
   onScreenTextDistance: 0.1
-  healthLeftColor: {r: 1, g: 0, b: 0, a: 1}
+  healthLeftColor: {r: 1, g: 0.30034468, b: 0.13679248, a: 1}
   healthLostColor: {r: 0, g: 0, b: 0, a: 0.39215687}
+  healthBarCharacter: 61
   parentCenterOffset: {x: 0, y: 1.3, z: 0}
