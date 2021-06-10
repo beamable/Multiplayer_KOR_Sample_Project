@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Beamable.Samples.KOR.UI;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +20,12 @@ namespace Beamable.Samples.KOR.Views
       public TMP_BufferedText BufferedText { get { return _bufferedText; } }
       public List<AvatarView> AvatarViews { get { return _avatarViews; } }
       public List<AvatarUIView> AvatarUIViews { get { return _avatarUIViews; } }
+      public CinemachineImpulseSource CinemachineImpulseSource { get { return _cinemachineImpulseSource; } }
 
       //  Fields ---------------------------------------
+      [SerializeField]
+      private CinemachineImpulseSource _cinemachineImpulseSource = null;
+
       [SerializeField]
       private AttributesPanelUI _attributesPanelUI = null;
 
@@ -35,7 +40,6 @@ namespace Beamable.Samples.KOR.Views
 
       [SerializeField]
       private List<AvatarUIView> _avatarUIViews = null;
-
 
       [Header("Populates at Runtime")]
       [SerializeField]

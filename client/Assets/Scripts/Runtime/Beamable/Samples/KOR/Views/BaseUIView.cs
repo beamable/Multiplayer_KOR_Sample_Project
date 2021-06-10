@@ -12,7 +12,6 @@ namespace Beamable.Samples.KOR.Views
    {
       //  Properties -----------------------------------
       public Camera Camera { get { return _camera; } }
-      public bool WillRecolorCamera { get { return _willRecolorCamera; } }
       public Configuration Configuration { get { return _configuration; } }
       public List<CanvasGroup> CanvasGroups { get { return _canvasGroups; } }
 
@@ -20,9 +19,6 @@ namespace Beamable.Samples.KOR.Views
       [Header ("Base Properties")]
       [SerializeField]
       private Camera _camera = null;
-
-      [SerializeField]
-      private bool _willRecolorCamera = true;
 
       [SerializeField]
       private Configuration _configuration = null;
@@ -34,11 +30,6 @@ namespace Beamable.Samples.KOR.Views
       //  Unity Methods   ------------------------------
       protected void OnValidate()
       {
-         if (_camera == null || !_willRecolorCamera)
-         {
-            return;
-         }
-         
          if (RenderSettings.skybox != _configuration.CameraSkyboxMaterial)
          {
             RenderSettings.skybox = _configuration.CameraSkyboxMaterial;

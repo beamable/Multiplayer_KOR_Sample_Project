@@ -242,6 +242,15 @@ namespace Beamable.Samples.KOR
                 HandleNetworkEvent(evt);
             }
         }
+        
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("TODO: Remove this method");
+                _gameUIView.CinemachineImpulseSource.GenerateImpulse();
+            }
+        }
 
         public void HandleNetworkEvent(KOREvent korEvent)
         {
