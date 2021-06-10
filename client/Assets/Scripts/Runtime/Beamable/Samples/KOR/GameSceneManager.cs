@@ -13,6 +13,7 @@ using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
 using Beamable.Samples.KOR.Animation;
+using System.Collections.Concurrent;
 
 namespace Beamable.Samples.KOR
 {
@@ -43,6 +44,20 @@ namespace Beamable.Samples.KOR
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
         private HashSet<long> _dbidReadyReceived = new HashSet<long>();
         private bool _hasSpawned = false;
+
+        private ConcurrentQueue<Action> _concurrentQueue = new ConcurrentQueue<Action>();
+
+        public void EnqueueConcurrent(Action action)
+        {
+            _concurrentQueue.Enqueue(action);
+        }
+
+        private void FixedUpdate()
+        {
+            Action newAction;
+            if (_concurrentQueue.TryDequeue(out newAction))
+                newAction();
+        }
 
         //  Unity Methods   ------------------------------
         protected void Start()
