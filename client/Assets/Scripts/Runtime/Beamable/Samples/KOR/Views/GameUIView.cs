@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Beamable.Samples.KOR.Behaviours;
 using Beamable.Samples.KOR.UI;
+using TMPro;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,13 +15,14 @@ namespace Beamable.Samples.KOR.Views
    public class GameUIView : BaseUIView
    {
       //  Properties -----------------------------------
-      public AttributesPanelUI AttributesPanelUI { get { return _attributesPanelUI; } }
-      public RingView RingView { get { return _ringView; } }
-      public Button BackButton { get { return _backButton; } }
+      public AttributesPanelUI AttributesPanelUI => _attributesPanelUI;
+      public RingView RingView => _ringView;
+      public Button BackButton => _backButton;
 
-      public TMP_BufferedText BufferedText { get { return _bufferedText; } }
-      public List<AvatarView> AvatarViews { get { return _avatarViews; } }
-      public List<AvatarUIView> AvatarUIViews { get { return _avatarUIViews; } }
+      public TMP_BufferedText BufferedText => _bufferedText;
+      public List<AvatarView> AvatarViews => _avatarViews;
+      public List<AvatarUIView> AvatarUIViews => _avatarUIViews;
+      public GameTimerBehaviour GameTimerBehaviour => _timerBehaviour;
       public CinemachineImpulseSource CinemachineImpulseSource { get { return _cinemachineImpulseSource; } }
 
       //  Fields ---------------------------------------
@@ -41,6 +44,12 @@ namespace Beamable.Samples.KOR.Views
       [SerializeField]
       private List<AvatarUIView> _avatarUIViews = null;
 
+      [SerializeField]
+      private TextMeshProUGUI _timeRemainingValue;
+
+      [SerializeField]
+      private GameTimerBehaviour _timerBehaviour;
+
       [Header("Populates at Runtime")]
       [SerializeField]
       private List<AvatarView> _avatarViews = new List<AvatarView>();
@@ -49,5 +58,13 @@ namespace Beamable.Samples.KOR.Views
       {
          return AvatarViews.FirstOrDefault(view => view.playerDbid == dbid);
       }
+
+
+      protected override void Update()
+      {
+         base.Update();
+         _timeRemainingValue.text = $"{_timerBehaviour.SecondsRemaining.ToString("00")}";
+      }
+
    }
 }

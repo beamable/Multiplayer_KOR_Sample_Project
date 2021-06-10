@@ -77,7 +77,7 @@ LineRenderer:
   - {x: 6.9309464, y: 0, z: 0.0032792091}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1.3723289
+    widthMultiplier: 2.389784
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f734e7f11cc4932ace8f04e0c3dde43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxLength: 5
+  MaxLength: 7
   LineResolution: 20
   Speed: 500
   SmoothTime: 0.01

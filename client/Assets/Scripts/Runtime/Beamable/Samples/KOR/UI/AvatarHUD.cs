@@ -59,10 +59,10 @@ namespace Beamable.Samples.KOR.UI
             aliasText.text = newAlias;
         }
 
-        public void SetHealth(int newHealth)
+        public void SetHealth(sfloat healthRatio)
         {
             const int totalBlockCount = 10;
-            int blocksLeft = Mathf.CeilToInt(((float)newHealth / 100.0f) * (float)totalBlockCount);
+            int blocksLeft = Mathf.CeilToInt((float)healthRatio * totalBlockCount);
             string filledBlocks = new string('-', blocksLeft);
             string emptyBlocks = new string('-', totalBlockCount - blocksLeft);
             healthText.text = string.Format("{0}{1}{2}{3}", _healthLeftColorString, filledBlocks, _healthLostColorString, emptyBlocks);

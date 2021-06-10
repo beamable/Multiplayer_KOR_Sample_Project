@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5585650543961373798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8302972802619312773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a15d5f64f57a9a4997604fcc0bb51e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  avatarHUD: {fileID: 8775760190696778478}
 --- !u!1001 &2935263588506102578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -99,6 +86,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1052478230460350323, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 2.684913
+      objectReference: {fileID: 0}
     - target: {fileID: 2917565731528861378, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_Name
       value: RedGoblin
@@ -181,7 +172,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4202046324630264043, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4330894941151641541, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5345675840862055009, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6276507837589541420, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_Radius
@@ -190,6 +189,10 @@ PrefabInstance:
     - target: {fileID: 6276507837589541420, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: m_Center.y
       value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6667210362306855216, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6928970518923597896, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
       propertyPath: Model
@@ -213,11 +216,6 @@ PrefabInstance:
       objectReference: {fileID: 534651553380963335}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
---- !u!1 &8302972802619312773 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2917565731528861378, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
-  m_PrefabInstance: {fileID: 6577317413715176519}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7675710485414075047 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3585649607945959136, guid: ee72a591af028c94c9b35577e9cef6ba, type: 3}
@@ -335,14 +333,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2eb5498c4d42822479bf3f5054aed0b5, type: 3}
---- !u!114 &8775760190696778478 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -8091974830761874186, guid: 2eb5498c4d42822479bf3f5054aed0b5, type: 3}
-  m_PrefabInstance: {fileID: 8537211525427332632}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af526ad0bc962c047ac2d41e3b0c4516, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

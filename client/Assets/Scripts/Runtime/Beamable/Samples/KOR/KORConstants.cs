@@ -8,12 +8,12 @@
       //  Consts ---------------------------------------
       public const string ItemContentType = "items";
       public const string CurrencyContentType = "currency";
-      
+
       /// <summary>
       /// Used as a 'null' value.
       /// </summary>
       public const int UnsetValue = -1;
-      
+
       // Animations
       public const string Avatar_WalkForward = "Walk Forward"; //start here
       public const string Avatar_RunForward = "Run Forward";
@@ -21,13 +21,15 @@
       public const string Avatar_Attack02 = "Attack 02";
       public const string Avatar_TakeDamage = "Take Damage";
       public const string Avatar_Die = "Die";
-      
+
       // Display Text
       public const string AvatarUIView_Remote = "Remote";
       public const string AvatarUIView_Local = "Local";
       public const string AvatarUIView_Offline = "Offline";
       public const string GameUIView_Playing = "Playing ...";
       public const string LobbyUIView_Joining = "Player {0}/{1} joined. Waiting {2}...";
+      public const string LobbyUIView_Finalizing = "Player {0}/{1} joined. Finalizing...";
+      public const string LobbyUIView_Waiting = "Player {0}/{1} Acquiring Match...";
       public const string LobbyUIView_Joined = "Player {0}/{1} joined. Ready!";
       public const string StoreUIView_Loading_Store = "Loading Store...";
       public const string StoreUIView_Loading_Inventory = "Loading Inventory ...";

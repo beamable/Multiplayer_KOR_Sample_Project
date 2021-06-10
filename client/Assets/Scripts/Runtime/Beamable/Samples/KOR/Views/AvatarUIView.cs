@@ -1,4 +1,7 @@
-﻿using Beamable.Samples.KOR.Data;
+﻿using System;
+using Beamable.Examples.Features.Multiplayer.Core;
+using Beamable.Samples.KOR.Behaviours;
+using Beamable.Samples.KOR.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,10 +17,11 @@ namespace Beamable.Samples.KOR.Views
 
         public AvatarSlotData AvatarSlotData { set { _avatarSlotData = value; Render(); } get { return _avatarSlotData; } }
 
-        public bool IsLocalPlayer { set { _isLocalPlayer = value; Render(); } get { return _isLocalPlayer; } }
-        public bool IsInGame { set { _isInGame = value; Render(); } get { return _isInGame; } }
-        public string Name { set { _name = value; Render(); } get { return _name; } }
-        public int Health { set { _health = value; Render(); } get { return _health; } }
+        // public bool IsLocalPlayer { set { _isLocalPlayer = value; Render(); } get { return _isLocalPlayer; } }
+        // public bool IsInGame { set { _isInGame = value; Render(); } get { return _isInGame; } }
+        // public string Name { set { _name = value; Render(); } get { return _name; } }
+        // public int Health { set { _health = value; Render(); } get { return _health; } }
+
 
         //  Fields ---------------------------------------
         [SerializeField]
@@ -26,14 +30,37 @@ namespace Beamable.Samples.KOR.Views
         [SerializeField]
         private TMP_Text _text = null;
 
+        [SerializeField]
+        private Player _player;
+
+        [SerializeField]
+        private SpawnablePlayer _spawnablePlayer;
+
         private AvatarData _avatarData = null;
         private AvatarSlotData _avatarSlotData = null;
         private string _name = "";
-        private int _health = 0;
         private bool _isLocalPlayer = false;
         private bool _isInGame = false;
 
+        // Unity Methods   -------------------------------
+        private void Update()
+        {
+            if (!_player) return;
+
+            Render();
+        }
+
         //  Other Methods   ------------------------------
+        public void Set(Player player, SpawnablePlayer spawnablePlayer)
+        {
+            _player = player;
+            _spawnablePlayer = spawnablePlayer;
+
+            _isInGame = true;
+            _isLocalPlayer = _spawnablePlayer.DBID == NetworkController.Instance.LocalDbid;
+            _name = _spawnablePlayer.PlayerAlias;
+        }
+
         public void Render()
         {
             if (_avatarSlotData != null)
@@ -51,7 +78,7 @@ namespace Beamable.Samples.KOR.Views
 
             if (_isInGame)
             {
-                _text.text = $"{truncatedName} ({_health}%)\n{location}";
+                _text.text = $"{truncatedName} ({_player.HealthBehaviour.HealthPercentage}%)\n{location}";
             }
             else
             {

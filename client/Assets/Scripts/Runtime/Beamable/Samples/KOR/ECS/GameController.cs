@@ -145,10 +145,11 @@ namespace Beamable.Samples.KOR.Multiplayer
             Entities.ForEach((ref Entity e, ref Translation t, ref Rotation r, ref PhysicsMass mass, ref PhysicsVelocity vel, ref PhysicsImpulse impulse) =>
             {
 
-                if (t.Value.y < -(sfloat) 2)
+                if (t.Value.y < -(sfloat) 20)
                 {
                     vel.Linear = sfloat.Zero;
-                    t.Value = new float3(sfloat.Zero, (sfloat) 8, sfloat.Zero);
+
+                    t.Value = new float3(sfloat.Zero, (sfloat) 7, sfloat.Zero);
                 }
 
                 vel.ApplyLinearImpulse(mass, impulse.Impulse);

@@ -6,6 +6,7 @@ using Beamable.Common.Shop;
 using Beamable.Core.UI.DialogSystem;
 using Beamable.Extensions;
 using Beamable.Samples.Core;
+using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.CustomContent;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.UI;
@@ -292,7 +293,7 @@ namespace Beamable.Samples.KOR
 
         private void BuyButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClickPrimary();
+            SoundManager.Instance.PlayAudioClip(SoundConstants.Coin01);
 
             BuySelectedStoreItem();
         }
@@ -336,7 +337,7 @@ namespace Beamable.Samples.KOR
 
         private void BackButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClickPrimary();
+            KORHelper.PlayAudioForUIClickBack();
 
             StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
                _configuration.DelayBeforeLoadScene));

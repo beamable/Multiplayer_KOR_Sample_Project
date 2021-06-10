@@ -20,6 +20,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
         public long LocalDbid;
 
         public System.Random rand;
+        private string _roomId;
 
         public string RandomSeed { get; private set; }
 
@@ -32,9 +33,9 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
             var beamable = await API.Instance;
 
-            var roomId = RuntimeDataStorage.Instance.RoomId;
+            _roomId = RuntimeDataStorage.Instance.RoomId;
             LocalDbid = beamable.User.id;
-            _sim = new SimClient(new FastNetworkEventStream(roomId), NetworkFramesPerSecond, 1);
+            _sim = new SimClient(new FastNetworkEventStream(_roomId), NetworkFramesPerSecond, 1);
             _sim.OnInit(HandleOnInit);
             _sim.OnConnect(HandleOnConnect);
             _sim.OnDisconnect(HandleOnDisconnect);
@@ -100,6 +101,12 @@ namespace Beamable.Examples.Features.Multiplayer.Core
         public void SendNetworkMessage(KOREvent message)
         {
             _sim.SendEvent(message.GetType().Name, message);
+        }
+
+        public async void ReportResults(PlayerResult[] results)
+        {
+            var beamable = await Beamable.API.Instance;
+            beamable.Experimental.GameRelayService.ReportResults(_roomId, results);
         }
 
         private SimClient.EventCallback<string> ListenForEventFrom<T>(string origin)
