@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Beamable.Core.UI.DialogSystem;
 using Beamable.Samples.KOR.Animation;
 using Beamable.Samples.KOR.Data;
 using UnityEngine;
@@ -14,14 +15,20 @@ namespace Beamable.Samples.KOR.Views
       public Camera Camera { get { return _camera; } }
       public Configuration Configuration { get { return _configuration; } }
       public List<CanvasGroup> CanvasGroups { get { return _canvasGroups; } }
+      
+      public DialogSystem DialogSystem { get { return _dialogSystem; } }
+      
 
       //  Fields ---------------------------------------
-      [Header ("Base Properties")]
+      [Header ("Base Fields")]
       [SerializeField]
       private Camera _camera = null;
 
       [SerializeField]
       private Configuration _configuration = null;
+
+      [SerializeField] 
+      private DialogSystem _dialogSystem = new DialogSystem();
 
       [SerializeField]
       private List<CanvasGroup> _canvasGroups = null;
@@ -64,4 +71,5 @@ namespace Beamable.Samples.KOR.Views
          TweenHelper.CanvasGroupsDoFade(_canvasGroups, 0, 1, 1, Configuration.DelayBeforeFadeInUI, Configuration.DelayBetweenFadeInUI);
       }
    }
+   
 }
