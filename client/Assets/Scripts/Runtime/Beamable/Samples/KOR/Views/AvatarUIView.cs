@@ -17,11 +17,8 @@ namespace Beamable.Samples.KOR.Views
 
         public AvatarSlotData AvatarSlotData { set { _avatarSlotData = value; Render(); } get { return _avatarSlotData; } }
 
-        // public bool IsLocalPlayer { set { _isLocalPlayer = value; Render(); } get { return _isLocalPlayer; } }
-        // public bool IsInGame { set { _isInGame = value; Render(); } get { return _isInGame; } }
-        // public string Name { set { _name = value; Render(); } get { return _name; } }
-        // public int Health { set { _health = value; Render(); } get { return _health; } }
-
+        public Player Player => _player;
+        public SpawnablePlayer SpawnablePlayer => _spawnablePlayer;
 
         //  Fields ---------------------------------------
         [SerializeField]

@@ -81,7 +81,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
                 Log.EnqueueHashAssertion(hashCheck.ForTick, hashCheck.Hash);
             });
 
-            
+
             var joinMsg = new PlayerJoinedEvent();
             joinMsg.SetPlayerDbid(dbidNumber);
 
@@ -103,10 +103,10 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             _sim.SendEvent(message.GetType().Name, message);
         }
 
-        public async void ReportResults(PlayerResult[] results)
+        public async Task<GameResults> ReportResults(PlayerResult[] results)
         {
             var beamable = await Beamable.API.Instance;
-            beamable.Experimental.GameRelayService.ReportResults(_roomId, results);
+            return await beamable.Experimental.GameRelayService.ReportResults(_roomId, results);
         }
 
         private SimClient.EventCallback<string> ListenForEventFrom<T>(string origin)

@@ -29,4 +29,28 @@ MonoBehaviour:
     scoringAlgorithm:
       algorithm: 0
       options: []
-  rewards: []
+  rewards:
+  - startRank: 0
+    endRank: 0
+    rewards:
+    - type: 0
+      name: currency.Coins
+      amount: 30
+  - startRank: 1
+    endRank: 1
+    rewards:
+    - type: 0
+      name: currency.Coins
+      amount: 20
+  - startRank: 2
+    endRank: 2
+    rewards:
+    - type: 0
+      name: currency.Coins
+      amount: 10
+  - startRank: 3
+    endRank: 6
+    rewards:
+    - type: 0
+      name: currency.Coins
+      amount: 5
