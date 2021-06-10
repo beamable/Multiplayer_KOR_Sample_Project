@@ -13,6 +13,7 @@ using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
 using static Beamable.Samples.KOR.CharacterManager;
+using Beamable.Samples.KOR.Animation;
 
 namespace Beamable.Samples.KOR
 {
@@ -47,6 +48,9 @@ namespace Beamable.Samples.KOR
         //  Unity Methods   ------------------------------
         protected void Start()
         {
+            for (int i = 0; i < 6; i++)
+                _gameUIView.AvatarUIViews[i].GetComponent<CanvasGroup>().alpha = 0.0f;
+
             _gameUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
             SetupBeamable();
         }
@@ -121,35 +125,6 @@ namespace Beamable.Samples.KOR
 
             // Optional: Render color and text of avatar ui
             _gameUIView.AvatarViews.Clear();
-
-            // TODO: Spawn the HUD from player join messages...
-            for (int i = 0; i < 5; i++)
-            {
-                // TODO: Spawn Avatars according to chosen character per DBID
-                // For now, just use a fixed prefab for everyone.
-                // TODO: Only show HUD for players that are actually in the game.
-                _gameUIView.AvatarUIViews[i].AvatarData = _configuration.LocalAvatar;
-                _gameUIView.AvatarUIViews[i].Health = 100;
-                _gameUIView.AvatarUIViews[i].IsInGame = i < RuntimeDataStorage.Instance.CurrentPlayerCount;
-                _gameUIView.AvatarUIViews[i].Name = $"Player {(i + 1):00}"; // "Player 01"
-                _gameUIView.AvatarUIViews[i].IsLocalPlayer = i == 0; //Todo: check dbid
-                _gameUIView.AvatarUIViews[i].Render();
-
-                if (i < RuntimeDataStorage.Instance.MinPlayerCount)
-                {
-                    // AvatarView avatarView = GameObject.Instantiate<AvatarView>(avatarData.AvatarViewPrefab);
-                    // _gameUIView.AvatarViews.Add(avatarView);
-
-                    //Optional: Play animations. All are working properly
-                    //avatarView.PlayAnimationAttack01();
-                    //avatarView.PlayAnimationAttack02();
-                    //avatarView.PlayAnimationDie();
-                    //avatarView.PlayAnimationRunForward();
-                    //avatarView.PlayAnimationTakeDamage();
-                    //avatarView.PlayAnimationWalkForward();
-                    // avatarView.PlayAnimationIdle();
-                }
-            }
         }
 
         private class SpawnablePlayer
@@ -167,9 +142,12 @@ namespace Beamable.Samples.KOR
 
             public Attributes Attributes { get { return _attributes; } set { _attributes = value; } }
 
+            public string PlayerAlias { get { return _playerAlias; } set { _playerAlias = value; } }
+
             private long _dbid = -1;
             private SpawnPointBehaviour _spawnPointBehaviour;
             private Attributes _attributes;
+            private string _playerAlias;
         }
 
         public async void OnPlayerJoined(PlayerJoinedEvent joinEvent)
@@ -184,10 +162,13 @@ namespace Beamable.Samples.KOR
             SpawnablePlayer newPlayer = new SpawnablePlayer(joinEvent.PlayerDbid, spawnPoint);
             _spawnablePlayers.Add(newPlayer);
             await RuntimeDataStorage.Instance.CharacterManager.BootstrapTask;
-            newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid); ;
+            newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid);
+            string alias = await RuntimeDataStorage.Instance.CharacterManager.GetPlayerAliasByDBID(joinEvent.PlayerDbid);
 
-            // Notify the rest of the clients that we are ready to roll...
-            NetworkController.Instance.SendNetworkMessage(new ReadyEvent(_ownAttributes));
+            Debug.Log($"alias from joinEvent dbid={joinEvent.PlayerDbid} alias={alias}");
+
+            if (joinEvent.PlayerDbid == NetworkController.Instance.LocalDbid)
+                NetworkController.Instance.SendNetworkMessage(new ReadyEvent(_ownAttributes, alias));
         }
 
         private void OnPlayerReady(ReadyEvent readyEvt)
@@ -199,6 +180,9 @@ namespace Beamable.Samples.KOR
 
             SpawnablePlayer sp = _spawnablePlayers.Find(i => i.DBID == readyEvt.PlayerDbid);
             sp.Attributes = new Attributes(readyEvt.aggregateChargeSpeed, readyEvt.aggregateMovementSpeed);
+            sp.PlayerAlias = readyEvt.playerAlias;
+
+            Debug.Log($"alias from readyEvt dbid={readyEvt.PlayerDbid} alias={sp.PlayerAlias}");
 
             Configuration.Debugger.Log($"OnPlayerReady Players={_dbidReadyReceived.Count}/{RuntimeDataStorage.Instance.CurrentPlayerCount}", DebugLogLevel.Verbose);
             if (!_hasSpawned && _dbidReadyReceived.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)
@@ -210,13 +194,22 @@ namespace Beamable.Samples.KOR
 
         private void SpawnAllPlayersAtOnce()
         {
-            foreach (SpawnablePlayer sp in _spawnablePlayers)
+            List<CanvasGroup> avatarUiCanvasGroups = new List<CanvasGroup>();
+
+            for (int p = 0; p < _spawnablePlayers.Count; p++)
             {
+                SpawnablePlayer sp = _spawnablePlayers[p];
+
                 Configuration.Debugger.Log($"DBID={sp.DBID} Spawning character={sp.ChosenCharacter.CharacterContentObject.ContentName}"
                     + $" attributes move/charge={sp.Attributes.MovementSpeed}/{sp.Attributes.ChargeSpeed}", DebugLogLevel.Verbose);
 
+                Debug.Log($"playerAlias={sp.PlayerAlias}");
+
                 AvatarView avatarView = GameObject.Instantiate<AvatarView>(sp.ChosenCharacter.AvatarViewPrefab);
                 avatarView.transform.SetPhysicsPosition(sp.SpawnPointBehaviour.transform.position);
+
+                Player player = avatarView.gameObject.GetComponent<Player>();
+                player.SetAlias(sp.PlayerAlias);
 
                 avatarView.SetForPlayer(sp.DBID);
                 _gameUIView.AvatarViews.Add(avatarView);
@@ -228,7 +221,18 @@ namespace Beamable.Samples.KOR
 
                 AvatarMotionBehaviour amb = avatarView.gameObject.GetComponent<AvatarMotionBehaviour>();
                 amb.Attributes = sp.Attributes;
+
+                _gameUIView.AvatarUIViews[p].Health = 100;
+                _gameUIView.AvatarUIViews[p].IsInGame = true;
+                _gameUIView.AvatarUIViews[p].Name = sp.PlayerAlias;
+                _gameUIView.AvatarUIViews[p].IsLocalPlayer = sp.DBID == NetworkController.Instance.LocalDbid;
+                _gameUIView.AvatarUIViews[p].Render();
+                avatarUiCanvasGroups.Add(_gameUIView.AvatarUIViews[p].GetComponent<CanvasGroup>());
+
+                player.SetHealth(70);
             }
+
+            TweenHelper.CanvasGroupsDoFade(avatarUiCanvasGroups, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f);
         }
 
         public void HandleNetworkUpdate(TimeUpdate update)
