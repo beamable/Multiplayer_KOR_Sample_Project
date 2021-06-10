@@ -44,7 +44,6 @@ namespace Beamable.Samples.KOR
         private HashSet<long> _dbidReadyReceived = new HashSet<long>();
         private bool _hasSpawned = false;
 
-
         //  Unity Methods   ------------------------------
         protected void Start()
         {
@@ -189,14 +188,11 @@ namespace Beamable.Samples.KOR
                 {
                     inputBehaviour.enabled = false;
                 }
-
             };
         }
 
         private void SpawnAllPlayersAtOnce()
         {
-
-
             List<CanvasGroup> avatarUiCanvasGroups = new List<CanvasGroup>();
 
             for (int p = 0; p < _spawnablePlayers.Count; p++)
@@ -228,7 +224,6 @@ namespace Beamable.Samples.KOR
                 _gameUIView.AvatarUIViews[p].Set(player, sp);
                 _gameUIView.AvatarUIViews[p].Render();
                 avatarUiCanvasGroups.Add(_gameUIView.AvatarUIViews[p].GetComponent<CanvasGroup>());
-
             }
 
             TweenHelper.CanvasGroupsDoFade(avatarUiCanvasGroups, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f);
@@ -241,7 +236,7 @@ namespace Beamable.Samples.KOR
                 HandleNetworkEvent(evt);
             }
         }
-        
+
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -278,7 +273,7 @@ namespace Beamable.Samples.KOR
         //  Event Handlers -------------------------------
         private void BackButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClickPrimary();
+            KORHelper.PlayAudioForUIClickBack();
 
             // Clean up manager
             _spawnablePlayers.Clear();

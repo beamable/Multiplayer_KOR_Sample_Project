@@ -8,7 +8,6 @@ namespace Beamable.Samples.KOR
     /// </summary>
     public class LeaderboardSceneManager : MonoBehaviour
     {
-
         //  Fields ---------------------------------------
         [SerializeField]
         private LeaderboardUIView _leaderboardUIView = null;
@@ -19,23 +18,22 @@ namespace Beamable.Samples.KOR
             _leaderboardUIView.BackButton.onClick.AddListener(BackButton_OnClicked);
 
             _leaderboardUIView.KORLeaderboardMainMenu.OnRendered.AddListener(KORLeaderboardMainMenu_OnRendered);
-            
+
             // For KOR, use a custom UI for the leaderboard rows
             _leaderboardUIView.KORLeaderboardMainMenu.KORLeaderboardItem = _leaderboardUIView.KORLeaderboardItem;
-            
+
             _leaderboardUIView.KORLeaderboardMainMenu.Render();
-            
         }
 
         //  Event Handlers -------------------------------
         private void BackButton_OnClicked()
         {
-            KORHelper.PlayAudioForUIClickPrimary();
-            
+            KORHelper.PlayAudioForUIClickBack();
+
             StartCoroutine(KORHelper.LoadScene_Coroutine(_leaderboardUIView.Configuration.IntroSceneName,
                 _leaderboardUIView.Configuration.DelayBeforeLoadScene));
         }
-        
+
         protected void KORLeaderboardMainMenu_OnRendered()
         {
             _leaderboardUIView.CanvasGroupsDoFadeIn();

@@ -2,6 +2,7 @@
 using Beamable.Common.Api;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
+using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
 using System;
@@ -183,7 +184,7 @@ namespace Beamable.Samples.KOR
         private string _latestNotYetSetNewAlias = null;
         private Promise<EmptyResponse> _setPlayerAliasPromise = null;
 
-        private void PlayerAliasInputField_OnValueChanged(string newValue)
+        private void UpdatePlayerAlias(string newValue)
         {
             if (_setPlayerAliasPromise != null && !_setPlayerAliasPromise.IsCompleted)
             {
@@ -200,14 +201,22 @@ namespace Beamable.Samples.KOR
                 if (currentlyUpdatingValue.Equals(_latestNotYetSetNewAlias))
                     _latestNotYetSetNewAlias = null;
                 else
-                    PlayerAliasInputField_OnValueChanged(_latestNotYetSetNewAlias);
+                    UpdatePlayerAlias(_latestNotYetSetNewAlias);
             });
+        }
+
+        private void PlayerAliasInputField_OnValueChanged(string newValue)
+        {
+            const float randomPitchRange = 0.05f;
+            SoundManager.Instance.PlayAudioClip(SoundConstants.Click01, 1.0f + UnityEngine.Random.Range(-randomPitchRange, randomPitchRange));
+
+            UpdatePlayerAlias(newValue);
         }
 
         private async void PreviousCharacterButton_OnClicked()
         {
             KORHelper.PlayAudioForUIClickSecondary();
-            
+
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
 
@@ -218,7 +227,7 @@ namespace Beamable.Samples.KOR
         private async void NextCharacterButton_OnClicked()
         {
             KORHelper.PlayAudioForUIClickSecondary();
-            
+
             CharacterManager cm = RuntimeDataStorage.Instance.CharacterManager;
             int characterIndex = cm.GetChosenCharacterIndex();
             int charactersCount = cm.AllCharacters.Count;
