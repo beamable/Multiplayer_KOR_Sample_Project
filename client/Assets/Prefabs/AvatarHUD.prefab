@@ -391,7 +391,7 @@ MonoBehaviour:
   healthText: {fileID: 7072793883677033565}
   onScreenTextSize: 0.025
   onScreenTextDistance: 0.1
-  healthLeftColor: {r: 1, g: 0.30034468, b: 0.13679248, a: 1}
+  healthLeftColor: {r: 1, g: 0, b: 0, a: 1}
   healthLostColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   healthBarCharacter: 61
   parentCenterOffset: {x: 0, y: 1.3, z: 0}
