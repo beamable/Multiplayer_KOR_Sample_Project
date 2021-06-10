@@ -253,15 +253,6 @@ namespace Beamable.Samples.KOR
             }
         }
 
-        public void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Debug.Log("TODO: Remove this method");
-                _gameUIView.CinemachineImpulseSource.GenerateImpulse();
-            }
-        }
-
         public void ShakeCamera(float force=1)
         {
             _gameUIView.CinemachineImpulseSource.GenerateImpulse();
