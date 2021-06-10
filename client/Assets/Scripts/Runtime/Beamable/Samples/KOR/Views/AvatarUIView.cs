@@ -11,7 +11,6 @@ namespace Beamable.Samples.KOR.Views
     public class AvatarUIView : MonoBehaviour
     {
         //  Properties -----------------------------------
-        public AvatarData AvatarData { set { _avatarData = value; Render(); } get { return _avatarData; } }
 
         public AvatarSlotData AvatarSlotData { set { _avatarSlotData = value; Render(); } get { return _avatarSlotData; } }
 
@@ -46,13 +45,17 @@ namespace Beamable.Samples.KOR.Views
                 location = KORConstants.AvatarUIView_Local;
             }
 
+            const int maxNameLength = 10;
+            const string ellipsis = "...";
+            string truncatedName = _name.Length > maxNameLength ? _name.Substring(0, maxNameLength - ellipsis.Length) + ellipsis : _name;
+
             if (_isInGame)
             {
-                _text.text = $"{Name} ({_health}%)\n{location}";
+                _text.text = $"{truncatedName} ({_health}%)\n{location}";
             }
             else
             {
-                _text.text = $"{Name}\n{KORConstants.AvatarUIView_Offline}";
+                _text.text = $"{truncatedName}\n{KORConstants.AvatarUIView_Offline}";
             }
         }
     }
