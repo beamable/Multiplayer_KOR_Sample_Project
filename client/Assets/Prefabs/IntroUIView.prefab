@@ -38,8 +38,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125.179985, y: -111.14922}
-  m_SizeDelta: {x: 250.35997, y: 0}
+  m_AnchoredPosition: {x: 125.109886, y: -82.275795}
+  m_SizeDelta: {x: 250.21977, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &899589365
 CanvasRenderer:
@@ -644,8 +644,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 0}
-  _willRecolorCamera: 1
   _configuration: {fileID: 11400000, guid: 28e7b012a002a51458322ba2fc05964d, type: 2}
+  _dialogSystem:
+    _dialogParent: {fileID: 361388984452256304}
+    _dialogUIPrefab: {fileID: 1507302197928125495, guid: 4484762e95aa3ff4782218d9ecbb2564, type: 3}
   _canvasGroups:
   - {fileID: 3391841333033439565}
   - {fileID: 9077155039664476505}
@@ -861,9 +863,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 0
+  m_MinWidth: 20
   m_MinHeight: -1
-  m_PreferredWidth: 339.8202
+  m_PreferredWidth: 20
   m_PreferredHeight: -1
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
@@ -4940,13 +4942,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7887ff2e315173740ace0c5e861f0b38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!225 &6154947537405718104 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 2892981549775498312, guid: ad88008002b665241a886f794fe0879a, type: 3}
-  m_PrefabInstance: {fileID: 9029483368724234768}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4782245094516135543 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4544934512574207079, guid: ad88008002b665241a886f794fe0879a, type: 3}
+  m_PrefabInstance: {fileID: 9029483368724234768}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &6154947537405718104 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 2892981549775498312, guid: ad88008002b665241a886f794fe0879a, type: 3}
   m_PrefabInstance: {fileID: 9029483368724234768}
   m_PrefabAsset: {fileID: 0}

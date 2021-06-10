@@ -1,4 +1,6 @@
 using Beamable.Examples.Features.Multiplayer.Core;
+using Beamable.Samples.KOR.Audio;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -10,64 +12,82 @@ using UnityS.Transforms;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
-   [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-   [UpdateAfter(typeof(EndFramePhysicsSystem))]
-   public class PlayerBounceSystem : JobComponentSystem
-   {
-      private BuildPhysicsWorld _buildPhysicsWorld;
-      private StepPhysicsWorld _stepPhysicsWorld;
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateAfter(typeof(EndFramePhysicsSystem))]
+    public class PlayerBounceSystem : JobComponentSystem
+    {
+        private BuildPhysicsWorld _buildPhysicsWorld;
+        private StepPhysicsWorld _stepPhysicsWorld;
 
-      protected override void OnCreate()
-      {
-         base.OnCreate();
-         _buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
-         _stepPhysicsWorld = World.GetOrCreateSystem<StepPhysicsWorld>();
-      }
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            _buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+            _stepPhysicsWorld = World.GetOrCreateSystem<StepPhysicsWorld>();
+        }
 
-      protected override JobHandle OnUpdate(JobHandle inputDeps)
-      {
-         if (!NetworkController.NetworkInitialized)
-         {
-            return default;
-         }
+        protected override JobHandle OnUpdate(JobHandle inputDeps)
+        {
+            if (!NetworkController.NetworkInitialized)
+            {
+                return default;
+            }
 
+            var job = new PlayerBounceSystemJob();
+            job.bouncyGroup = GetComponentDataFromEntity<BouncyTag>(true);
+            job.impulseGroup = GetComponentDataFromEntity<PhysicsImpulse>();
+            job.velocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(true);
 
-         var job = new PlayerBounceSystemJob();
-         job.bouncyGroup = GetComponentDataFromEntity<BouncyTag>(true);
-         job.velocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(true);
-         job.impulseGroup = GetComponentDataFromEntity<PhysicsImpulse>();
+            var jobHandle = job.Schedule(_stepPhysicsWorld.Simulation, ref _buildPhysicsWorld.PhysicsWorld, inputDeps);
+            jobHandle.Complete();
 
-         var jobHandle = job.Schedule(_stepPhysicsWorld.Simulation, ref _buildPhysicsWorld.PhysicsWorld, inputDeps);
-         jobHandle.Complete();
+            return jobHandle;
+        }
 
-         return jobHandle;
-      }
+        private struct PlayerBounceSystemJob : ICollisionEventsJob
+        {
+            [ReadOnly]
+            public ComponentDataFromEntity<BouncyTag> bouncyGroup;
 
+            [ReadOnly]
+            public ComponentDataFromEntity<PhysicsVelocity> velocityGroup;
 
-      struct PlayerBounceSystemJob : ICollisionEventsJob
-      {
-         [ReadOnly]
-         public ComponentDataFromEntity<BouncyTag> bouncyGroup;
+            public ComponentDataFromEntity<PhysicsImpulse> impulseGroup;
 
-         [ReadOnly]
-         public ComponentDataFromEntity<PhysicsVelocity> velocityGroup;
+            private sfloat GetImpulse(Entity e)
+            {
+                if (!impulseGroup.HasComponent(e))
+                    return (sfloat)0.0f;
 
-         public ComponentDataFromEntity<PhysicsImpulse> impulseGroup;
+                sfloat sqrMagImpulse = impulseGroup[e].Impulse.x * impulseGroup[e].Impulse.x
+                       + impulseGroup[e].Impulse.y * impulseGroup[e].Impulse.y
+                       + impulseGroup[e].Impulse.z * impulseGroup[e].Impulse.z;
 
+                return sqrMagImpulse;
+            }
 
-         public void Execute(CollisionEvent collisionEvent)
-         {
-            var normal = collisionEvent.Normal;
+            public void Execute(CollisionEvent collisionEvent)
+            {
+                var a = collisionEvent.EntityA;
+                var b = collisionEvent.EntityB;
 
-            var a = collisionEvent.EntityA;
-            var b = collisionEvent.EntityB;
+                var aIsBouncy = bouncyGroup.HasComponent(a);
+                var bIsBouncy = bouncyGroup.HasComponent(b);
+                var aHasImpulse = impulseGroup.HasComponent(a);
+                var bHasImpulse = impulseGroup.HasComponent(b);
 
-            var aIsBouncy = bouncyGroup.HasComponent(a);
-            var bIsBouncy = bouncyGroup.HasComponent(b);
-            var aHasImpulse = impulseGroup.HasComponent(a);
-            var bHasImpulse = impulseGroup.HasComponent(b);
+                sfloat minImpulse = (sfloat)0.01f;
+                sfloat totalImpulse = GetImpulse(a) + GetImpulse(b);
+                if (totalImpulse > minImpulse)
+                {
+                    GameSceneManager.Instance.EnqueueConcurrent(() =>
+                    {
+                        List<string> collisionClips = new List<string>() { SoundConstants.Collision01, SoundConstants.Collision02, SoundConstants.Collision03 };
+                        SoundManager.Instance.PlayAudioClip(collisionClips[Random.Range(0, collisionClips.Count)], SoundManager.GetRandomPitch(1.0f, 0.3f));
+                    });
+                }
 
-            if (aIsBouncy && bIsBouncy)
+  if (aIsBouncy && bIsBouncy)
             {
                var aBounce = bouncyGroup[a];
                var bBounce = bouncyGroup[b];
@@ -104,23 +124,22 @@ namespace Beamable.Samples.KOR.Multiplayer
                return;
                // but we'll temper it by shields
             }
+                if (aIsBouncy && bHasImpulse)
+                {
+                    // apply an explosion impulse to b.
+                    var bImpulse = impulseGroup[b];
+                    bImpulse.Impulse = collisionEvent.Normal * bouncyGroup[a].Bounce;
+                    impulseGroup[b] = bImpulse;
+                }
 
-            if (aIsBouncy && bHasImpulse)
-            {
-               normal = -normal;
-               var bImpulse = impulseGroup[b];
-               bImpulse.Impulse = normal * bouncyGroup[a].Bounce;
-               impulseGroup[b] = bImpulse;
+                if (bIsBouncy && aHasImpulse)
+                {
+                    // apply an explosion impulse to a
+                    var aImpulse = impulseGroup[a];
+                    aImpulse.Impulse = collisionEvent.Normal * bouncyGroup[b].Bounce;
+                    impulseGroup[a] = aImpulse;
+                }
             }
-
-            if (bIsBouncy && aHasImpulse)
-            {
-               var aImpulse = impulseGroup[a];
-               aImpulse.Impulse = normal * bouncyGroup[b].Bounce;
-               impulseGroup[a] = aImpulse;
-            }
-
-         }
-      }
-   }
+        }
+    }
 }

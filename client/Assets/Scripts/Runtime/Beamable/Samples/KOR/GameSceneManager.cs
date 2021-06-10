@@ -6,6 +6,7 @@ using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Behaviours;
 using Beamable.Core.Debugging;
+using Beamable.Core.UI.DialogSystem;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
 using Beamable.Samples.KOR.Multiplayer.Events;
@@ -13,6 +14,7 @@ using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
 using Beamable.Samples.KOR.Animation;
+using System.Collections.Concurrent;
 
 namespace Beamable.Samples.KOR
 {
@@ -43,6 +45,20 @@ namespace Beamable.Samples.KOR
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
         private HashSet<long> _dbidReadyReceived = new HashSet<long>();
         private bool _hasSpawned = false;
+
+        private ConcurrentQueue<Action> _concurrentQueue = new ConcurrentQueue<Action>();
+
+        public void EnqueueConcurrent(Action action)
+        {
+            _concurrentQueue.Enqueue(action);
+        }
+
+        private void FixedUpdate()
+        {
+            Action newAction;
+            if (_concurrentQueue.TryDequeue(out newAction))
+                newAction();
+        }
 
         //  Unity Methods   ------------------------------
         protected void Start()
@@ -274,20 +290,47 @@ namespace Beamable.Samples.KOR
         private void BackButton_OnClicked()
         {
             KORHelper.PlayAudioForUIClickBack();
+            
+            _gameUIView.DialogSystem.ShowDialogBox<DialogUI>(
+                
+                // Renders this prefab. DUPLICATE this prefab and drag
+                // into _storeUIView to change layout
+                _gameUIView.DialogSystem.DialogUIPrefab,
+                
+                // Set Text
+                KORConstants.Dialog_AreYouSure,
+                "This well end your game.",
+                
+                // Create zero or more buttons
+                new List<DialogButtonData>
+                {
+                    new DialogButtonData(KORConstants.Dialog_Ok, () =>
+                    {
+                        KORHelper.PlayAudioForUIClickPrimary();
+                        _gameUIView.DialogSystem.HideDialogBox();
+                        
+                        // Clean up manager
+                        _spawnablePlayers.Clear();
+                        _unusedSpawnPoints.Clear();
+                        _dbidReadyReceived.Clear();
+                        _hasSpawned = false;
+                        NetworkController.Instance.Cleanup();
 
-            // Clean up manager
-            _spawnablePlayers.Clear();
-            _unusedSpawnPoints.Clear();
-            _dbidReadyReceived.Clear();
-            _hasSpawned = false;
-            NetworkController.Instance.Cleanup();
+                        // Destroy ECS
+                        SystemManager.DestroyGameSystems();
 
-            // Destroy ECS
-            SystemManager.DestroyGameSystems();
+                        // Change scenes
+                        StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
+                            _configuration.DelayBeforeLoadScene));
+                    }),
+                    new DialogButtonData(KORConstants.Dialog_Cancel, () =>
+                    {
+                        KORHelper.PlayAudioForUIClickSecondary();
+                        _gameUIView.DialogSystem.HideDialogBox();
+                    })
+                });
 
-            // Change scenes
-            StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
-               _configuration.DelayBeforeLoadScene));
+            
         }
     }
 }

@@ -5,6 +5,7 @@
    /// </summary>
    public static class KORConstants
    {
+   
       //  Consts ---------------------------------------
       public const string ItemContentType = "items";
       public const string CurrencyContentType = "currency";
@@ -41,5 +42,10 @@
       public const string StoreUIView_SelectStoreItem = "{2}Gives bonus " + Player_Attributes;
       public const string StoreUIView_CurrencyName = "Coin";
       public const string Player_Attributes = "C:{0:000} M:{1:000}";
+      public const string Dialog_AreYouSure = "Are you sure?";
+      public static string Dialog_Ok = "Ok";
+      public static string Dialog_Cancel = "Cancel";
+
+
    }
 }
