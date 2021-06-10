@@ -64,7 +64,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
         private void HandleOnConnect(string dbid)
         {
-            Debug.Log("Sim client has connection from " + dbid);
+            Configuration.Debugger.Log("Sim client has connection from " + dbid);
 
             // listen for messages from this player...
             var dbidNumber = long.Parse(dbid);
@@ -77,7 +77,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             {
                 hashCheck.SetPlayerDbid(dbidNumber);
                 if (dbidNumber == LocalDbid) return;
-                Debug.Log("Validating hash from " + dbid + " for tick " + hashCheck.ForTick);
+                Configuration.Debugger.Log("Validating hash from " + dbid + " for tick " + hashCheck.ForTick);
                 Log.EnqueueHashAssertion(hashCheck.ForTick, hashCheck.Hash);
             });
 
