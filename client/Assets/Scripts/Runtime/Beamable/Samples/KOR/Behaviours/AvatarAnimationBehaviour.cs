@@ -36,7 +36,7 @@ namespace Beamable.Samples.KOR.Behaviours
             Avatar.PlayAnimationIdle();
          } else if (false)
          {
-            Avatar.PlayAnimationWalkForward();
+            //Avatar.PlayAnimationWalkForward();
          } else if (isRunning)
          {
             Avatar.PlayAnimationRunForward();

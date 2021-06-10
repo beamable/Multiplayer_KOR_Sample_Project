@@ -308,7 +308,7 @@ namespace Beamable.Samples.KOR
                     avatarView.gameObject.GetComponent<PlayerInputBehaviour>().enabled = false;
 
                 AvatarMotionBehaviour amb = avatarView.gameObject.GetComponent<AvatarMotionBehaviour>();
-                amb.Attributes = sp.Attributes;
+                amb.Attributes = sp.Attributes; 
 
                 _gameUIView.AvatarUIViews[p].Set(player, sp);
                 _gameUIView.AvatarUIViews[p].Render();

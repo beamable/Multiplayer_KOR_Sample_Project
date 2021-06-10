@@ -33,7 +33,6 @@ namespace Beamable.Samples.KOR.Views
         [SerializeField]
         private SpawnablePlayer _spawnablePlayer;
 
-        private AvatarData _avatarData = null;
         private AvatarSlotData _avatarSlotData = null;
         private string _name = "";
         private bool _isLocalPlayer = false;
