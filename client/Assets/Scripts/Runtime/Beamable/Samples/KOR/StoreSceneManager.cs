@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Beamable.Api.Payments;
 using Beamable.Common.Api.Inventory;
 using Beamable.Common.Shop;
+using Beamable.Core.UI.DialogSystem;
 using Beamable.Extensions;
 using Beamable.Samples.Core;
 using Beamable.Samples.KOR.Audio;
@@ -301,12 +302,36 @@ namespace Beamable.Samples.KOR
         {
             KORHelper.PlayAudioForUIClickPrimary();
 
-            Configuration.Debugger.Log(
-               "Reset! This deletes the local player, " +
-               "creates a new one, and restarts the game. " +
-               "Do not use this in production.");
 
-            ExampleProjectHacks.ClearDeviceUsersAndReloadGame();
+
+            _storeUIView.DialogSystem.ShowDialogBox<DialogUI>(
+                
+                // Renders this prefab. DUPLICATE this prefab and drag
+                // into _storeUIView to change layout
+                _storeUIView.DialogSystem.DialogUIPrefab,
+                
+                // Set Text
+                KORConstants.Dialog_AreYouSure,
+                "This will delete your player history and restart the game.",
+                
+                // Create zero or more buttons
+                new List<DialogButtonData>
+                {
+                    new DialogButtonData(KORConstants.Dialog_Ok, () =>
+                    {
+                        // TODO: Do something for "OK"
+                        ExampleProjectHacks.ClearDeviceUsersAndReloadGame();
+                        KORHelper.PlayAudioForUIClickPrimary();
+                        _storeUIView.DialogSystem.HideDialogBox();
+                    }),
+                    new DialogButtonData(KORConstants.Dialog_Cancel, () =>
+                    {
+                        // TODO: Do something for "Cancel"
+                        KORHelper.PlayAudioForUIClickSecondary();
+                        _storeUIView.DialogSystem.HideDialogBox();
+                    })
+                });
+            
         }
 
         private void BackButton_OnClicked()
