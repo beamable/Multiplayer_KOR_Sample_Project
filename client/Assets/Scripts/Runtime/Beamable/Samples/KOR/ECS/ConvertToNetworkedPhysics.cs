@@ -248,7 +248,8 @@ namespace Beamable.Samples.KOR.Multiplayer
             World.DefaultGameObjectInjectionWorld.EntityManager.AddComponent<BouncyTag>(Entity);
             World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(Entity, new BouncyTag
             {
-               Bounce = ExtraBounce.Value
+               Bounce = ExtraBounce.Value,
+               Shield = sfloat.One
             });
          }
 

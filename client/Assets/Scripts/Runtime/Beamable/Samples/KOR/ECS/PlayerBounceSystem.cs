@@ -2,9 +2,11 @@ using Beamable.Examples.Features.Multiplayer.Core;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using UnityEngine;
 using UnityS.Mathematics;
 using UnityS.Physics;
 using UnityS.Physics.Systems;
+using UnityS.Transforms;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
@@ -32,8 +34,8 @@ namespace Beamable.Samples.KOR.Multiplayer
 
          var job = new PlayerBounceSystemJob();
          job.bouncyGroup = GetComponentDataFromEntity<BouncyTag>(true);
-         job.impulseGroup = GetComponentDataFromEntity<PhysicsImpulse>();
          job.velocityGroup = GetComponentDataFromEntity<PhysicsVelocity>(true);
+         job.impulseGroup = GetComponentDataFromEntity<PhysicsImpulse>();
 
          var jobHandle = job.Schedule(_stepPhysicsWorld.Simulation, ref _buildPhysicsWorld.PhysicsWorld, inputDeps);
          jobHandle.Complete();
@@ -55,6 +57,7 @@ namespace Beamable.Samples.KOR.Multiplayer
 
          public void Execute(CollisionEvent collisionEvent)
          {
+            var normal = collisionEvent.Normal;
 
             var a = collisionEvent.EntityA;
             var b = collisionEvent.EntityB;
@@ -64,21 +67,56 @@ namespace Beamable.Samples.KOR.Multiplayer
             var aHasImpulse = impulseGroup.HasComponent(a);
             var bHasImpulse = impulseGroup.HasComponent(b);
 
-            if (aIsBouncy && bIsBouncy) return; // don't do anything, because I can't figure out how correctly handle it yet...
+            if (aIsBouncy && bIsBouncy)
+            {
+               var aBounce = bouncyGroup[a];
+               var bBounce = bouncyGroup[b];
+
+               var aVelocity = velocityGroup[a];
+               var bVelocity = velocityGroup[b];
+
+               var aImpulse = impulseGroup[a];
+               var bImpulse = impulseGroup[b];
+
+               var isAFaster = math.length(aVelocity.Linear) < math.length(bVelocity.Linear);
+
+               var bouncer = isAFaster ? aBounce : bBounce;
+               var bouncee = isAFaster ? bBounce : aBounce;
+               var targetImpulse = isAFaster ? bImpulse : aImpulse;
+               var targetEntity = isAFaster ? b : a;
+               normal = isAFaster ? -normal : normal;
+
+               // two bouncy things are colliding... Normally we'd just add a lot of impulse on both characters
+               var impulse = normal * bouncer.Bounce;
+               var shield = bouncee.Shield;
+               Debug.Log(a.Index + "=" + aBounce.Shield + " / " + b.Index + "=" + bBounce.Shield);
+               impulse /= (shield + (sfloat).1f); // a shield of 1 doesn't do anything. A shield of 0 causes catastrophie...
+               var maxLength = (sfloat) 30;
+               if (math.length(impulse) > maxLength)
+               {
+                  impulse = (impulse / math.length(impulse)) * maxLength;
+               }
+
+               targetImpulse.Impulse = impulse;  // TODO: Discount it by shield.
+               impulseGroup[targetEntity] = targetImpulse;
+               // bImpulse.Impulse += collisionEvent.
+
+               return;
+               // but we'll temper it by shields
+            }
 
             if (aIsBouncy && bHasImpulse)
             {
-               // apply an explosion impulse to b.
+               normal = -normal;
                var bImpulse = impulseGroup[b];
-               bImpulse.Impulse = collisionEvent.Normal * bouncyGroup[a].Bounce;
+               bImpulse.Impulse = normal * bouncyGroup[a].Bounce;
                impulseGroup[b] = bImpulse;
             }
 
             if (bIsBouncy && aHasImpulse)
             {
-               // apply an explosion impulse to a
                var aImpulse = impulseGroup[a];
-               aImpulse.Impulse = collisionEvent.Normal * bouncyGroup[b].Bounce;
+               aImpulse.Impulse = normal * bouncyGroup[b].Bounce;
                impulseGroup[a] = aImpulse;
             }
 

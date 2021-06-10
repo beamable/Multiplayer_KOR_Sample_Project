@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2722535405041683743}
   - component: {fileID: 8512463412627880569}
   - component: {fileID: 5832335789083506276}
+  - component: {fileID: 5967991540365212269}
   m_Layer: 0
   m_Name: AvatarViewBase
   m_TagString: Untagged
@@ -273,7 +274,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   TakeDamageAtHeight:
-    rawValue: 3204448256
+    rawValue: 3212836864
 --- !u!114 &8512463412627880569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +302,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 100
+--- !u!114 &5967991540365212269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917565731528861378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0358df5ad534eefaed13b770b879382, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkedPhysics: {fileID: 3821721727158368489}
+  Health: {fileID: 5832335789083506276}
 --- !u!1 &4319881476015272313
 GameObject:
   m_ObjectHideFlags: 0

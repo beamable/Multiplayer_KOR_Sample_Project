@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Beamable.Common;
+using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.KOR.Data;
 using Unity.Entities;
 using UnityEngine;
@@ -149,7 +150,9 @@ namespace Beamable.Samples.KOR.Multiplayer
                 {
                     vel.Linear = sfloat.Zero;
 
-                    t.Value = new float3(sfloat.Zero, (sfloat) 7, sfloat.Zero);
+                    var x = NetworkController.Instance.rand.Next(-15, 15);
+                    var z = NetworkController.Instance.rand.Next(-5, 5);
+                    t.Value = new float3((sfloat)x, (sfloat) 7, (sfloat)z);
                 }
 
                 vel.ApplyLinearImpulse(mass, impulse.Impulse);
