@@ -63,7 +63,7 @@ namespace Beamable.Samples.KOR.Views
       protected override void Update()
       {
          base.Update();
-         _timeRemainingValue.text = $"<mspace=mspace=500>{_timerBehaviour.SecondsRemaining.ToString("00")}</mspace>";
+         _timeRemainingValue.text = $"{_timerBehaviour.SecondsRemaining.ToString("00")}";
       }
 
    }
