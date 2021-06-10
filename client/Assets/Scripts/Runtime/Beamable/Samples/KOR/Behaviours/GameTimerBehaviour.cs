@@ -1,6 +1,5 @@
 using System;
 using Beamable.Examples.Features.Multiplayer.Core;
-using Beamable.Samples.Core;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Behaviours
@@ -13,10 +12,8 @@ namespace Beamable.Samples.KOR.Behaviours
 
       public event Action OnGameOver;
 
-      private sfloat startTime;
       private sfloat endTime;
       private sfloat currTime;
-      private bool started;
       private bool ended;
 
       public void StartMatch()
@@ -24,7 +21,6 @@ namespace Beamable.Samples.KOR.Behaviours
          var tick = NetworkController.HighestSeenNetworkFrame;
          var time = (sfloat)tick / (sfloat) NetworkController.NetworkFramesPerSecond;
          endTime = time + durationSeconds;
-         started = true;
          SecondsRemaining = (int)durationSeconds;
          NetworkController.Instance.Log.CreateNewConsumer(NetworkUpdate);
       }

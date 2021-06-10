@@ -15,6 +15,7 @@ using Beamable.Samples.KOR.Views;
 using UnityEngine;
 using Beamable.Samples.KOR.Animation;
 using System.Collections.Concurrent;
+using Beamable.Experimental.Api.Sim;
 
 namespace Beamable.Samples.KOR
 {
@@ -188,10 +189,32 @@ namespace Beamable.Samples.KOR
         private void StartGameTimer()
         {
             GameUIView.GameTimerBehaviour.StartMatch();
-            GameUIView.GameTimerBehaviour.OnGameOver += () =>
+            GameUIView.GameTimerBehaviour.OnGameOver += async () =>
             {
                 // TODO: score the players, and end the game.
                 Debug.Log("Game over!");
+
+                var uis = FindObjectsOfType<AvatarUIView>();
+                var validUis = uis.Where(ui => ui.Player).ToList();
+                validUis.Sort((a, b) => a.SpawnablePlayer.DBID > b.SpawnablePlayer.DBID ? 1 : -1);
+                validUis.Sort((a, b) => a.Player.HealthBehaviour.Health > b.Player.HealthBehaviour.Health ? -1 : 1);
+
+                var scores = validUis.Select(ui => new PlayerResult
+                {
+                    playerId = ui.SpawnablePlayer.DBID,
+                    score = ui.Player.HealthBehaviour.Health,
+                }).ToArray();
+                var selfRank = 0;
+                var selfScore = scores[0];
+                for (var i = 0; i < scores.Length; i++)
+                {
+                    scores[i].rank = i;
+                    if (scores[i].playerId == NetworkController.Instance.LocalDbid)
+                    {
+                        selfRank = i;
+                        selfScore = scores[i];
+                    }
+                }
 
                 // TODO: Disable input and motion behaviours.
                 foreach (var motionBehaviour in FindObjectsOfType<AvatarMotionBehaviour>())
@@ -204,6 +227,56 @@ namespace Beamable.Samples.KOR
                 {
                     inputBehaviour.enabled = false;
                 }
+
+                var results = await NetworkController.Instance.ReportResults(scores);
+
+                var isWinner = selfRank == 0;
+                var earnings = string.Join(",", results.currenciesGranted.Select(grant => $"{grant.amount}x{grant.symbol}"));
+                var earningsBody = string.IsNullOrWhiteSpace(earnings)
+                    ? "nothing"
+                    : earnings;
+                var body = "You came in place: " + (selfRank + 1) + ". You earned " + earningsBody;
+                _gameUIView.DialogSystem.ShowDialogBox<DialogUI>(
+
+                    // Renders this prefab. DUPLICATE this prefab and drag
+                    // into _storeUIView to change layout
+                    _gameUIView.DialogSystem.DialogUIPrefab,
+
+                    // Set Text
+                    isWinner
+                        ? KORConstants.Dialog_GameOver_Victory
+                        : KORConstants.Dialog_GameOver_Defeat,
+                    body,
+
+                    // Create zero or more buttons
+                    new List<DialogButtonData>
+                    {
+                        new DialogButtonData(KORConstants.Dialog_Ok, () =>
+                        {
+                            KORHelper.PlayAudioForUIClickPrimary();
+                            _gameUIView.DialogSystem.HideDialogBox();
+
+                            // Clean up manager
+                            _spawnablePlayers.Clear();
+                            _unusedSpawnPoints.Clear();
+                            _dbidReadyReceived.Clear();
+                            _hasSpawned = false;
+                            NetworkController.Instance.Cleanup();
+
+                            // Destroy ECS
+                            SystemManager.DestroyGameSystems();
+
+                            // Change scenes
+                            StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
+                                _configuration.DelayBeforeLoadScene));
+                        }),
+                        new DialogButtonData(KORConstants.Dialog_Cancel, () =>
+                        {
+                            KORHelper.PlayAudioForUIClickSecondary();
+                            _gameUIView.DialogSystem.HideDialogBox();
+                        })
+                    });
+
             };
         }
 
@@ -235,7 +308,7 @@ namespace Beamable.Samples.KOR
                     avatarView.gameObject.GetComponent<PlayerInputBehaviour>().enabled = false;
 
                 AvatarMotionBehaviour amb = avatarView.gameObject.GetComponent<AvatarMotionBehaviour>();
-                amb.Attributes = sp.Attributes;
+                amb.Attributes = sp.Attributes; 
 
                 _gameUIView.AvatarUIViews[p].Set(player, sp);
                 _gameUIView.AvatarUIViews[p].Render();

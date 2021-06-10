@@ -228,6 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _backgroundImage: {fileID: 8545633642255338788}
   _text: {fileID: 2844816126271840980}
+  _player: {fileID: 0}
 --- !u!225 &3950940782059792095
 CanvasGroup:
   m_ObjectHideFlags: 0

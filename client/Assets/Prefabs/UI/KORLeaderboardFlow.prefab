@@ -2085,8 +2085,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 15
-    m_Right: 15
+    m_Left: 20
+    m_Right: 20
     m_Top: 15
     m_Bottom: 0
   m_ChildAlignment: 0
@@ -2218,6 +2218,18 @@ PrefabInstance:
     - target: {fileID: 4348895522687995505, guid: a031fa800ac1f994d9c53a7cdf8e6d18, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4348895522687995519, guid: a031fa800ac1f994d9c53a7cdf8e6d18, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4348895522687995519, guid: a031fa800ac1f994d9c53a7cdf8e6d18, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4348895522687995519, guid: a031fa800ac1f994d9c53a7cdf8e6d18, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4348895523686286725, guid: a031fa800ac1f994d9c53a7cdf8e6d18, type: 3}
       propertyPath: m_AnchorMax.y

@@ -71,7 +71,6 @@ namespace Beamable.Samples.KOR.Data
         private int _currentPlayerCount;
         private int _targetPlayerCount;
         private SimGameType _activeSimGameType;
-        private bool _hasChosenCharacter = false;
         private CharacterManager _characterManager;
 
         //  Unity Methods  --------------------------------
