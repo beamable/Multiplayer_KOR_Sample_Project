@@ -38,7 +38,7 @@ MonoBehaviour:
   _cameraSkyboxRotationSpeed: 1
   _delayBeforeLoadScene: 0.1
   _statusMessageMinDuration: 1
-  delayBetweenBetweenFadeInUI: 0.25
+  delayBetweenBetweenFadeInUI: 0.1
   _delayBeforeFadeInUI: 0
   _leaderboardMinRowCount: 10
   _leaderboardMockScoreMin: 1
