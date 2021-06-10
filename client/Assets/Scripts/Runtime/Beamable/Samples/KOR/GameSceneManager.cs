@@ -158,7 +158,7 @@ namespace Beamable.Samples.KOR
             newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid);
             string alias = await RuntimeDataStorage.Instance.CharacterManager.GetPlayerAliasByDBID(joinEvent.PlayerDbid);
 
-            Debug.Log($"alias from joinEvent dbid={joinEvent.PlayerDbid} alias={alias}");
+            DebugLog($"alias from joinEvent dbid={joinEvent.PlayerDbid} alias={alias}");
 
             if (joinEvent.PlayerDbid == NetworkController.Instance.LocalDbid)
                 NetworkController.Instance.SendNetworkMessage(new ReadyEvent(_ownAttributes, alias));
@@ -167,7 +167,7 @@ namespace Beamable.Samples.KOR
         private void OnPlayerReady(ReadyEvent readyEvt)
         {
             Configuration.Debugger.Log($"Getting ready for dbid={readyEvt.PlayerDbid}"
-                + $" attributes move/charge={readyEvt.aggregateMovementSpeed}/{readyEvt.aggregateChargeSpeed}", DebugLogLevel.Verbose);
+                                       + $" attributes move/charge={readyEvt.aggregateMovementSpeed}/{readyEvt.aggregateChargeSpeed}", DebugLogLevel.Verbose);
 
             _dbidReadyReceived.Add(readyEvt.PlayerDbid);
 
@@ -289,9 +289,9 @@ namespace Beamable.Samples.KOR
                 SpawnablePlayer sp = _spawnablePlayers[p];
 
                 Configuration.Debugger.Log($"DBID={sp.DBID} Spawning character={sp.ChosenCharacter.CharacterContentObject.ContentName}"
-                    + $" attributes move/charge={sp.Attributes.MovementSpeed}/{sp.Attributes.ChargeSpeed}", DebugLogLevel.Verbose);
+                                           + $" attributes move/charge={sp.Attributes.MovementSpeed}/{sp.Attributes.ChargeSpeed}", DebugLogLevel.Verbose);
 
-                Debug.Log($"playerAlias={sp.PlayerAlias}");
+                DebugLog($"playerAlias={sp.PlayerAlias}");
 
                 AvatarView avatarView = GameObject.Instantiate<AvatarView>(sp.ChosenCharacter.AvatarViewPrefab);
                 avatarView.transform.SetPhysicsPosition(sp.SpawnPointBehaviour.transform.position);

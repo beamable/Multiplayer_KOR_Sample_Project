@@ -45,7 +45,7 @@ namespace Beamable.Samples.KOR.Multiplayer
         protected override void OnCreate()
         {
             base.OnCreate();
-            Debug.Log("Creating Game Controller");
+            Configuration.Debugger.Log("Creating Game Controller");
             Instance = this;
             OnInstance.CompleteSuccess(Instance);
             UnityEngine.Physics.autoSimulation = false;
