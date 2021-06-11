@@ -95,6 +95,7 @@ namespace Beamable.Samples.KOR
                 // Failed to connect (e.g. not logged in)
                 _isBeamableSDKInstalled = false;
                 _isBeamableSDKInstalledErrorMessage = e.Message;
+                Debug.LogError($"Stack trace:\n{e.StackTrace}");
                 ConnectivityService_OnConnectivityChanged(false);
             }
 
