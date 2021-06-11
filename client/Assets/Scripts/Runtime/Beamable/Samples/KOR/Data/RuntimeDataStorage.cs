@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using Beamable.Common.Content;
 using Beamable.Samples.Core;
 
@@ -11,6 +12,8 @@ namespace Beamable.Samples.KOR.Data
     {
         //  Properties  ----------------------------------
         public CharacterManager CharacterManager { get { if (_characterManager == null) { _characterManager = new CharacterManager(); } return _characterManager; } }
+
+        public GameServices GameServices { get { if (_gameServices == null) { _gameServices = new GameServices(); } return _gameServices; } }
 
         public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
 
@@ -72,12 +75,18 @@ namespace Beamable.Samples.KOR.Data
         private int _targetPlayerCount;
         private SimGameType _activeSimGameType;
         private CharacterManager _characterManager;
+        private GameServices _gameServices;
 
         //  Unity Methods  --------------------------------
         protected override void Awake()
         {
             base.Awake();
             ClearData();
+        }
+
+        private void FixedUpdate()
+        {
+            GameServices.Tick();
         }
 
         //  Other Methods  --------------------------------

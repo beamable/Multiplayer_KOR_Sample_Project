@@ -1,5 +1,6 @@
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.KOR.Audio;
+using Beamable.Samples.KOR.Data;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
@@ -55,7 +56,7 @@ namespace Beamable.Samples.KOR.Multiplayer
             private sfloat GetImpulse(Entity e)
             {
                 if (!impulseGroup.HasComponent(e))
-                    return (sfloat) 0.0f;
+                    return (sfloat)0.0f;
 
                 sfloat sqrMagImpulse = impulseGroup[e].Impulse.x * impulseGroup[e].Impulse.x
                                        + impulseGroup[e].Impulse.y * impulseGroup[e].Impulse.y
@@ -74,20 +75,19 @@ namespace Beamable.Samples.KOR.Multiplayer
                 var aHasImpulse = impulseGroup.HasComponent(a);
                 var bHasImpulse = impulseGroup.HasComponent(b);
 
-                sfloat minImpulse = (sfloat) 0.01f;
+                sfloat minImpulse = (sfloat)0.01f;
                 sfloat totalImpulse = GetImpulse(a) + GetImpulse(b);
                 if (totalImpulse > minImpulse)
                 {
-                    GameSceneManager.Instance.EnqueueConcurrent(() =>
+                    RuntimeDataStorage.Instance.GameServices.EnqueueConcurrent(() =>
                     {
-                        GameSceneManager.Instance.ShakeCamera();
+                        RuntimeDataStorage.Instance.GameServices.ShakeCamera();
                         List<string> collisionClips = new List<string>()
                             {SoundConstants.Collision01, SoundConstants.Collision02, SoundConstants.Collision03};
                         SoundManager.Instance.PlayAudioClip(collisionClips[Random.Range(0, collisionClips.Count)],
                             SoundManager.GetRandomPitch(1.0f, 0.3f));
                     });
                 }
-
 
                 if (aIsBouncy && bIsBouncy)
                 {
@@ -114,8 +114,8 @@ namespace Beamable.Samples.KOR.Multiplayer
                     var shield = bouncee.Shield;
                     Debug.Log(a.Index + "=" + aBounce.Shield + " / " + b.Index + "=" + bBounce.Shield);
                     impulse /= (shield +
-                                (sfloat) .1f); // a shield of 1 doesn't do anything. A shield of 0 causes catastrophie...
-                    var maxLength = (sfloat) 30;
+                                (sfloat).1f); // a shield of 1 doesn't do anything. A shield of 0 causes catastrophie...
+                    var maxLength = (sfloat)30;
                     if (math.length(impulse) > maxLength)
                     {
                         impulse = (impulse / math.length(impulse)) * maxLength;
@@ -143,7 +143,6 @@ namespace Beamable.Samples.KOR.Multiplayer
                     var aImpulse = impulseGroup[a];
                     aImpulse.Impulse = collisionEvent.Normal * bouncyGroup[b].Bounce;
                     impulseGroup[a] = aImpulse;
-
                 }
             }
         }

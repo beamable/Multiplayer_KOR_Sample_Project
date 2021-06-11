@@ -22,7 +22,7 @@ namespace Beamable.Samples.KOR
     /// <summary>
     /// Handles the main scene logic: Game
     /// </summary>
-    public class GameSceneManager : SingletonMonobehavior<GameSceneManager>
+    public class GameSceneManager : MonoBehaviour
     {
         //  Properties -----------------------------------
         public GameUIView GameUIView { get { return _gameUIView; } }
@@ -46,20 +46,6 @@ namespace Beamable.Samples.KOR
         private List<SpawnPointBehaviour> _unusedSpawnPoints = new List<SpawnPointBehaviour>();
         private HashSet<long> _dbidReadyReceived = new HashSet<long>();
         private bool _hasSpawned = false;
-
-        private ConcurrentQueue<Action> _concurrentQueue = new ConcurrentQueue<Action>();
-
-        public void EnqueueConcurrent(Action action)
-        {
-            _concurrentQueue.Enqueue(action);
-        }
-
-        private void FixedUpdate()
-        {
-            Action newAction;
-            if (_concurrentQueue.TryDequeue(out newAction))
-                newAction();
-        }
 
         //  Unity Methods   ------------------------------
         protected void Start()
@@ -323,11 +309,6 @@ namespace Beamable.Samples.KOR
             {
                 HandleNetworkEvent(evt);
             }
-        }
-
-        public void ShakeCamera(float force = 1)
-        {
-            _gameUIView.CinemachineImpulseSource.GenerateImpulse();
         }
 
         public void HandleNetworkEvent(KOREvent korEvent)
