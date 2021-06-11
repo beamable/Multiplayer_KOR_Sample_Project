@@ -160,10 +160,21 @@ namespace Beamable.Samples.KOR
 
             const float playerCountPitchMultiplier = 0.05f;
 
-            if (currentPlayersCount > _lastProgressPlayerCount)
-                SoundManager.Instance.PlayAudioClip(SoundConstants.Chime02, 1.0f + currentPlayersCount * playerCountPitchMultiplier);
-            if (currentPlayersCount < _lastProgressPlayerCount)
-                SoundManager.Instance.PlayAudioClip(SoundConstants.Chime01, 1.0f - currentPlayersCount * playerCountPitchMultiplier);
+            int playerCountDiff = currentPlayersCount - _lastProgressPlayerCount;
+
+            if (playerCountDiff > 0)
+            {
+                for (int p = 0; p < playerCountDiff; p++)
+                    SoundManager.Instance.PlayAudioClipDelayed(SoundConstants.Chime02, p * 0.5f,
+                        1.0f + ((_lastProgressPlayerCount + p) * playerCountPitchMultiplier));
+            }
+
+            if (playerCountDiff < 0)
+            {
+                for (int p = 0; p < -playerCountDiff; p++)
+                    SoundManager.Instance.PlayAudioClipDelayed(SoundConstants.Chime02, p * 0.5f,
+                        1.0f - ((_lastProgressPlayerCount - p) * playerCountPitchMultiplier));
+            }
 
             _lastProgressPlayerCount = currentPlayersCount;
         }
