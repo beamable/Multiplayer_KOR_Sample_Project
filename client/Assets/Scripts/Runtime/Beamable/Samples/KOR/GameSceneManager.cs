@@ -22,7 +22,7 @@ namespace Beamable.Samples.KOR
     /// <summary>
     /// Handles the main scene logic: Game
     /// </summary>
-    public partial class GameSceneManager : SingletonMonobehavior<GameSceneManager>
+    public class GameSceneManager : SingletonMonobehavior<GameSceneManager>
     {
         //  Properties -----------------------------------
         public GameUIView GameUIView { get { return _gameUIView; } }
@@ -276,7 +276,6 @@ namespace Beamable.Samples.KOR
                             _gameUIView.DialogSystem.HideDialogBox();
                         })
                     });
-
             };
         }
 
@@ -308,7 +307,7 @@ namespace Beamable.Samples.KOR
                     avatarView.gameObject.GetComponent<PlayerInputBehaviour>().enabled = false;
 
                 AvatarMotionBehaviour amb = avatarView.gameObject.GetComponent<AvatarMotionBehaviour>();
-                amb.Attributes = sp.Attributes; 
+                amb.Attributes = sp.Attributes;
 
                 _gameUIView.AvatarUIViews[p].Set(player, sp);
                 _gameUIView.AvatarUIViews[p].Render();
@@ -326,7 +325,7 @@ namespace Beamable.Samples.KOR
             }
         }
 
-        public void ShakeCamera(float force=1)
+        public void ShakeCamera(float force = 1)
         {
             _gameUIView.CinemachineImpulseSource.GenerateImpulse();
         }
@@ -368,7 +367,7 @@ namespace Beamable.Samples.KOR
 
                 // Set Text
                 KORConstants.Dialog_AreYouSure,
-                "This well end your game.",
+                "This will end your game.",
 
                 // Create zero or more buttons
                 new List<DialogButtonData>
@@ -398,8 +397,6 @@ namespace Beamable.Samples.KOR
                         _gameUIView.DialogSystem.HideDialogBox();
                     })
                 });
-
-
         }
     }
 }

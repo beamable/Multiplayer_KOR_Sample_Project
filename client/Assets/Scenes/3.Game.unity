@@ -255,49 +255,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d67a093c8074ab3b312398a7a6f87df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &666703746
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 666703748}
-  - component: {fileID: 666703747}
-  m_Layer: 0
-  m_Name: Beamable.Samples.KOR.Data.RuntimeDataStorage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &666703747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 666703746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dde3f6fb92d8b8448b0ddb52f88c855a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &666703748
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 666703746}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1060777086 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7793529713656307944, guid: 11793fd589259ad42bfbb021ed714002, type: 3}
@@ -933,7 +890,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7793529714709734004, guid: 11793fd589259ad42bfbb021ed714002, type: 3}
       propertyPath: field of view
-      value: 58.00534
+      value: 56.678837
       objectReference: {fileID: 0}
     - target: {fileID: 7793529714709734005, guid: 11793fd589259ad42bfbb021ed714002, type: 3}
       propertyPath: m_LocalPosition.x

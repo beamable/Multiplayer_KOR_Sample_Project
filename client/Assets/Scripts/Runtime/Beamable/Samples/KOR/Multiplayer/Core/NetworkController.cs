@@ -30,7 +30,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             NetworkInitialized = false;
             // roomId = string.IsNullOrEmpty(roomIdOverride) ? roomId : roomIdOverride;
 
-
             var beamable = await API.Instance;
 
             _roomId = RuntimeDataStorage.Instance.RoomId;
@@ -81,7 +80,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
                 Log.EnqueueHashAssertion(hashCheck.ForTick, hashCheck.Hash);
             });
 
-
             var joinMsg = new PlayerJoinedEvent();
             joinMsg.SetPlayerDbid(dbidNumber);
 
@@ -100,7 +98,7 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
         public void SendNetworkMessage(KOREvent message)
         {
-            _sim.SendEvent(message.GetType().Name, message);
+            _sim?.SendEvent(message.GetType().Name, message);
         }
 
         public async Task<GameResults> ReportResults(PlayerResult[] results)
