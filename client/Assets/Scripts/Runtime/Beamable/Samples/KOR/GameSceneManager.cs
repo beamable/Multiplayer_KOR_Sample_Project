@@ -202,7 +202,6 @@ namespace Beamable.Samples.KOR
                     }
                 }
 
-                // TODO: Disable input and motion behaviours.
                 foreach (var motionBehaviour in FindObjectsOfType<AvatarMotionBehaviour>())
                 {
                     motionBehaviour.Stop();
@@ -255,11 +254,6 @@ namespace Beamable.Samples.KOR
                             // Change scenes
                             StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
                                 _configuration.DelayBeforeLoadScene));
-                        }),
-                        new DialogButtonData(KORConstants.Dialog_Cancel, () =>
-                        {
-                            KORHelper.PlayAudioForUIClickSecondary();
-                            _gameUIView.DialogSystem.HideDialogBox();
                         })
                     });
             };
