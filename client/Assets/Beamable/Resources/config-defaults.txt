@@ -1,7 +1,7 @@
 {
-    "cid": "",
-    "alias": "",
-    "pid": "",
+    "cid": "1381866783234229",
+    "alias": "beamable-kor-sample-organization",
+    "pid": "DE_1381866783234230",
     "platform": "https://api.beamable.com",
     "socket": "https://api.beamable.com"
 }
