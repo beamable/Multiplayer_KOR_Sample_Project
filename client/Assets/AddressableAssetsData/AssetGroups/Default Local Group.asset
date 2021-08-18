@@ -20,51 +20,43 @@ MonoBehaviour:
   - m_GUID: b97c91e8b348f3f4ebdc11f5c82182cd
     m_Address: Assets/3rdParty/Rexard/RPG_inventory_icons/shield.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: 970324311431c794ca338446ea889948
     m_Address: Assets/3rdParty/Rexard/RPG_inventory_icons/rings.PNG
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: fd6e4fc32c78509458fc45ea4a478ba8
     m_Address: Assets/3rdParty/Rexard/RPG_inventory_icons/helmets.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: 0e8271e3bc569064687b488a21e01cd0
     m_Address: Assets/3rdParty/Rexard/RPG_inventory_icons/coin.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: 4668c6355c5039a49a88c09c9542516d
     m_Address: Assets/Prefabs/Avatars/AvatarView02.prefab
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: cbe580ced7b01c14192bafa714296cea
     m_Address: Assets/Prefabs/Avatars/AvatarView01.prefab
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: 7fcac171a20989e4b8b85cb535a460b9
     m_Address: Assets/Art/Textures/ReadMeIconTransparent2.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   - m_GUID: 87b9a19d7b14dcf4d8f12216ef1f102b
     m_Address: Assets/Art/Textures/ReadMeIconTransparent.png
     m_ReadOnly: 0
-    m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_SerializedLabels:
+    - default
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4309a4b5e831a23439f75ffddcaab1b8, type: 2}
   m_SchemaSet:

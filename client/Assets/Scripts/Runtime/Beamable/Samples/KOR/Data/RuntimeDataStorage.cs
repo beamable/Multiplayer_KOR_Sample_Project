@@ -11,9 +11,9 @@ namespace Beamable.Samples.KOR.Data
     public class RuntimeDataStorage : SingletonMonobehavior<RuntimeDataStorage>
     {
         //  Properties  ----------------------------------
-        public CharacterManager CharacterManager { get { if (_characterManager == null) { _characterManager = new CharacterManager(); } return _characterManager; } }
+        public CharacterManager CharacterManager { get { return _characterManager; } }
 
-        public GameServices GameServices { get { if (_gameServices == null) { _gameServices = new GameServices(); } return _gameServices; } }
+        public GameServices GameServices { get { return _gameServices; } }
 
         public bool IsMatchmakingComplete { get { return _isMatchmakingComplete; } set { _isMatchmakingComplete = value; } }
 
@@ -28,7 +28,15 @@ namespace Beamable.Samples.KOR.Data
                 {
                     throw new Exception("Must set ActiveSimGameType before getting MinPlayerCount");
                 }
-                return _activeSimGameType.minPlayersToStart.Value;
+                int playerCountMin = 0;
+                foreach (TeamContent teamContent in _activeSimGameType.teams)
+                {
+                    if (teamContent.minPlayers.HasValue)
+                    {
+                        playerCountMin += teamContent.minPlayers.Value;
+                    }
+                }
+                return playerCountMin;
             }
         }
 
@@ -44,7 +52,7 @@ namespace Beamable.Samples.KOR.Data
             }
         }
 
-        public string RoomId { get { return _roomId; } set { _roomId = value; } }
+        public string MatchId { get { return _matchId; } set { _matchId = value; } }
         public long LocalPlayerDbid { get { return _localPlayerDbid; } set { _localPlayerDbid = value; } }
 
         public bool IsLocalPlayerDbid(long dbid)
@@ -70,7 +78,7 @@ namespace Beamable.Samples.KOR.Data
 
         private bool _hasPopulatedLeaderboard;
         private long _localPlayerDbid;
-        private string _roomId;
+        private string _matchId;
         private int _currentPlayerCount;
         private int _targetPlayerCount;
         private SimGameType _activeSimGameType;
@@ -98,10 +106,12 @@ namespace Beamable.Samples.KOR.Data
             _isMatchmakingComplete = false;
             _hasPopulatedLeaderboard = false;
             _localPlayerDbid = KORConstants.UnsetValue;
-            _roomId = "";
+            _matchId = "";
             _currentPlayerCount = KORConstants.UnsetValue;
             _targetPlayerCount = KORConstants.UnsetValue;
             _activeSimGameType = null;
+            _characterManager = new CharacterManager();
+            _gameServices = new GameServices(); 
         }
     }
 }

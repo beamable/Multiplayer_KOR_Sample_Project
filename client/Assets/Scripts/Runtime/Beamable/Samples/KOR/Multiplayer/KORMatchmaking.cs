@@ -16,14 +16,14 @@ namespace Beamable.Samples.KOR.Multiplayer
    {
       /// <summary>
       /// During development, if the game scene is loaded directly (and thus no matchmaking)
-      /// this method is used to give a RoomId. Why random? So that each connection is fresh
+      /// this method is used to give a MatchId. Why random? So that each connection is fresh
       /// and has no history. Otherwise a new connection (within 10-15 seconds of the last connection)
       /// may remember the 'old' session and contain 'old' events.
       /// </summary>
       /// <returns></returns>
-      public static string GetRandomRoomId()
+      public static string GetRandomMatchId()
       {
-         return "KORRoomId" + string.Format("{00:00}", UnityEngine.Random.Range(0, 1000));
+         return "KORMatchId" + string.Format("{00:00}", UnityEngine.Random.Range(0, 1000));
       }
 
       public KORMatchmaking( MatchmakingService matchmakingService, 
@@ -33,7 +33,7 @@ namespace Beamable.Samples.KOR.Multiplayer
       }
       
       //  Other Methods   ------------------------------
-      protected override void DebugLog(string message)
+      protected void DebugLog(string message)
       {
          // Respects Configuration.IsDebugLog Checkbox
          Configuration.Debugger.Log(message);

@@ -26,9 +26,7 @@ namespace Beamable.Samples.KOR
     {
         //  Properties -----------------------------------
         public GameUIView GameUIView { get { return _gameUIView; } }
-
         public Configuration Configuration { get { return _configuration; } }
-
         public List<SpawnPointBehaviour> AvailableSpawnPoints;
 
         //  Fields ---------------------------------------
@@ -67,7 +65,7 @@ namespace Beamable.Samples.KOR
         private async void SetupBeamable()
         {
             _beamableAPI = await Beamable.API.Instance;
-            await RuntimeDataStorage.Instance.CharacterManager.BootstrapTask;
+            await RuntimeDataStorage.Instance.CharacterManager.Initialize();
             _ownAttributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
 
             // Do this after calling "Beamable.API.Instance" for smoother UI
@@ -80,7 +78,7 @@ namespace Beamable.Samples.KOR
                 RuntimeDataStorage.Instance.TargetPlayerCount = 1;
                 RuntimeDataStorage.Instance.CurrentPlayerCount = 1;
                 RuntimeDataStorage.Instance.LocalPlayerDbid = _beamableAPI.User.id;
-                RuntimeDataStorage.Instance.RoomId = KORMatchmaking.GetRandomRoomId();
+                RuntimeDataStorage.Instance.MatchId = KORMatchmaking.GetRandomMatchId();
             }
             else
             {
@@ -140,7 +138,7 @@ namespace Beamable.Samples.KOR
 
             SpawnablePlayer newPlayer = new SpawnablePlayer(joinEvent.PlayerDbid, spawnPoint);
             _spawnablePlayers.Add(newPlayer);
-            await RuntimeDataStorage.Instance.CharacterManager.BootstrapTask;
+            await RuntimeDataStorage.Instance.CharacterManager.Initialize();
             newPlayer.ChosenCharacter = await RuntimeDataStorage.Instance.CharacterManager.GetChosenCharacterByDBID(joinEvent.PlayerDbid);
             string alias = await RuntimeDataStorage.Instance.CharacterManager.GetPlayerAliasByDBID(joinEvent.PlayerDbid);
 

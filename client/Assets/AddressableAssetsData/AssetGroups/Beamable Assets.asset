@@ -21,8 +21,6 @@ MonoBehaviour:
     m_Address: Assets/Beamable/DefaultAssets/currency/icon.png
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4309a4b5e831a23439f75ffddcaab1b8, type: 2}
   m_SchemaSet:

@@ -6,6 +6,8 @@ using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
 using System;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -43,6 +45,7 @@ namespace Beamable.Samples.KOR
             _introUIView.StoreButton.onClick.AddListener(StoreButton_OnClicked);
             _introUIView.QuitButton.onClick.AddListener(QuitButton_OnClicked);
             _introUIView.PlayerAliasInputField.onValueChanged.AddListener(PlayerAliasInputField_OnValueChanged);
+            
             SetupBeamable();
         }
 
@@ -67,6 +70,11 @@ namespace Beamable.Samples.KOR
             // Attempt Connection to Beamable
             _beamableAPI = await Beamable.API.Instance;
 
+            // Build a series of one or more strings
+            // In case errors occur, and show them to the 
+            // user via onscreen UI
+            StringBuilder errorStringBuilder = new StringBuilder();
+            
             try
             {
                 _isBeamableSDKInstalled = true;
@@ -79,6 +87,8 @@ namespace Beamable.Samples.KOR
                 if (!RuntimeDataStorage.Instance.HasPopulatedLeaderboard)
                 {
                     LeaderboardContent leaderboardContent = await _configuration.LeaderboardRef.Resolve();
+                    
+                    await RuntimeDataStorage.Instance.CharacterManager.Initialize();
                     LeaderBoardView leaderBoardView = await MockDataCreator.PopulateLeaderboardWithMockData(_beamableAPI,
                        leaderboardContent,
                        _configuration.LeaderboardMinRowCount,
@@ -94,8 +104,10 @@ namespace Beamable.Samples.KOR
             {
                 // Failed to connect (e.g. not logged in)
                 _isBeamableSDKInstalled = false;
-                _isBeamableSDKInstalledErrorMessage = e.Message;
-                Debug.LogError($"Stack trace:\n{e.StackTrace}");
+
+                errorStringBuilder.Append(e.Message);
+                _isBeamableSDKInstalledErrorMessage = errorStringBuilder.ToString();
+                Debug.LogError($"Stack trace:\n{_isBeamableSDKInstalledErrorMessage}");
                 ConnectivityService_OnConnectivityChanged(false);
             }
 

@@ -40,7 +40,7 @@ namespace Beamable.Samples.KOR
             _lobbyUIView.BufferedText.SetText("",
                TMP_BufferedText.BufferedTextMode.Immediate);
 
-            MyKorMatchmakingOnProgress(null);
+            MyKorMatchmaking_OnProgress(null);
 
             SetupBeamable();
         }
@@ -92,13 +92,17 @@ namespace Beamable.Samples.KOR
                RuntimeDataStorage.Instance.ActiveSimGameType,
                _beamableAPI.User.id);
 
-            _korMatchmaking.OnProgress += MyKorMatchmakingOnProgress;
-            _korMatchmaking.OnComplete += MyKorMatchmakingOnComplete;
-            _onDestroy = _korMatchmaking.Stop;
+            _korMatchmaking.OnProgress.AddListener(MyKorMatchmaking_OnProgress);
+            _korMatchmaking.OnComplete.AddListener(MyKorMatchmaking_OnComplete);
+            _korMatchmaking.OnError.AddListener(MyKorMatchmaking_OnError);
+            _onDestroy = async () =>
+            {
+                await _korMatchmaking.CancelMatchmaking();
+            };
 
             try
             {
-                await _korMatchmaking.Start();
+                await _korMatchmaking.StartMatchmaking();
             }
             catch (Exception)
             {
@@ -113,48 +117,36 @@ namespace Beamable.Samples.KOR
         {
             KORHelper.PlayAudioForUIClickBack();
 
-            _korMatchmaking?.Stop();
+            _korMatchmaking?.CancelMatchmaking();
 
             StartCoroutine(KORHelper.LoadScene_Coroutine(_configuration.IntroSceneName,
                _configuration.DelayBeforeLoadScene));
         }
 
-        private void MyKorMatchmakingOnProgress(MyMatchmakingResult result)
+        private void MyKorMatchmaking_OnProgress(MyMatchmakingResult result)
         {
             int currentPlayersCount = 0;
             int targetPlayerCount = 0;
-            int secondsRemaining = -1;
-            string roomId = "0";
+            string matchId = "0";
 
             if (result != null)
             {
-                currentPlayersCount = result.CurrentPlayerDbidList.Count;
-                targetPlayerCount = result.TargetPlayerCount;
-                roomId = result.RoomId;
-                secondsRemaining = result.SecondsRemaining;
+                currentPlayersCount = result.Players.Count;
+                targetPlayerCount = result.SimGameType.maxPlayers;
+                matchId = result.MatchId;
             }
 
             DebugLog($"MyMatchmaking_OnProgress() ...\n " +
                      $"Players={currentPlayersCount}/{targetPlayerCount}, " +
-                     $"SecondsRemaining = {secondsRemaining}, " +
-                     $"RoomId={roomId}");
+                     $"MatchId={matchId}");
 
             string text = string.Format(KORConstants.LobbyUIView_Joining,
                currentPlayersCount,
-               targetPlayerCount,
-               secondsRemaining);
-            if (secondsRemaining == 0)
-            {
-                text = string.Format(KORConstants.LobbyUIView_Finalizing,
-                   currentPlayersCount,
-                   targetPlayerCount);
-            }
-            if (secondsRemaining == -1)
-            {
-                text = string.Format(KORConstants.LobbyUIView_Waiting,
-                   currentPlayersCount,
-                   targetPlayerCount);
-            }
+               targetPlayerCount );
+            
+            //TODO REmove
+            //text = string.Format(KORConstants.LobbyUIView_Finalizing,
+            //text = string.Format(KORConstants.LobbyUIView_Waiting,
 
             _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
 
@@ -179,32 +171,44 @@ namespace Beamable.Samples.KOR
             _lastProgressPlayerCount = currentPlayersCount;
         }
 
-        private void MyKorMatchmakingOnComplete(MyMatchmakingResult result)
+        private void MyKorMatchmaking_OnComplete(MyMatchmakingResult result)
         {
             if (!RuntimeDataStorage.Instance.IsMatchmakingComplete)
             {
                 string text = string.Format(KORConstants.LobbyUIView_Joined,
-                   result.CurrentPlayerDbidList.Count,
-                   result.TargetPlayerCount);
+                   result.Players.Count,
+                   result.SimGameType.maxPlayers);
 
                 _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
 
                 DebugLog($"MyMatchmaking_OnComplete() " +
-                   $"Players={result.CurrentPlayerDbidList.Count}/{result.TargetPlayerCount} " +
-                   $"RoomId={result.RoomId}");
+                   $"Players = {result.Players.Count}/{result.SimGameType.maxPlayers} " +
+                   $"MatchId = {result.MatchId}");
 
                 //Store successful info here for use in another scene
                 RuntimeDataStorage.Instance.IsMatchmakingComplete = true;
-                RuntimeDataStorage.Instance.LocalPlayerDbid = result.LocalPlayerDbid;
-                RuntimeDataStorage.Instance.CurrentPlayerCount = result.CurrentPlayerDbidList.Count;
-                RuntimeDataStorage.Instance.RoomId = result.RoomId;
+                RuntimeDataStorage.Instance.LocalPlayerDbid = result.LocalPlayer;
+                RuntimeDataStorage.Instance.CurrentPlayerCount = result.Players.Count;
+                RuntimeDataStorage.Instance.MatchId = result.MatchId;
 
                 StartCoroutine(LoadScene_Coroutine());
             }
             else
             {
-                throw new Exception("Must not reach MyKorMatchmakingOnComplete() if already IsMatchmakingComplete == true");
+                throw new Exception("Must not reach MyKorMatchmaking_OnComplete() if already IsMatchmakingComplete == true");
             }
+        }
+        
+        private void MyKorMatchmaking_OnError(MyMatchmakingResult result)
+        {
+            string text = string.Format(KORConstants.LobbyUIView_Error,
+                result.PlayerCountMin,
+                result.PlayerCountMax,
+                result.ErrorMessage);
+            
+            DebugLog($"{text}");
+
+            _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Immediate);
         }
 
         private IEnumerator LoadScene_Coroutine()

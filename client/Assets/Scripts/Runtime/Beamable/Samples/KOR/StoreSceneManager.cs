@@ -109,7 +109,7 @@ namespace Beamable.Samples.KOR
         private async Task<Attributes> ReloadAndRenderAttributes()
         {
             // Show the player's attributes in the UI of this scene
-            await RuntimeDataStorage.Instance.CharacterManager.BootstrapTask;
+            await RuntimeDataStorage.Instance.CharacterManager.Initialize();
             Attributes attributes = await RuntimeDataStorage.Instance.CharacterManager.GetChosenPlayerAttributes();
             _storeUIView.AttributesPanelUI.Attributes = attributes;
             return attributes;

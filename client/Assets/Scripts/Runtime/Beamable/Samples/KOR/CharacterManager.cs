@@ -22,6 +22,7 @@ namespace Beamable.Samples.KOR
         public const string PlayerAliasStatKey = "alias";
         public const string DefaultPlayerAliasPrefix = "Plyr";
 
+        private bool _isInitialized = false;
         private List<Character> _allCharacters = null;
 
         private IBeamableAPI _beamableAPI = null;
@@ -30,15 +31,11 @@ namespace Beamable.Samples.KOR
 
         private Character _currentlyChosenCharacter = null;
 
-        private Task _bootstrapTask = null;
-
         public event Action OnChoiceHasBeenMade;
 
         public List<Character> AllCharacters { get { return _allCharacters; } }
 
         public Character CurrentlyChosenCharacter { get { return _currentlyChosenCharacter; } }
-
-        public Task BootstrapTask { get { return _bootstrapTask; } }
 
         public class Character
         {
@@ -51,11 +48,6 @@ namespace Beamable.Samples.KOR
                 CharacterContentObject = characterContentObject;
                 AvatarViewPrefab = avatarView;
             }
-        }
-
-        public CharacterManager()
-        {
-            _bootstrapTask = SetupBeamable();
         }
 
         public async Task<Character> GetChosenCharacterByDBID(long dbid)
@@ -148,44 +140,56 @@ namespace Beamable.Samples.KOR
             }
         }
 
-        private async Task SetupBeamable()
+        public async Task Initialize()
         {
+            if (_isInitialized)
+            {
+                return;
+            }
+           
             _beamableAPI = await Beamable.API.Instance;
 
             List<CharacterContentObject> allCCOs = await GetAllCharacterContentObjects();
 
             if (allCCOs.Count == 0)
             {
-                Debug.LogError("No characters found in manifest. Did you forget to add some? This will break.");
-                return;
+                throw new Exception("No characters found in manifest. Did you forget to add some? This will break.");
             }
-
+            
             _allCharacters = new List<Character>();
 
             foreach (var cco in allCCOs)
             {
-                Configuration.Debugger.Log($"CharacterContentObject name={cco.ContentName} " +
-                                           $"type={cco.ContentType} id={cco.Id} readable name={cco.ReadableName}",
-                    DebugLogLevel.Verbose);
-
                 GameObject viewPrefab = await Addressables.LoadAssetAsync<GameObject>(cco.avatarViewPrefab).Task;
+                
+                if (viewPrefab == null)
+                {
+                    throw new Exception($"Can't find addressable for {cco.avatarViewPrefab}. " +
+                                        $"Build Unity Addressables before running project. " +
+                                        $"See https://docs.unity3d.com/Packages/com.unity.addressables@1.3/manual/AddressableAssetsDevelopmentCycle.html");
+                }
+                
                 AvatarView view = viewPrefab.GetComponent<AvatarView>();
 
                 Character newCharacter = new Character(cco, view);
-
+                
                 _allCharacters.Add(newCharacter);
                 _mapCharacterObjectNameToCharacter.Add(cco.ContentName, newCharacter);
             }
 
             Character chosenCharacter = await GetChosenCharacterByDBID(_beamableAPI.User.id);
-
+            
             if (chosenCharacter == null)
+            {
                 await ChooseCharacter(_allCharacters[0]);
+            }
             else
             {
                 _currentlyChosenCharacter = _allCharacters.Where(c => c.CharacterContentObject == chosenCharacter.CharacterContentObject).FirstOrDefault();
                 OnChoiceHasBeenMade?.Invoke();
             }
+            
+            _isInitialized = true;
         }
 
         private async Task<string> GetStatKeyByDBID(string statKey, long dbid)

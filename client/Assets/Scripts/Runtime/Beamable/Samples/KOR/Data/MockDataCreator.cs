@@ -44,7 +44,7 @@ namespace Beamable.Samples.KOR.Data
             StatsService statsService = beamableAPI.StatsService;
             IAuthService authService = beamableAPI.AuthService;
 
-            await RuntimeDataStorage.Instance.CharacterManager.BootstrapTask;
+            await RuntimeDataStorage.Instance.CharacterManager.Initialize();
 
             // Capture current user
             var localDbid = beamableAPI.User.id;

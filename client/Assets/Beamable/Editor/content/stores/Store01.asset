@@ -19,3 +19,6 @@ MonoBehaviour:
   - Id: listings.Listing02
   - Id: listings.Listing03
   showInactiveListings: 1
+  activeListingLimit:
+    HasValue: 0
+    Value: 0
