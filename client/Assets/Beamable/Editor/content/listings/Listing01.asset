@@ -30,8 +30,10 @@ MonoBehaviour:
         - Powerful description
     obtainCurrency: []
     obtainItems:
-    - contentId: items.KORItem.KORItem01
+    - contentId:
+        Id: items.KORItem.KORItem01
       properties: []
+      content_legacy: 
   activePeriod:
     HasValue: 0
     Value:

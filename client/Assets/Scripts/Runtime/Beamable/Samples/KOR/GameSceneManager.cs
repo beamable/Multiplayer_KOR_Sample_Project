@@ -159,7 +159,7 @@ namespace Beamable.Samples.KOR
             sp.Attributes = new Attributes(readyEvt.aggregateChargeSpeed, readyEvt.aggregateMovementSpeed);
             sp.PlayerAlias = readyEvt.playerAlias;
 
-            Debug.Log($"alias from readyEvt dbid={readyEvt.PlayerDbid} alias={sp.PlayerAlias}");
+            Configuration.Debugger.Log($"alias from readyEvt dbid={readyEvt.PlayerDbid} alias={sp.PlayerAlias}");
 
             Configuration.Debugger.Log($"OnPlayerReady Players={_dbidReadyReceived.Count}/{RuntimeDataStorage.Instance.CurrentPlayerCount}", DebugLogLevel.Verbose);
             if (!_hasSpawned && _dbidReadyReceived.Count == RuntimeDataStorage.Instance.CurrentPlayerCount)

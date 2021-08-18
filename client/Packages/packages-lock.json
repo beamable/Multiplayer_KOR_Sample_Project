@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.beamable": {
-      "version": "0.13.3",
+      "version": "0.14.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -24,11 +24,11 @@
       "dependencies": {}
     },
     "com.unity.addressables": {
-      "version": "1.18.9",
+      "version": "1.18.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.19.0",
+        "com.unity.scriptablebuildpipeline": "1.19.1",
         "com.unity.modules.assetbundle": "1.0.0",
         "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
@@ -47,7 +47,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.6.4",
+      "version": "2.6.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -201,7 +201,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "1.19.0",
+      "version": "1.19.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -238,7 +238,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.27",
+      "version": "1.1.29",
       "depth": 0,
       "source": "registry",
       "dependencies": {
