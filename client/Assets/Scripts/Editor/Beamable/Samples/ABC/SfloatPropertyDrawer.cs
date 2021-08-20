@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Beamable
+namespace Beamable.Samples.KOR
 {
    [CustomPropertyDrawer(typeof(sfloat))]
    public class SFloatPropertyDrawer : PropertyDrawer

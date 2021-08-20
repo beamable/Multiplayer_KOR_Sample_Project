@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Beamable.Core.UI.DialogSystem
+namespace Beamable.Samples.Core.UI.DialogSystem
 {
     /// <summary>
     ///  Renders one dialog

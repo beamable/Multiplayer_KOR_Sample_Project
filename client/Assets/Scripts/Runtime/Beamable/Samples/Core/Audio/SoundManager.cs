@@ -1,12 +1,10 @@
-﻿using Beamable.Samples.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
+using Beamable.Samples.Core.Components;
 using Beamable.Samples.KOR.Data;
 using UnityEngine;
-using System.Collections.Concurrent;
-using System;
 
-namespace Beamable.Samples.KOR.Audio
+namespace Beamable.Samples.Core.Audio
 {
     /// <summary>
     /// Maintain a list of AudioSources and play the next

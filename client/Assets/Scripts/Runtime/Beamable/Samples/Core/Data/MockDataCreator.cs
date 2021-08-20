@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,10 +8,11 @@ using Beamable.Api.Stats;
 using Beamable.Common.Api;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
-using Beamable.Samples.KOR.CustomContent;
+using Beamable.Samples.KOR;
+using Beamable.Samples.KOR.Data;
 using Random = System.Random;
 
-namespace Beamable.Samples.KOR.Data
+namespace Beamable.Samples.Core.Data
 {
     /// <summary>
     /// Create mock data. This is appropriate for a sample project, but not for

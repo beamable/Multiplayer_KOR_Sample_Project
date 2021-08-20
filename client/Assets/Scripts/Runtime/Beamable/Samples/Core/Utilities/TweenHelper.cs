@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Beamable.Samples.KOR.Animation
+namespace Beamable.Samples.Core.Utilities
 {
    /// <summary>
    /// Store commonly reused functionality 

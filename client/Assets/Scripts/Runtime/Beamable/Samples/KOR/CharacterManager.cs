@@ -2,7 +2,6 @@ using Beamable.Common;
 using Beamable.Common.Api;
 using Beamable.Common.Api.Inventory;
 using Beamable.Common.Content;
-using Beamable.Core.Debugging;
 using Beamable.Samples.KOR.CustomContent;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
@@ -10,9 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Beamable.Samples.Core.Debugging;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Beamable.Samples.KOR
 {

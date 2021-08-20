@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Beamable.Samples.KOR.Exceptions
+namespace Beamable.Samples.Core.Exceptions
 {
    /// <summary>
    /// Handles errors generated when the default clause of a

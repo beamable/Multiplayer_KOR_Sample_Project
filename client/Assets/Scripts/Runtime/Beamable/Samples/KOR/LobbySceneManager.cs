@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using Beamable.Examples.Features.Multiplayer.Core;
-using Beamable.Samples.KOR.Audio;
+using Beamable.Samples.Core.Audio;
+using Beamable.Samples.Core.UI;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
-using Beamable.Samples.KOR.UI;
 using Beamable.Samples.KOR.Views;
 using UnityEngine;
 

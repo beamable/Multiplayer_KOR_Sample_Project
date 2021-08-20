@@ -1,7 +1,7 @@
 ﻿using Beamable.Common.Content;
 using Beamable.Common.Leaderboards;
 using Beamable.Common.Shop;
-using Beamable.Core.Debugging;
+using Beamable.Samples.Core.Debugging;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data

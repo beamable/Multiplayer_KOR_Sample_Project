@@ -1,8 +1,8 @@
-using Beamable.Samples.Core;
+using Beamable.Samples.Core.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Beamable.Samples
+namespace Beamable.Samples.Core.PropertyDrawers
 {
    [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
    public class ReadOnlyPropertyDrawer : PropertyDrawer

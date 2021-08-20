@@ -1,4 +1,4 @@
-namespace Beamable.Core.Debugging
+namespace Beamable.Samples.Core.Debugging
 {
     public enum DebugLogLevel
     {

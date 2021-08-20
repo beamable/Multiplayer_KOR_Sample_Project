@@ -1,4 +1,5 @@
 using Beamable.Samples.Core;
+using Beamable.Samples.Core.Components;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Data

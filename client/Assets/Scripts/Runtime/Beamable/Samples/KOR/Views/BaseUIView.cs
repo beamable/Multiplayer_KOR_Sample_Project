@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Beamable.Core.UI.DialogSystem;
-using Beamable.Samples.KOR.Animation;
+using Beamable.Samples.Core.UI.DialogSystem;
+using Beamable.Samples.Core.Utilities;
 using Beamable.Samples.KOR.Data;
 using UnityEngine;
 

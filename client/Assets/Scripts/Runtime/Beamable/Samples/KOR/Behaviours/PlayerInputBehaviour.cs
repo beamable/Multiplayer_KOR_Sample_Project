@@ -1,6 +1,7 @@
 using System;
 using Beamable.Examples.Features.Multiplayer.Core;
 using Beamable.Samples.Core;
+using Beamable.Samples.Core.Attributes;
 using Beamable.Samples.KOR.Multiplayer.Events;
 using Beamable.Samples.KOR.Views;
 using Unity.Entities;

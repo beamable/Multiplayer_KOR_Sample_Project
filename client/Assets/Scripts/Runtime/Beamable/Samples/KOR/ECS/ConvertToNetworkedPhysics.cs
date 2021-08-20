@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Beamable.Samples.Core;
+using Beamable.Samples.Core.Attributes;
 using Unity.Entities;
 using UnityEngine;
 using UnityS.Mathematics;

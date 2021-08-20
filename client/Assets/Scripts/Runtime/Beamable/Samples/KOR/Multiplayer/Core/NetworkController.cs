@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using Beamable.Samples.Core;
+using Beamable.Samples.Core.Components;
 using Beamable.Samples.KOR;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer.Events;

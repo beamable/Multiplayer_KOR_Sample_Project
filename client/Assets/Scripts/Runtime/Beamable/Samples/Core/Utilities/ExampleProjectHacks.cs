@@ -1,8 +1,8 @@
 ﻿using Beamable.Api;
 using Beamable.Service;
 
-namespace Beamable.Samples.Core
-{ 
+namespace Beamable.Samples.Core.Utilities
+{
     /// <summary>
     /// These are hacks and other shortcuts used to
     /// assist in the examples.

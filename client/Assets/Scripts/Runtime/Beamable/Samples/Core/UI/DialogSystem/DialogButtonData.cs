@@ -1,6 +1,6 @@
 using UnityEngine.Events;
 
-namespace Beamable.Core.UI.DialogSystem
+namespace Beamable.Samples.Core.UI.DialogSystem
 {
     /// <summary>
     ///  Defines each button in the dialog

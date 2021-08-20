@@ -1,11 +1,11 @@
 using Beamable.Examples.Features.Multiplayer.Core;
-using Beamable.Samples.Core;
-using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer;
 using Beamable.Samples.KOR.Multiplayer.Events;
 using Beamable.Samples.KOR.Views;
 using System.Collections.Generic;
+using Beamable.Samples.Core.Attributes;
+using Beamable.Samples.Core.Audio;
 using Unity.Entities;
 using UnityEngine;
 using UnityS.Mathematics;
@@ -166,7 +166,9 @@ namespace Beamable.Samples.KOR.Behaviours
         private void HandleMotionEndEvent(sfloat deltaTime, PlayerMoveEndEvent evt)
         {
             List<string> moveClips = new List<string>() { SoundConstants.Move01, SoundConstants.Move02 };
-            SoundManager.Instance.PlayAudioClip(moveClips[Random.Range(0, moveClips.Count)], SoundManager.GetRandomPitch(1.0f, 0.3f));
+            
+            SoundManager.Instance.PlayAudioClip(moveClips[Random.Range(0, moveClips.Count)], 
+                SoundManager.GetRandomPitch(1.0f, 0.3f));
 
             var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 

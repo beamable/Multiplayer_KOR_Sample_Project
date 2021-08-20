@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Beamable.Samples.Core.UI;
 using Beamable.Samples.KOR.UI;
 using UnityEngine;
 using UnityEngine.UI;

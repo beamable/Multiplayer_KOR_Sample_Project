@@ -1,4 +1,4 @@
-using Beamable.Samples.KOR.Audio;
+using Beamable.Samples.Core.Audio;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Behaviours
@@ -20,7 +20,8 @@ namespace Beamable.Samples.KOR.Behaviours
         public void ChangeHealth(int delta)
         {
             if (delta < 0)
-                SoundManager.Instance.PlayAudioClip(SoundConstants.TakeDamage01, SoundManager.GetRandomPitch(1.0f, 0.3f));
+                SoundManager.Instance.PlayAudioClip(SoundConstants.TakeDamage01, 
+                    SoundManager.GetRandomPitch(1.0f, 0.3f));
 
             Health += delta;
             if (Health < 0)

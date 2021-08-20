@@ -1,7 +1,7 @@
 using Beamable.Examples.Features.Multiplayer.Core;
-using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using System.Collections.Generic;
+using Beamable.Samples.Core.Audio;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityS.Mathematics;
 using UnityS.Physics;
 using UnityS.Physics.Systems;
-using UnityS.Transforms;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
@@ -84,7 +83,7 @@ namespace Beamable.Samples.KOR.Multiplayer
                         RuntimeDataStorage.Instance.GameServices.ShakeCamera();
                         List<string> collisionClips = new List<string>()
                             {SoundConstants.Collision01, SoundConstants.Collision02, SoundConstants.Collision03};
-                        SoundManager.Instance.PlayAudioClip(collisionClips[Random.Range(0, collisionClips.Count)],
+                            SoundManager.Instance.PlayAudioClip(collisionClips[Random.Range(0, collisionClips.Count)],
                             SoundManager.GetRandomPitch(1.0f, 0.3f));
                     });
                 }

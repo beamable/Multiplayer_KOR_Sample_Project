@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using Beamable.Common.Content;
 using Beamable.Samples.Core;
+using Beamable.Samples.Core.Components;
 
 namespace Beamable.Samples.KOR.Data
 {

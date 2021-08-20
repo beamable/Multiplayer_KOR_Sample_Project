@@ -1,4 +1,4 @@
-using Beamable.Samples.KOR.Audio;
+using Beamable.Samples.Core.Audio;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.Behaviours
@@ -11,7 +11,8 @@ namespace Beamable.Samples.KOR.Behaviours
 
         public void SpawnEffect()
         {
-            SoundManager.Instance.PlayAudioClip(SoundConstants.GameOverWin, SoundManager.GetRandomPitch(1.0f, 0.3f));
+            SoundManager.Instance.PlayAudioClip(SoundConstants.GameOverWin, 
+                SoundManager.GetRandomPitch(1.0f, 0.3f));
 
             var effect = Instantiate(Prefab);
             effect.transform.position = SpawnLocation.position;

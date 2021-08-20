@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
-namespace Beamable.Samples.Core
+namespace Beamable.Samples.Core.UI
 {
     /// <summary>
     /// User may click any <link=blah>text</link> in the source text to

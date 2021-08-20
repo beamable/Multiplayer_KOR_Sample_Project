@@ -1,5 +1,5 @@
-﻿using Beamable.Samples.Core;
-using Beamable.Samples.KOR.Audio;
+﻿using Beamable.Samples.Core.Attributes;
+using Beamable.Samples.Core.Audio;
 using Beamable.Samples.KOR.Data;
 using UnityEngine;
 

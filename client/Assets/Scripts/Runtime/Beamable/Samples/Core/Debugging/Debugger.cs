@@ -1,4 +1,4 @@
-namespace Beamable.Core.Debugging
+namespace Beamable.Samples.Core.Debugging
 {
     /// <summary>
     /// Reduce console traffic by wrapping "Debug.Log" calls to use of this Debugger.

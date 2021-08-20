@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Beamable.Samples.Core
+namespace Beamable.Samples.Core.Components
 {
 	/// <summary>
 	/// Toggle the visibility at runtime. This is helpful

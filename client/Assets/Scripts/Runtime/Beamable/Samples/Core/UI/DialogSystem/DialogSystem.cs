@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Beamable.Core.UI.DialogSystem
+namespace Beamable.Samples.Core.UI.DialogSystem
 {
     /// <summary>
     ///  Manages the dialogs

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Beamable.Samples.Core
+namespace Beamable.Samples.Core.Utilities
 {
    /// <summary>
    /// Store commonly reused functionality for concerns: async/await/Task

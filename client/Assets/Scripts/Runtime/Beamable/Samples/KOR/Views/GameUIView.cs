@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Beamable.Samples.Core.UI;
 using Beamable.Samples.KOR.Behaviours;
 using Beamable.Samples.KOR.UI;
 using TMPro;

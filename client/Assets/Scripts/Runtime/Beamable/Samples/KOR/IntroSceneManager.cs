@@ -2,12 +2,13 @@
 using Beamable.Common.Api;
 using Beamable.Common.Api.Leaderboards;
 using Beamable.Common.Leaderboards;
-using Beamable.Samples.KOR.Audio;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Views;
 using System;
 using System.Text;
-using System.Threading.Tasks;
+using Beamable.Samples.Core.Audio;
+using Beamable.Samples.Core.Data;
+using Beamable.Samples.Core.Debugging;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -209,7 +210,7 @@ namespace Beamable.Samples.KOR
             string currentlyUpdatingValue = newValue;
             _setPlayerAliasPromise = RuntimeDataStorage.Instance.CharacterManager.SetCurrentPlayerAlias(currentlyUpdatingValue).Then(er =>
             {
-                Configuration.Debugger.Log($"NEW alias={currentlyUpdatingValue} set!", Beamable.Core.Debugging.DebugLogLevel.Verbose);
+                Configuration.Debugger.Log($"NEW alias={currentlyUpdatingValue} set!", DebugLogLevel.Verbose);
 
                 if (currentlyUpdatingValue.Equals(_latestNotYetSetNewAlias))
                     _latestNotYetSetNewAlias = null;
