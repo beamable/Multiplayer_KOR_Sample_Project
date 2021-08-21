@@ -839,6 +839,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6882454591178140916, guid: 4dd576057a8d89144908a0b68fbb7116, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8424034589577058330, guid: 4dd576057a8d89144908a0b68fbb7116, type: 3}
       propertyPath: _camera
       value: 
@@ -1024,9 +1028,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: KORLeaderboardFlow
       objectReference: {fileID: 0}
+    - target: {fileID: 3446762163796517769, guid: cec5c9bc1e04a2946baec59ae93b6256, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3446762165261149668, guid: cec5c9bc1e04a2946baec59ae93b6256, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446762165261149668, guid: cec5c9bc1e04a2946baec59ae93b6256, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0002746582
       objectReference: {fileID: 0}
     - target: {fileID: 3446762165334373272, guid: cec5c9bc1e04a2946baec59ae93b6256, type: 3}
       propertyPath: m_SizeDelta.y
