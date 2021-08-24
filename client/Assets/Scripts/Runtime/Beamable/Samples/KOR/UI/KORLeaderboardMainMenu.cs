@@ -7,7 +7,6 @@ using Beamable.Samples.KOR.Data;
 using Beamable.UI.Scripts;
 using UnityEngine;
 using UnityEngine.Events;
-using Debug = UnityEngine.Debug;
 
 namespace Beamable.Samples.KOR.UI
 {

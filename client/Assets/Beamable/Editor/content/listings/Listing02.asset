@@ -44,6 +44,9 @@ MonoBehaviour:
   purchaseLimit:
     HasValue: 0
     Value: 0
+  cohortRequirements:
+    HasValue: 0
+    Value: []
   playerStatRequirements:
     HasValue: 0
     Value: []
