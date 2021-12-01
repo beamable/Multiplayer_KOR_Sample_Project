@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Beamable.Extensions;
+using Beamable.Samples.KOR.Multiplayer;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
