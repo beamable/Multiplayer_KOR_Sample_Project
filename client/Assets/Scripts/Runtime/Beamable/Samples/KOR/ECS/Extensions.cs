@@ -19,6 +19,16 @@ namespace Beamable.Samples.KOR.Multiplayer
                )
          });
       }
+      
+      public static void ClearChildren(this Transform trans)
+      {
+         while (trans.childCount > 0)
+         {
+            Transform child = trans.GetChild(0);
+            child.SetParent((Transform) null);
+            Object.DestroyImmediate((Object) child.gameObject);
+         }
+      }
 
       public static uint ToRawSFloat(this float number)
       {
