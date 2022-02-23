@@ -1,6 +1,5 @@
-﻿using System;
+﻿
 using Beamable.Examples.Features.Multiplayer.Core;
-using Beamable.Samples.KOR.Behaviours;
 using Beamable.Samples.KOR.Data;
 using TMPro;
 using UnityEngine;
@@ -17,7 +16,7 @@ namespace Beamable.Samples.KOR.Views
 
         public AvatarSlotData AvatarSlotData { set { _avatarSlotData = value; Render(); } get { return _avatarSlotData; } }
 
-        public Player Player => _player;
+        public Behaviours.Player Player => _player;
         public SpawnablePlayer SpawnablePlayer => _spawnablePlayer;
 
         //  Fields ---------------------------------------
@@ -28,7 +27,7 @@ namespace Beamable.Samples.KOR.Views
         private TMP_Text _text = null;
 
         [SerializeField]
-        private Player _player;
+        private Behaviours.Player _player;
 
         [SerializeField]
         private SpawnablePlayer _spawnablePlayer;
@@ -47,7 +46,7 @@ namespace Beamable.Samples.KOR.Views
         }
 
         //  Other Methods   ------------------------------
-        public void Set(Player player, SpawnablePlayer spawnablePlayer)
+        public void Set(Behaviours.Player player, SpawnablePlayer spawnablePlayer)
         {
             _player = player;
             _spawnablePlayer = spawnablePlayer;

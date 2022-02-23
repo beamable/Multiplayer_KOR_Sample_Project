@@ -271,7 +271,7 @@ namespace Beamable.Samples.KOR
                 AvatarView avatarView = GameObject.Instantiate<AvatarView>(sp.ChosenCharacter.AvatarViewPrefab);
                 avatarView.transform.SetPhysicsPosition(sp.SpawnPointBehaviour.transform.position);
 
-                Player player = avatarView.gameObject.GetComponent<Player>();
+                var player = avatarView.gameObject.GetComponent<Behaviours.Player>();
                 player.SetAlias(sp.PlayerAlias);
 
                 avatarView.SetForPlayer(sp.DBID);

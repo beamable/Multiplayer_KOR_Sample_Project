@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Beamable.Experimental.Api.Sim;
 using Beamable.Samples.Core;
@@ -6,6 +7,7 @@ using Beamable.Samples.Core.Components;
 using Beamable.Samples.KOR;
 using Beamable.Samples.KOR.Data;
 using Beamable.Samples.KOR.Multiplayer.Events;
+using Beamable.Service;
 using UnityEngine;
 
 namespace Beamable.Examples.Features.Multiplayer.Core
@@ -35,7 +37,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
             _roomId = RuntimeDataStorage.Instance.MatchId;
             LocalDbid = beamable.User.id;
-            _sim = new SimClient(new FastNetworkEventStream(_roomId), NetworkFramesPerSecond, 1);
+            _sim = new SimClient(new FastNetworkEventStream(_roomId, LocalDbid.ToString(CultureInfo.InvariantCulture)),
+                                 NetworkFramesPerSecond, 1);
             _sim.OnInit(HandleOnInit);
             _sim.OnConnect(HandleOnConnect);
             _sim.OnDisconnect(HandleOnDisconnect);
