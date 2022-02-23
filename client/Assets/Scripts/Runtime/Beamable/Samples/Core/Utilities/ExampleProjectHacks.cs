@@ -1,4 +1,6 @@
 ﻿using Beamable.Api;
+using Beamable.Common;
+using Beamable.Player;
 using Beamable.Service;
 
 namespace Beamable.Samples.Core.Utilities
@@ -21,9 +23,9 @@ namespace Beamable.Samples.Core.Utilities
         /// </summary>
         public static void ClearDeviceUsersAndReloadGame()
         {
-            PlatformService platformService = ServiceManager.Resolve<PlatformService>();
-            platformService.ClearDeviceUsers();
-            ServiceManager.OnTeardown();
+            BeamContext.Default.Api.ClearDeviceUsers();
+            Beam.ClearAndStopAllContexts();
+            Beam.ResetToScene("1.Intro");
         }
     }
 }

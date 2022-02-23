@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Beamable.Api;
+using Beamable.Api.Auth;
+using Beamable.Api.Sessions;
 using Beamable.Experimental.Api.Sim;
 using Beamable.Service;
 
@@ -20,10 +22,10 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       private bool hasData = false;
       private string roomName;
 
-      public FastNetworkEventStream(string roomName)
+      public FastNetworkEventStream(string roomName, string id)
       {
          this.roomName = roomName;
-         ClientId = ServiceManager.Resolve<PlatformService>().User.id.ToString();
+         ClientId = id;
          _syncFrames.Add(_nextFrame);
          Ready = true;
       }
@@ -34,7 +36,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          if ((now - _lastReqTime) >= REQ_FREQ_MS)
          {
             _lastReqTime = now;
-            var platform = ServiceManager.Resolve<PlatformService>();
             var req = new GameRelaySyncMsg();
             req.t = _nextFrame.Frame;
             for (int i = 0; i < _eventQueue.Count; i++)
@@ -45,8 +46,8 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             }
 
             _eventQueue.Clear();
-
-            platform.GameRelay.Sync(roomName, req).Then(rsp =>
+            
+            BeamContext.Default.ServiceProvider.GetService<GameRelayService>().Sync(roomName, req).Then(rsp =>
             {
                if (rsp.t == -1)
                {
