@@ -1,13 +1,16 @@
 {
   "dependencies": {
     "com.beamable": {
-      "version": "1.0.0",
+      "version": "1.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0",
         "com.unity.addressables": "1.18.19",
-        "com.unity.textmeshpro": "1.4.1"
+        "com.unity.textmeshpro": "1.4.1",
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.test-framework": "1.1.19",
+        "com.unity.test-framework.performance": "2.8.1-preview"
       },
       "url": "https://nexus.beamable.com/nexus/content/repositories/unity"
     },
@@ -61,6 +64,13 @@
         "com.unity.test-framework.performance": "2.3.1-preview",
         "com.unity.burst": "1.4.1"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.entities": {
@@ -138,13 +148,6 @@
       "dependencies": {
         "nuget.mono-cecil": "0.1.6-preview"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0-preview",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.platforms": {
@@ -251,12 +254,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework.performance": {
-      "version": "2.3.1-preview",
+      "version": "2.8.1-preview",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.0",
-        "com.unity.nuget.newtonsoft-json": "2.0.0-preview"
+        "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
