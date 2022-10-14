@@ -27,7 +27,7 @@ namespace Beamable.Samples.KOR.Data
             CinemachineImpulseSource.GenerateImpulse();
         }
 
-        private ConcurrentQueue<Action> _concurrentQueue = new ConcurrentQueue<Action>();
+        private readonly ConcurrentQueue<Action> _concurrentQueue = new ConcurrentQueue<Action>();
 
         public void EnqueueConcurrent(Action action)
         {

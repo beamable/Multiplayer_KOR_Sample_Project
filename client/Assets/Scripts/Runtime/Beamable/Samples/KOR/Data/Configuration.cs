@@ -1,8 +1,10 @@
-﻿using Beamable.Common.Content;
+﻿using Beamable.Common;
+using Beamable.Common.Content;
 using Beamable.Common.Leaderboards;
 using Beamable.Common.Shop;
 using Beamable.Samples.Core.Debugging;
 using UnityEngine;
+using static Beamable.Common.Constants.MenuItems.Assets;
 
 namespace Beamable.Samples.KOR.Data
 {
@@ -12,9 +14,9 @@ namespace Beamable.Samples.KOR.Data
    /// </summary>
    [CreateAssetMenu(
       fileName = Title,
-      menuName = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_SAMPLES + "/" +
+      menuName = Paths.MENU_ITEM_PATH_ASSETS_BEAMABLE_SAMPLES + "/" +
       "Multiplayer/Create New " + Title,
-      order = BeamableConstants.MENU_ITEM_PATH_ASSETS_BEAMABLE_ORDER_1)]
+      order = Orders.MENU_ITEM_PATH_ASSETS_BEAMABLE_ORDER_1)]
    public class Configuration : ScriptableObject
    {
       

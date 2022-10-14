@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Beamable.Examples.Features.Multiplayer.Core;
+using Beamable.Experimental.Api.Matchmaking;
 using Beamable.Samples.Core.Audio;
 using Beamable.Samples.Core.UI;
 using Beamable.Samples.KOR.Data;
@@ -25,7 +26,7 @@ namespace Beamable.Samples.KOR
         [SerializeField]
         private LobbyUIView _lobbyUIView = null;
 
-        private IBeamableAPI _beamableAPI;
+        private BeamContext _beam;
         private KORMatchmaking _korMatchmaking;
 
         private int _lastProgressPlayerCount = 0;
@@ -59,7 +60,8 @@ namespace Beamable.Samples.KOR
 
         private async void SetupBeamable()
         {
-            _beamableAPI = await Beamable.API.Instance;
+            _beam = BeamContext.Default;
+            await _beam.OnReady;
 
             // Do this after calling "Beamable.API.Instance" for smoother UI
             _lobbyUIView.CanvasGroupsDoFadeIn();
@@ -88,9 +90,9 @@ namespace Beamable.Samples.KOR
             RuntimeDataStorage.Instance.IsMatchmakingComplete = false;
 
             // Do matchmaking
-            _korMatchmaking = new KORMatchmaking(_beamableAPI.Experimental.MatchmakingService,
+            _korMatchmaking = new KORMatchmaking(_beam.ServiceProvider.GetService<MatchmakingService>(),
                RuntimeDataStorage.Instance.ActiveSimGameType,
-               _beamableAPI.User.id);
+               _beam.PlayerId);
 
             _korMatchmaking.OnProgress.AddListener(MyKorMatchmaking_OnProgress);
             _korMatchmaking.OnComplete.AddListener(MyKorMatchmaking_OnComplete);

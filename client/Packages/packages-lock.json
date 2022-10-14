@@ -1,13 +1,16 @@
 {
   "dependencies": {
     "com.beamable": {
-      "version": "1.0.0",
+      "version": "1.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0",
         "com.unity.addressables": "1.18.19",
-        "com.unity.textmeshpro": "1.4.1"
+        "com.unity.textmeshpro": "1.4.1",
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.test-framework": "1.1.19",
+        "com.unity.test-framework.performance": "2.8.1-preview"
       },
       "url": "https://nexus.beamable.com/nexus/content/repositories/unity"
     },
@@ -63,6 +66,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.entities": {
       "version": "0.17.0-preview.41",
       "depth": 0,
@@ -90,16 +100,16 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "2.0.7",
+      "version": "3.0.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.1"
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.16",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -108,7 +118,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -138,13 +148,6 @@
       "dependencies": {
         "nuget.mono-cecil": "0.1.6-preview"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0-preview",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.platforms": {
@@ -181,7 +184,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "10.7.0",
+      "version": "10.10.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -192,13 +195,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.universal": {
-      "version": "10.7.0",
+      "version": "10.10.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.1.0",
-        "com.unity.render-pipelines.core": "10.7.0",
-        "com.unity.shadergraph": "10.7.0"
+        "com.unity.render-pipelines.core": "10.10.0",
+        "com.unity.shadergraph": "10.10.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -230,17 +233,17 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "10.7.0",
+      "version": "10.10.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.render-pipelines.core": "10.7.0",
+        "com.unity.render-pipelines.core": "10.10.0",
         "com.unity.searcher": "4.3.2"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.30",
+      "version": "1.1.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -251,12 +254,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework.performance": {
-      "version": "2.3.1-preview",
+      "version": "2.8.1-preview",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.0",
-        "com.unity.nuget.newtonsoft-json": "2.0.0-preview"
+        "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },

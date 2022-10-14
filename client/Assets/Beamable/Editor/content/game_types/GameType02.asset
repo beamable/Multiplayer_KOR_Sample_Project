@@ -14,13 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tags:
   - base
-  maxPlayers: 6
+  maxPlayers: 0
+  legacyTeams: []
   teams:
-  - name: Team01
-    maxPlayers: 6
-    minPlayers:
-      HasValue: 1
-      Value: 2
+    listData:
+    - name: 
+      maxPlayers: 1
+      minPlayers:
+        HasValue: 0
+        Value: 0
+    - name: 
+      maxPlayers: 1
+      minPlayers:
+        HasValue: 0
+        Value: 0
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:
@@ -29,6 +36,9 @@ MonoBehaviour:
   maxWaitDurationSecs:
     HasValue: 1
     Value: 60
+  matchingIntervalSecs:
+    HasValue: 0
+    Value: 0
   leaderboardUpdates:
   - leaderboard: leaderboards.Leaderboard01
     scoringAlgorithm:
