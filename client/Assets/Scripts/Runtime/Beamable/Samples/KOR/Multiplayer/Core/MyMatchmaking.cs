@@ -166,6 +166,16 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public async Task CancelMatchmaking()
       {
+         if (_matchmakingService == null)
+         {
+            return;
+         }
+
+         if (_myMatchmakingResult.MatchmakingHandle.Tickets == null ||
+             _myMatchmakingResult.MatchmakingHandle.Tickets.Length == 0)
+         {
+            return;
+         }
          await _matchmakingService.CancelMatchmaking(_myMatchmakingResult.MatchmakingHandle.Tickets[0].ticketId);
       }
       
