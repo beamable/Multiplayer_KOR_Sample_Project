@@ -57,14 +57,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
-      "version": "0.15.0-preview.21",
-      "depth": 1,
-      "source": "registry",
+      "version": "file:com.unity.collections@0.15.0-preview.21",
+      "depth": 0,
+      "source": "embedded",
       "dependencies": {
         "com.unity.test-framework.performance": "2.3.1-preview",
         "com.unity.burst": "1.4.1"
-      },
-      "url": "https://packages.unity.com"
+      }
     },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",
