@@ -11,14 +11,21 @@ namespace Beamable.Samples.KOR.Multiplayer
    [DisableAutoCreation]
    public class GameSystem : SystemBase
    {
+      private NetworkController _networkController;
+      private int _framesPerSecond;
+      protected override void OnCreate()
+      {
+         _networkController = NetworkController.Instance;
+         _framesPerSecond = NetworkController.NetworkFramesPerSecond;
+         base.OnCreate();
+      }
+
       protected override void OnUpdate()
       {
-         // get the tick this represents...
-         var network = NetworkController.Instance;
          var time = World.Time.ElapsedTime;
-         var frame = (long) (time * NetworkController.NetworkFramesPerSecond);
+         var frame = (long) (time * _framesPerSecond);
 
-         network.Log.NotifyConsumers(frame, (float)time, (float)World.Time.DeltaTime);
+         _networkController.Log.NotifyConsumers(frame, (float)time, (float)World.Time.DeltaTime);
       }
    }
 }

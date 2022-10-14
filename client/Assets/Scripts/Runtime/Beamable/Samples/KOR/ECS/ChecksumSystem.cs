@@ -13,15 +13,22 @@ namespace Beamable.Samples.KOR.Multiplayer
    [DisableAutoCreation]
    public class ChecksumSystem : SystemBase
    {
+      private NetworkController _networkController;
+      private const int FramesPerSecond = NetworkController.NetworkFramesPerSecond;
+      readonly StringBuilder _sBuilder = new StringBuilder(512);
+      protected override void OnCreate()
+      {
+         _networkController = NetworkController.Instance;
+         base.OnCreate();
+      }
       protected override void OnUpdate()
       {
-         var network = NetworkController.Instance;
          if (!NetworkController.NetworkInitialized) return;
 
          var time = World.Time.ElapsedTime;
-         var tick = (long) (time * NetworkController.NetworkFramesPerSecond);
+         var tick = (long) (time * FramesPerSecond);
 
-         if (network.Log.HasHashForTick(tick)) return; // don't do anything...
+         if (_networkController.Log.HasHashForTick(tick)) return; // don't do anything...
 
          var list = new List<uint>();
          var entities = EntityManager.GetAllEntities();
@@ -36,14 +43,14 @@ namespace Beamable.Samples.KOR.Multiplayer
          }
 
          var hash = GetMD5Checksum(list);
-         network.Log.ReportHashForTick(tick, hash);
+         _networkController.Log.ReportHashForTick(tick, hash);
          if (tick % 40 == 0) // every 2 seconds ish...
          {
-            network.SendNetworkMessage(new ChecksumEvent(hash, tick));
+            _networkController.SendNetworkMessage(new ChecksumEvent(hash, tick));
          }
       }
 
-      private string GetMD5Checksum(List<uint> list)
+      private string GetMD5Checksum(IList<uint> list)
       {
          using var md5 = MD5.Create();
 
@@ -58,12 +65,12 @@ namespace Beamable.Samples.KOR.Multiplayer
          }
 
          var hash = md5.ComputeHash(buffer);
-         var sBuilder = new StringBuilder();
+         _sBuilder.Clear();
          for (int i = 0; i < hash.Length; i++)
          {
-            sBuilder.Append(hash[i].ToString("x2"));
+            _sBuilder.Append(hash[i].ToString("x2"));
          }
-         return sBuilder.ToString();
+         return _sBuilder.ToString();
       }
 
    }
