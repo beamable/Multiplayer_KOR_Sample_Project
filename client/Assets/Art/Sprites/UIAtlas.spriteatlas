@@ -76,5 +76,5 @@ SpriteAtlas:
   - PanelBackground01
   - ButtonBackground01
   m_RenderDataMap: {}
-  m_Tag: UIAtlass
+  m_Tag: UIAtlas
   m_IsVariant: 0
