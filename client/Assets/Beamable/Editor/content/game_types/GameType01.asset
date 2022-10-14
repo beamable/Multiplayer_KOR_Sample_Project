@@ -23,11 +23,11 @@ MonoBehaviour:
       Value: 1
   teams:
     listData:
-    - name: 
+    - name: Team01
       maxPlayers: 1
       minPlayers:
-        HasValue: 0
-        Value: 0
+        HasValue: 1
+        Value: 1
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:

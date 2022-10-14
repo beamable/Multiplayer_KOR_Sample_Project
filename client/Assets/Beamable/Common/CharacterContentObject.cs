@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Beamable.Common.Content;
-using Beamable.Samples.KOR.Views;
 using UnityEngine;
 
 namespace Beamable.Samples.KOR.CustomContent

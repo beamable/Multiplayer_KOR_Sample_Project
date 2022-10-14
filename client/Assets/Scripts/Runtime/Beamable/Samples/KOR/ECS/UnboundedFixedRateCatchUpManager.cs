@@ -1,6 +1,7 @@
 using Unity.Core;
 using Unity.Entities;
-using Unity.Mathematics;
+using UnityEngine;
+using UnityS.Mathematics;
 
 namespace Beamable.Samples.KOR.Multiplayer
 {
@@ -10,12 +11,12 @@ namespace Beamable.Samples.KOR.Multiplayer
     public class UnboundedFixedRateCatchUpManager : IFixedRateManager
     {
         // TODO: move this to World
-        float m_MaximumDeltaTime;
+        sfloat m_MaximumDeltaTime;
 
-        public float MaximumDeltaTime
+        public sfloat MaximumDeltaTime
         {
             get => m_MaximumDeltaTime;
-            set => m_MaximumDeltaTime = math.max(value, m_FixedTimestep);
+            set => m_MaximumDeltaTime = math.max((sfloat)value, (sfloat)m_FixedTimestep);
         }
 
         float m_FixedTimestep;
@@ -23,7 +24,7 @@ namespace Beamable.Samples.KOR.Multiplayer
         public float Timestep
         {
             get => m_FixedTimestep;
-            set { m_FixedTimestep = math.clamp(value, .0001f, 100000); }
+            set { m_FixedTimestep = (float)math.clamp((sfloat)value, sfloat.Epsilon, (sfloat)100000f); }
         }
 
         double m_LastFixedUpdateTime;
@@ -39,7 +40,7 @@ namespace Beamable.Samples.KOR.Multiplayer
         public bool ShouldGroupUpdate(ComponentSystemGroup group)
         {
             float worldMaximumDeltaTime = group.World.MaximumDeltaTime;
-            float maximumDeltaTime = math.max(worldMaximumDeltaTime, m_FixedTimestep);
+            float maximumDeltaTime = Mathf.Max(worldMaximumDeltaTime, m_FixedTimestep);
 
             // if this is true, means we're being called a second or later time in a loop
             if (m_DidPushTime)
@@ -51,7 +52,7 @@ namespace Beamable.Samples.KOR.Multiplayer
                 m_MaxFinalElapsedTime = m_LastFixedUpdateTime + maximumDeltaTime;
             }
 
-            var finalElapsedTime = math.min(m_MaxFinalElapsedTime, group.World.Time.ElapsedTime);
+            var finalElapsedTime = m_MaxFinalElapsedTime > group.World.Time.ElapsedTime ? group.World.Time.ElapsedTime : m_MaxFinalElapsedTime;
             if (m_FixedUpdateCount == 0)
             {
                 // First update should always occur at t=0

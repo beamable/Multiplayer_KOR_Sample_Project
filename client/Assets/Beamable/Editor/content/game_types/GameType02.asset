@@ -18,16 +18,11 @@ MonoBehaviour:
   legacyTeams: []
   teams:
     listData:
-    - name: 
-      maxPlayers: 1
+    - name: Team01
+      maxPlayers: 6
       minPlayers:
-        HasValue: 0
-        Value: 0
-    - name: 
-      maxPlayers: 1
-      minPlayers:
-        HasValue: 0
-        Value: 0
+        HasValue: 1
+        Value: 2
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:
