@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Update Beam version
+        id: beamable_updater
         uses: beamable/package-update-action@main
         with:
           project-path: "client"
