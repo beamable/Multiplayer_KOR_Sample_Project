@@ -11,7 +11,7 @@ jobs:
       - name: Update Beam version
         uses: beamable/package-update-action@main
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          project-path: "client"
       - name: Print the versions
         run: |
           echo "Local version is ${{ steps.beamable_updater.outputs.local_version }}"
