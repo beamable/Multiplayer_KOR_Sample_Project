@@ -1,5 +1,7 @@
-﻿using Beamable.Samples.SampleProjectBase;
+﻿using Beamable.Common;
+using Beamable.Samples.SampleProjectBase;
 using UnityEditor;
+using static Beamable.Common.Constants.MenuItems.Windows;
 
 namespace Beamable.Samples.Core
 {
@@ -30,9 +32,9 @@ namespace Beamable.Samples.Core
 		}
 
 		[MenuItem(
-			BeamableConstants.MENU_ITEM_PATH_WINDOW_BEAMABLE_SAMPLES + "/Multiplayer/" +
-			BeamableConstants.OPEN + " " + Title,
-			priority = BeamableConstants.MENU_ITEM_PATH_WINDOW_PRIORITY_4)]
+			Paths.MENU_ITEM_PATH_WINDOW_BEAMABLE_SAMPLES + "/Multiplayer/" +
+			Constants.Commons.OPEN + " " + Title,
+			priority = Orders.MENU_ITEM_PATH_WINDOW_PRIORITY_4)]
 		private static Readme SelectSpecificReadmeMenuItem()
 		{
 			// Reset SessionState if/when MenuItem is used

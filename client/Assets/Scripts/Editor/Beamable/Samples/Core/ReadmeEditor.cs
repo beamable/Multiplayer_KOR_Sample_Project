@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using Beamable.Samples.SampleProjectBase;
+using UnityEngine;
 using UnityEditor;
-using System;
-using Beamable.Samples.SampleProjectBase;
 
 namespace Beamable.Samples.Core
 {
@@ -12,7 +11,7 @@ namespace Beamable.Samples.Core
 	/// Inspired by Unity's "Learn" Sample Projects
 	///
 	/// </summary>
-	[CustomEditor(typeof(Beamable.Samples.SampleProjectBase.Readme))]
+	[CustomEditor(typeof(Readme))]
 	public class ReadmeEditor : UnityEditor.Editor
 	{
 		static float kSpace = 16f;
@@ -26,13 +25,10 @@ namespace Beamable.Samples.Core
 				var pathToReadme = AssetDatabase.GUIDToAssetPath(ids[0]);
 				return SelectReadme(pathToReadme);
 			}
-			else if (ids.Length > 1)
+			
+			if (ids.Length > 1)
 			{
 				Debug.LogError("SelectReadme() Too many results found for Readme.");
-			}
-			else
-			{
-				//Debug.LogError("SelectReadme() No results found for Readme.");
 			}
 
 			return null;
@@ -41,20 +37,17 @@ namespace Beamable.Samples.Core
 
 		private static Readme SelectReadme(string pathToReadme)
 		{
-			if (string.IsNullOrEmpty (pathToReadme))
-         {
+			if (string.IsNullOrWhiteSpace(pathToReadme))
 				return null;
-         }
+
 			var readmeObject = AssetDatabase.LoadMainAssetAtPath(pathToReadme);
 
 			if (readmeObject == null)
-         {
 				return null;
-         }
 
 			var editorAsm = typeof(UnityEditor.Editor).Assembly;
-			var inspWndType = editorAsm.GetType("UnityEditor.InspectorWindow");
-			var window = EditorWindow.GetWindow(inspWndType);
+			var inspectorWindowType = editorAsm.GetType("UnityEditor.InspectorWindow");
+			var window = EditorWindow.GetWindow(inspectorWindowType);
 			window.Focus();
 
 			Selection.objects = new UnityEngine.Object[] { readmeObject };
@@ -84,61 +77,70 @@ namespace Beamable.Samples.Core
 
 			foreach (var section in readme.sections)
 			{
-				if (!string.IsNullOrEmpty(section.heading))
+				if (!string.IsNullOrWhiteSpace(section.heading))
 				{
 					GUILayout.Label(section.heading, HeadingStyle);
 				}
-				if (!string.IsNullOrEmpty(section.text))
+				if (!string.IsNullOrWhiteSpace(section.text))
 				{
 					GUILayout.Label(section.text, BodyStyle);
 				}
-				if (!string.IsNullOrEmpty(section.linkText))
+				if (!string.IsNullOrWhiteSpace(section.linkText) &&
+				    LinkLabel(new GUIContent(section.linkText)))
 				{
-					if (LinkLabel(new GUIContent(section.linkText)))
-					{
-						Application.OpenURL(section.url);
-					}
+					Application.OpenURL(section.url);
 				}
 				GUILayout.Space(kSpace);
 			}
 		}
 
 
-		bool m_Initialized;
+		bool _initialized;
 
-		GUIStyle LinkStyle { get { return m_LinkStyle; } }
+		GUIStyle LinkStyle => m_LinkStyle;
 		[SerializeField] GUIStyle m_LinkStyle;
 
-		GUIStyle TitleStyle { get { return m_TitleStyle; } }
+		GUIStyle TitleStyle => m_TitleStyle;
 		[SerializeField] GUIStyle m_TitleStyle;
 
-		GUIStyle HeadingStyle { get { return m_HeadingStyle; } }
+		GUIStyle HeadingStyle => m_HeadingStyle;
 		[SerializeField] GUIStyle m_HeadingStyle;
 
-		GUIStyle BodyStyle { get { return m_BodyStyle; } }
+		GUIStyle BodyStyle => m_BodyStyle;
 		[SerializeField] GUIStyle m_BodyStyle;
 
 		void Init()
 		{
-			if (m_Initialized)
+			if (_initialized)
 				return;
-			m_BodyStyle = new GUIStyle(EditorStyles.label);
-			m_BodyStyle.wordWrap = true;
-			m_BodyStyle.fontSize = 14;
+			m_BodyStyle = new GUIStyle(EditorStyles.label)
+			{
+				wordWrap = true,
+				fontSize = 14
+			};
 
-			m_TitleStyle = new GUIStyle(m_BodyStyle);
-			m_TitleStyle.fontSize = 26;
+			m_TitleStyle = new GUIStyle(m_BodyStyle)
+			{
+				fontSize = 26
+			};
 
-			m_HeadingStyle = new GUIStyle(m_BodyStyle);
-			m_HeadingStyle.fontSize = 18;
+			m_HeadingStyle = new GUIStyle(m_BodyStyle)
+			{
+				fontSize = 18
+			};
 
-			m_LinkStyle = new GUIStyle(m_BodyStyle);
-			m_LinkStyle.wordWrap = false;
-			// Match selection color which works nicely for both light and dark skins
-			m_LinkStyle.normal.textColor = new Color(0x00 / 255f, 0x78 / 255f, 0xDA / 255f, 1f);
-			m_LinkStyle.stretchWidth = false;
+			m_LinkStyle = new GUIStyle(m_BodyStyle)
+			{
+				wordWrap = false,
+				normal =
+				{
+					// Match selection color which works nicely for both light and dark skins
+					textColor = new Color(0f, 0.4706f, 0.8549f, 1f)
+				},
+				stretchWidth = false
+			};
 
-			m_Initialized = true;
+			_initialized = true;
 		}
 
 		bool LinkLabel(GUIContent label, params GUILayoutOption[] options)
