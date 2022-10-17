@@ -1,0 +1,19 @@
+name: Push Build
+
+on: [push]
+
+jobs:
+  testVersionUpdate:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update Beam version
+        uses: beamable/package-update-action@main
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Print the versions
+        run: |
+          echo "Local version is ${{ steps.beamable_updater.outputs.local_version }}"
+          echo "Remote version is ${{ steps.beamable_updater.outputs.remote_version }}"
+          echo "Did perform the update: ${{ steps.beamable_updater.outputs.did_perform_update }}"
