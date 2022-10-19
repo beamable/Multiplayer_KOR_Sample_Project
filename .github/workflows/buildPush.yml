@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: client/Library
+          key: Library-WebGL
       - name: Update Beam version
         id: beamable_updater
         uses: beamable/package-update-action@main
@@ -36,11 +40,16 @@ jobs:
         with:
           name: Build-WebGL
           path: build/**
+      - uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Create Pull Request
         if: ${{ steps.beamable_updater.outputs.did_perform_update }}
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           branch-suffix: 'timestamp'
           title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
           commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
