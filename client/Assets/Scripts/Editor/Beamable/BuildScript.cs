@@ -3,8 +3,9 @@ using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEditor;
+using UnityEditor.AddressableAssets.Build;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
 namespace Beamable.Editor
@@ -46,7 +47,7 @@ namespace Beamable.Editor
             }
         }
 
-        private static void BuildTarget(BuildTarget target, bool developmentBuild = false)
+        private static void BuildTarget(BuildTarget target, bool developmentBuild = false, bool buildAddressables = false)
         {
             try
             {
@@ -55,6 +56,15 @@ namespace Beamable.Editor
                 if (Directory.Exists(basePath))
                 {
                     Directory.Delete(basePath, true);
+                }
+
+                if (buildAddressables)
+                {
+                    AddressableAssetSettings.BuildPlayerContent(out AddressablesPlayerBuildResult result);
+                    if (!string.IsNullOrWhiteSpace(result.Error))
+                    {
+                        throw new BuildFailedException($"Addressables build error encountered: {result.Error}");
+                    }
                 }
 
                 //Build
@@ -78,10 +88,10 @@ namespace Beamable.Editor
         [MenuItem("Beamable/Debug build")]
         static void DevelopmentBuild()
         {
-            BuildTarget(EditorUserBuildSettings.activeBuildTarget);
+            BuildTarget(EditorUserBuildSettings.activeBuildTarget, true);
         }
 
-        [PublicAPI]
-        public static void DebugWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL);
+        [MenuItem("Beamable/Debug WebGL build")]
+        public static void DebugWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL, true, true);
     }
 }
