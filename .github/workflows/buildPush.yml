@@ -11,6 +11,9 @@ jobs:
   testVersionUpdate:
     timeout-minutes: 90
     runs-on: ubuntu-latest
+    concurrency: 
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -49,5 +52,5 @@ jobs:
         if: ${{ steps.beamable_updater.outputs.did_perform_update }}
         with:
           name: Build-WebGL
-          path: build/**
+          path: /github/workspace/dist/WebGL/**
 
