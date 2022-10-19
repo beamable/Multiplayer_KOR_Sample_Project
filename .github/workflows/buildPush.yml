@@ -28,7 +28,7 @@ jobs:
         id: build
         uses: game-ci/unity-builder@v2.0.4
         with:
-          projectPath: "src/Idler"
+          projectPath: "client"
           buildMethod: Beamable.Editor.BuildScript.DebugWebGLBuild
       - uses: actions/upload-artifact@v3
         if: ${{ steps.beamable_updater.outputs.did_perform_update }}
