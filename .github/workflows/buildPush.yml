@@ -27,6 +27,16 @@ jobs:
           echo "Local version is ${{ steps.beamable_updater.outputs.local_version }}"
           echo "Remote version is ${{ steps.beamable_updater.outputs.remote_version }}"
           echo "Did perform the update: ${{ steps.beamable_updater.outputs.did_perform_update }}"
+      - name: Create Pull Request
+        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          add-paths: client/Packages
+          branch-suffix: 'timestamp'
+          title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
+          commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
       - name: Build WebGL client
         if: ${{ steps.beamable_updater.outputs.did_perform_update }}
         id: build
@@ -40,13 +50,4 @@ jobs:
         with:
           name: Build-WebGL
           path: build/**
-      - name: Create Pull Request
-        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch-suffix: 'timestamp'
-          title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
-          commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
-          labels: 'bot'
+
