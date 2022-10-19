@@ -2,12 +2,17 @@ name: Push Build
 
 on: [push]
 
+env:
+  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
 jobs:
   testVersionUpdate:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Update Beam version
         id: beamable_updater
         uses: beamable/package-update-action@main
@@ -18,3 +23,24 @@ jobs:
           echo "Local version is ${{ steps.beamable_updater.outputs.local_version }}"
           echo "Remote version is ${{ steps.beamable_updater.outputs.remote_version }}"
           echo "Did perform the update: ${{ steps.beamable_updater.outputs.did_perform_update }}"
+      - name: Build WebGL client
+        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
+        id: build
+        uses: game-ci/unity-builder@v2.0.4
+        with:
+          projectPath: "src/Idler"
+          buildMethod: Beamable.Editor.BuildScript.DebugWebGLBuild
+      - uses: actions/upload-artifact@v3
+        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
+        with:
+          name: Build-WebGL
+          path: build/**
+      - name: Create Pull Request
+        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch-suffix: 'timestamp'
+          title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
+          commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
+          labels: 'bot'
