@@ -45,6 +45,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
           branch-suffix: 'timestamp'
           title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
           commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
