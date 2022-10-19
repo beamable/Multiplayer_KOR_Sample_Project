@@ -22,11 +22,6 @@ jobs:
         uses: beamable/package-update-action@main
         with:
           project-path: "client"
-      - uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Print the versions
         run: |
           echo "Local version is ${{ steps.beamable_updater.outputs.local_version }}"
@@ -49,7 +44,7 @@ jobs:
         if: ${{ steps.beamable_updater.outputs.did_perform_update }}
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch-suffix: 'timestamp'
           title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
           commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
