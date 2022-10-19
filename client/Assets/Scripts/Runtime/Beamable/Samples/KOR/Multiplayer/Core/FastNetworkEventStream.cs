@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Beamable.Api;
-using Beamable.Api.Auth;
-using Beamable.Api.Sessions;
+using System.Runtime.CompilerServices;
+using Beamable.Common.Dependencies;
 using Beamable.Experimental.Api.Sim;
-using Beamable.Service;
 
 namespace Beamable.Examples.Features.Multiplayer.Core
 {
@@ -14,6 +12,10 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public string ClientId { get; private set; }
       public bool Ready { get; private set; }
+      public bool IsFaulted => simException != null;
+      public event Action<SimFaultResult> OnErrorStarted;
+      public event Action<SimErrorReport> OnErrorRecovered;
+      public event Action<SimFaultResult> OnErrorFailed;
       private List<SimEvent> _eventQueue = new List<SimEvent>();
       private List<SimFrame> _syncFrames = new List<SimFrame>();
       private List<SimFrame> _emptyFrames = new List<SimFrame>();
@@ -21,10 +23,14 @@ namespace Beamable.Examples.Features.Multiplayer.Core
       private long _lastReqTime;
       private bool hasData = false;
       private string roomName;
+      private SimNetworkErrorException simException = null;
+      private readonly IDependencyProvider _provider;
+      private GameRelayService GameRelay => _provider.GetService<GameRelayService>();
 
-      public FastNetworkEventStream(string roomName, string id)
+      public FastNetworkEventStream(string roomName, string id, IDependencyProvider provider)
       {
          this.roomName = roomName;
+         _provider = provider;
          ClientId = id;
          _syncFrames.Add(_nextFrame);
          Ready = true;
@@ -32,12 +38,18 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public List<SimFrame> Tick(long curFrame, long maxFrame, long expectedMaxFrame)
       {
+         if (IsFaulted)
+         {
+            throw simException;
+         }
          long now = GetTimeMs();
          if ((now - _lastReqTime) >= REQ_FREQ_MS)
          {
             _lastReqTime = now;
-            var req = new GameRelaySyncMsg();
-            req.t = _nextFrame.Frame;
+            var req = new GameRelaySyncMsg
+            {
+               t = _nextFrame.Frame
+            };
             for (int i = 0; i < _eventQueue.Count; i++)
             {
                var evt = new GameRelayEvent();
@@ -46,8 +58,9 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             }
 
             _eventQueue.Clear();
-            
-            BeamContext.Default.ServiceProvider.GetService<GameRelayService>().Sync(roomName, req).Then(rsp =>
+            var syncReq = GameRelay.Sync(roomName, req);
+               
+            syncReq.Then(rsp =>
             {
                if (rsp.t == -1)
                {

@@ -144,7 +144,6 @@ namespace Beamable.Examples.Features.Multiplayer.Core
          
          _myMatchmakingResult.MatchmakingHandle =  await _matchmakingService.StartMatchmaking(
             _myMatchmakingResult.SimGameType.Id,
-            maxWait: TimeSpan.FromSeconds(10),
             updateHandler: handle =>
             {
                OnUpdateHandler(handle);
@@ -166,7 +165,11 @@ namespace Beamable.Examples.Features.Multiplayer.Core
 
       public async Task CancelMatchmaking()
       {
-         await _matchmakingService.CancelMatchmaking(_myMatchmakingResult.MatchmakingHandle.Tickets[0].ticketId);
+         var tickets = _myMatchmakingResult.MatchmakingHandle?.Tickets;
+         if(tickets?.Length > 0)
+         {
+            await _matchmakingService.CancelMatchmaking(tickets[0].ticketId);
+         }
       }
       
       
