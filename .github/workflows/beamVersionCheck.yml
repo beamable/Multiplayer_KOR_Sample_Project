@@ -8,7 +8,7 @@ on:
       - 'automateVersionUpdate'
 
 jobs:
-  testVersionUpdate:
+  versionUpdateCheck:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     concurrency: 
@@ -28,9 +28,9 @@ jobs:
           echo "Did perform the update: ${{ steps.beamable_updater.outputs.did_perform_update }}"
       - name: Check if PR branch exists
         id: pr_check
-        run: echo ::set-output name=exists::$(if [ -n "$(git rev-parse --verify --quiet origin/beam${{ steps.beamable_updater.outputs.remote_version }})" ]; then echo "true"; else echo "false"; fi)
+        run: echo BRANCH_ALREADY_EXISTS=$(if [ -n "$(git rev-parse --verify --quiet origin/beam${{ steps.beamable_updater.outputs.remote_version }})" ]; then echo "true"; else echo "false"; fi) >> $GITHUB_ENV
       - name: Create Pull Request
-        if: ${{ steps.beamable_updater.outputs.did_perform_update }} && ${{ steps.pr_check.outputs.exists == 'false' }}
+        if: ${{ steps.beamable_updater.outputs.did_perform_update && env.BRANCH_ALREADY_EXISTS != 'true' }} 
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

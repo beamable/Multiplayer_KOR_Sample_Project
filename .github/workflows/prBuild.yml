@@ -37,7 +37,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Build-WebGL
-          path: /github/workspace/dist/WebGL/**
+          path: dist/WebGL
       - uses: github-actions-up-and-running/pr-comment@v1.0.1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
