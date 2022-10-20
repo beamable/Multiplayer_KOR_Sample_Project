@@ -33,11 +33,12 @@ namespace Beamable.Examples.Features.Multiplayer.Core
             NetworkInitialized = false;
             // roomId = string.IsNullOrEmpty(roomIdOverride) ? roomId : roomIdOverride;
 
-            var beamable = await API.Instance;
+            var beam = BeamContext.Default;
+            await beam.OnReady;
 
             _roomId = RuntimeDataStorage.Instance.MatchId;
-            LocalDbid = beamable.User.id;
-            _sim = new SimClient(new FastNetworkEventStream(_roomId, LocalDbid.ToString(CultureInfo.InvariantCulture)),
+            LocalDbid = beam.AuthorizedUser.Value.id;
+            _sim = new SimClient(new FastNetworkEventStream(_roomId, LocalDbid.ToString(CultureInfo.InvariantCulture), beam.ServiceProvider),
                                  NetworkFramesPerSecond, 1);
             _sim.OnInit(HandleOnInit);
             _sim.OnConnect(HandleOnConnect);
