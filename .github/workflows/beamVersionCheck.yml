@@ -1,25 +1,20 @@
 name: Push Build
 
-on: [push]
-
-env:
-  UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+on:
+  push:
+    branches:
+      - 'main'
+      - 'automateVersionUpdate'
 
 jobs:
   testVersionUpdate:
-    timeout-minutes: 90
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     concurrency: 
       group: ${{ github.head_ref || github.run_id }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: client/Library
-          key: Library-WebGL
       - name: Update Beam version
         id: beamable_updater
         uses: beamable/package-update-action@main
@@ -30,27 +25,17 @@ jobs:
           echo "Local version is ${{ steps.beamable_updater.outputs.local_version }}"
           echo "Remote version is ${{ steps.beamable_updater.outputs.remote_version }}"
           echo "Did perform the update: ${{ steps.beamable_updater.outputs.did_perform_update }}"
+      - name: Check if PR branch exists
+        run: echo ::set-output name=any::$(if [ -n "$(git rev-parse --verify --quiet origin/beam${{ steps.beamable_updater.outputs.remote_version }})" ]; then echo "true"; else echo "false"; fi)
       - name: Create Pull Request
-        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
+        if: ${{ steps.beamable_updater.outputs.did_perform_update }} && ${{ steps.format-changes.outputs.any == 'false' }}
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
           add-paths: client/Packages
-          branch-suffix: 'timestamp'
+          branch: beam${{ steps.beamable_updater.outputs.remote_version }}
           title: 'Beamable update: ${{ steps.beamable_updater.outputs.remote_version }}'
           commit-message: 'Updated Beamable version to ${{ steps.beamable_updater.outputs.remote_version }}'
-      - name: Build WebGL client
-        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
-        id: build
-        uses: game-ci/unity-builder@v2.0.4
-        with:
-          projectPath: "client"
-          allowDirtyBuild: true
-          buildMethod: Beamable.Editor.BuildScript.DebugWebGLBuild
-      - uses: actions/upload-artifact@v3
-        if: ${{ steps.beamable_updater.outputs.did_perform_update }}
-        with:
-          name: Build-WebGL
-          path: /github/workspace/dist/WebGL/**
+
 
