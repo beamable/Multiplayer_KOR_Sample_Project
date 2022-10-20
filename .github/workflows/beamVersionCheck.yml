@@ -5,7 +5,9 @@ on:
   push:
     branches:
       - 'main'
-      - 'automateVersionUpdate'
+  schedule:
+    # this cron string runs at 06:00:00am, every 2 days starting on the 1st, every month 
+    - cron: 0 0 6 */2 * ?
 
 jobs:
   versionUpdateCheck:
