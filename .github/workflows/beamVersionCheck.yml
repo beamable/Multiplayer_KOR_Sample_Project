@@ -1,6 +1,7 @@
 name: Push Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
@@ -26,9 +27,10 @@ jobs:
           echo "Remote version is ${{ steps.beamable_updater.outputs.remote_version }}"
           echo "Did perform the update: ${{ steps.beamable_updater.outputs.did_perform_update }}"
       - name: Check if PR branch exists
-        run: echo ::set-output name=any::$(if [ -n "$(git rev-parse --verify --quiet origin/beam${{ steps.beamable_updater.outputs.remote_version }})" ]; then echo "true"; else echo "false"; fi)
+        id: pr_check
+        run: echo ::set-output name=exists::$(if [ -n "$(git rev-parse --verify --quiet origin/beam${{ steps.beamable_updater.outputs.remote_version }})" ]; then echo "true"; else echo "false"; fi)
       - name: Create Pull Request
-        if: ${{ steps.beamable_updater.outputs.did_perform_update }} && ${{ steps.format-changes.outputs.any == 'false' }}
+        if: ${{ steps.beamable_updater.outputs.did_perform_update }} && ${{ steps.pr_check.outputs.exists == 'false' }}
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
