@@ -1,0 +1,45 @@
+name: PR Build
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+      - 'staging'
+      - 'production'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency: 
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            client/Library
+            client/Temp
+            client/obj
+          key: Library-WebGL
+      - name: Build WebGL client
+        id: build
+        uses: game-ci/unity-builder@v2.0.4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: "client"
+          allowDirtyBuild: true
+          buildMethod: Beamable.Editor.BuildScript.DebugWebGLBuild
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build-WebGL
+          path: /github/workspace/dist/WebGL/**
+      - uses: github-actions-up-and-running/pr-comment@v1.0.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          message: Built successfully my friend!
