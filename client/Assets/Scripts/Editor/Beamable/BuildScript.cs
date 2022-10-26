@@ -93,5 +93,6 @@ namespace Beamable.Editor
 
         [MenuItem("Beamable/Debug WebGL build")]
         public static void DebugWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL, true, true);
+        public static void ReleaseWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL, false, true);
     }
 }
