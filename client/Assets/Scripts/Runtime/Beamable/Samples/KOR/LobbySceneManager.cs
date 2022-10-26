@@ -132,7 +132,7 @@ namespace Beamable.Samples.KOR
             if (result != null)
             {
                 currentPlayersCount = result.Players.Count;
-                targetPlayerCount = result.SimGameType.maxPlayers;
+                targetPlayerCount = result.SimGameType.CalculateMaxPlayers();
                 matchId = result.MatchId;
             }
 
@@ -177,12 +177,12 @@ namespace Beamable.Samples.KOR
             {
                 string text = string.Format(KORConstants.LobbyUIView_Joined,
                    result.Players.Count,
-                   result.SimGameType.maxPlayers);
+                   result.SimGameType.CalculateMaxPlayers());
 
                 _lobbyUIView.BufferedText.SetText(text, TMP_BufferedText.BufferedTextMode.Queue);
 
                 DebugLog($"MyMatchmaking_OnComplete() " +
-                   $"Players = {result.Players.Count}/{result.SimGameType.maxPlayers} " +
+                   $"Players = {result.Players.Count}/{result.SimGameType.CalculateMaxPlayers()} " +
                    $"MatchId = {result.MatchId}");
 
                 //Store successful info here for use in another scene

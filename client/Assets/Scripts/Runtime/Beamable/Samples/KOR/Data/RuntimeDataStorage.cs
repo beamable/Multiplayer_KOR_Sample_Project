@@ -49,15 +49,20 @@ namespace Beamable.Samples.KOR.Data
                 {
                     throw new Exception("Must set ActiveSimGameType before getting MaxPlayerCount");
                 }
-                return _activeSimGameType.maxPlayers;
+                return _activeSimGameType.CalculateMaxPlayers();
             }
         }
 
-        public string MatchId { get { return _matchId; } set { _matchId = value; } }
-        public long LocalPlayerDbid { get { return _localPlayerDbid; } set { _localPlayerDbid = value; } }
+        public string MatchId { 
+            get => _matchId;
+            set => _matchId = value;
+        }
+        public long LocalPlayerDbid {
+            get => _localPlayerDbid;
+            set => _localPlayerDbid = value;
+        }
 
-        public bool IsLocalPlayerDbid(long dbid)
-        { return LocalPlayerDbid == dbid; }
+        public bool IsLocalPlayerDbid(long dbid) => LocalPlayerDbid == dbid;
 
         public bool IsSinglePlayerMode
         {
@@ -71,8 +76,14 @@ namespace Beamable.Samples.KOR.Data
             }
         }
 
-        public SimGameType ActiveSimGameType { get { return _activeSimGameType; } set { _activeSimGameType = value; } }
-        public bool HasPopulatedLeaderboard { get { return _hasPopulatedLeaderboard; } set { _hasPopulatedLeaderboard = value; } }
+        public SimGameType ActiveSimGameType { 
+            get => _activeSimGameType;
+            set => _activeSimGameType = value;
+        }
+        public bool HasPopulatedLeaderboard { 
+            get => _hasPopulatedLeaderboard;
+            set => _hasPopulatedLeaderboard = value;
+        }
 
         //  Fields  --------------------------------------
         private bool _isMatchmakingComplete;

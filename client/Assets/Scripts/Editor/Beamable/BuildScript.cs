@@ -70,7 +70,7 @@ namespace Beamable.Editor
                 //Build
                 var path = GetBuildPathForTarget(target, basePath);
                 var results = BuildPipeline.BuildPlayer(GetActiveScenes(), path, target,
-                    developmentBuild ? BuildOptions.Development : BuildOptions.None);
+                    developmentBuild ? BuildOptions.Development : BuildOptions.DetailedBuildReport );
 
                 if (results.summary.result != BuildResult.Succeeded)
                 {
@@ -93,6 +93,7 @@ namespace Beamable.Editor
 
         [MenuItem("Beamable/Debug WebGL build")]
         public static void DebugWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL, true, true);
+        [MenuItem("Beamable/Rls WebGL build")]
         public static void ReleaseWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL, false, true);
     }
 }
