@@ -31,6 +31,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          targetPlatform: WebGL
           projectPath: "client"
           allowDirtyBuild: true
           buildMethod: Beamable.Editor.BuildScript.ReleaseWebGLBuild
