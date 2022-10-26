@@ -21,6 +21,12 @@ jobs:
             client/Temp
             client/obj
           key: Library-WebGL
+      - name: Get Beam version
+        id: beamable_updater
+        uses: beamable/package-update-action@main
+        with:
+          dry_run: true
+          project-path: "client"
       - name: Build WebGL client
         id: build
         uses: game-ci/unity-builder@v2.0.4
@@ -32,7 +38,10 @@ jobs:
           targetPlatform: WebGL
           projectPath: "client"
           allowDirtyBuild: true
-          buildMethod: Beamable.Editor.BuildScript.ReleaseWebGLBuild
+          buildsPath: dist
+          versioning: Custom
+          version: ${{ steps.beamable_updater.outputs.local_version }}
+          buildMethod: Beamable.Editor.BuildScript.Build
       - uses: actions/upload-artifact@v3
         with:
           name: Build-WebGL
