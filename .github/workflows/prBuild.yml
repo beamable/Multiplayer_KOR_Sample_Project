@@ -20,7 +20,7 @@ jobs:
             client/Library
             client/Temp
             client/obj
-          key: Library-WebGL
+          key: Library-WebGL-2020.3.41f1
       - name: Get Beam version
         id: beamable_updater
         uses: beamable/package-update-action@main
