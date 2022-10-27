@@ -25,7 +25,7 @@ jobs:
         id: beamable_updater
         uses: beamable/package-update-action@main
         with:
-          dry_run: true
+          dry-run: true
           project-path: "client"
       - name: Build WebGL client
         id: build
