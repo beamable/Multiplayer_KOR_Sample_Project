@@ -47,7 +47,7 @@ namespace Beamable.Editor
             }
         }
 
-        private static void BuildTarget(BuildTarget target, bool developmentBuild = false, bool buildAddressables = false)
+        private static void BuildTarget(bool buildAddressables = false)
         {
             try
             {
@@ -68,9 +68,9 @@ namespace Beamable.Editor
                 }
 
                 //Build
+                var target = EditorUserBuildSettings.activeBuildTarget;
                 var path = GetBuildPathForTarget(target, basePath);
-                var results = BuildPipeline.BuildPlayer(GetActiveScenes(), path, target,
-                    developmentBuild ? BuildOptions.Development : BuildOptions.None);
+                var results = BuildPipeline.BuildPlayer(GetActiveScenes(), path, target, BuildOptions.None);
 
                 if (results.summary.result != BuildResult.Succeeded)
                 {
@@ -85,13 +85,10 @@ namespace Beamable.Editor
             }
         }
 
-        [MenuItem("Beamable/Debug build")]
-        static void DevelopmentBuild()
+        [MenuItem("Beamable/Build")]
+        static void Build()
         {
-            BuildTarget(EditorUserBuildSettings.activeBuildTarget, true);
+            BuildTarget( true);
         }
-
-        [MenuItem("Beamable/Debug WebGL build")]
-        public static void DebugWebGLBuild() => BuildTarget(UnityEditor.BuildTarget.WebGL, true, true);
     }
 }

@@ -8,7 +8,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 90
     concurrency: 
       group: ${{ github.head_ref || github.run_id }}
       cancel-in-progress: true
@@ -20,7 +20,13 @@ jobs:
             client/Library
             client/Temp
             client/obj
-          key: Library-WebGL
+          key: Library-WebGL-2020.3.41f1
+      - name: Get Beam version
+        id: beamable_updater
+        uses: beamable/package-update-action@main
+        with:
+          dry-run: true
+          project-path: "client"
       - name: Build WebGL client
         id: build
         uses: game-ci/unity-builder@v2.0.4
@@ -29,13 +35,17 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          targetPlatform: WebGL
           projectPath: "client"
           allowDirtyBuild: true
-          buildMethod: Beamable.Editor.BuildScript.DebugWebGLBuild
+          buildsPath: dist
+          versioning: Custom
+          version: ${{ steps.beamable_updater.outputs.local_version }}
+          buildMethod: Beamable.Editor.BuildScript.Build
       - uses: actions/upload-artifact@v3
         with:
           name: Build-WebGL
-          path: dist/WebGL
+          path: ./dist/WebGL
       - uses: github-actions-up-and-running/pr-comment@v1.0.1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}

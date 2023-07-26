@@ -1,0 +1,39 @@
+name: Update web build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    concurrency: 
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            client/Library
+            client/Temp
+            client/obj
+          key: Library-WebGL
+      - name: Build WebGL client
+        id: build
+        uses: game-ci/unity-builder@v2.0.4
+        env:
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+          projectPath: "client"
+          allowDirtyBuild: true
+          buildMethod: Beamable.Editor.BuildScript.ReleaseWebGLBuild
+      - name: upload
+        run: AWS_ACCESS_KEY_ID=${{secrets.AWS_KEY_ID}} AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} AWS_REGION=us-west-2 aws s3 cp --recursive ./dist/WebGL s3://${{secrets.AWS_BUCKET_BUILDS}}/uploads/${{github.sha}} --acl public-read
