@@ -15,12 +15,19 @@ MonoBehaviour:
   _tags:
   - base
   maxPlayers: 1
-  teams:
+  legacyTeams:
   - name: Team01
     maxPlayers: 1
     minPlayers:
       HasValue: 1
       Value: 1
+  teams:
+    listData:
+    - name: Team 1
+      maxPlayers: 1
+      minPlayers:
+        HasValue: 0
+        Value: 0
   numericRules: []
   stringRules: []
   waitAfterMinReachedSecs:
@@ -29,9 +36,18 @@ MonoBehaviour:
   maxWaitDurationSecs:
     HasValue: 1
     Value: 30
+  matchingIntervalSecs:
+    HasValue: 0
+    Value: 0
   leaderboardUpdates:
   - leaderboard: leaderboards.Leaderboard01
     scoringAlgorithm:
       algorithm: 0
       options: []
-  rewards: []
+  rewards:
+  - startRank: 0
+    endRank: 0
+    rewards:
+    - type: 0
+      name: currency.Coins
+      amount: 25
