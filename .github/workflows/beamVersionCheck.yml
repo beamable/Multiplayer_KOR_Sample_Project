@@ -33,7 +33,7 @@ jobs:
         run: echo BRANCH_ALREADY_EXISTS=$(if [ -n "$(git rev-parse --verify --quiet origin/beam${{ steps.beamable_updater.outputs.remote_version }})" ]; then echo "true"; else echo "false"; fi) >> $GITHUB_ENV
       - name: Create Pull Request
         if: ${{ steps.beamable_updater.outputs.did_perform_update && env.BRANCH_ALREADY_EXISTS != 'true' }} 
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
